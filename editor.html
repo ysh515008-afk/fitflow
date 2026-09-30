@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>FitFlow 客户管理 · 可视化编辑器</title>
+<style>
+  :root {
+    --bg: #eef2ef; --panel: #ffffff; --line: #e2e9e4;
+    --ink: #0f1a17; --ink-2: #39463f; --ink-3: #55635c; --ink-4: #6a7871;
+    --brand: #0e8f5b; --brand-2: #0a6e46; --brand-tint: #e6f4ec;
+    --warn: #9a5b00; --danger: #b93b2c;
+    --font: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: var(--font); background: var(--bg); color: var(--ink); font-size: 14px; }
+  /* 顶栏 */
+  .topbar { display: flex; align-items: center; gap: 10px; padding: 10px 16px; background: var(--panel); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 20; }
+  .topbar .logo { font-weight: 700; font-size: 15px; color: var(--brand-2); white-space: nowrap; }
+  .topbar .spacer { flex: 1; }
+  .btn { padding: 7px 14px; border: 1px solid var(--line); background: #fff; border-radius: 8px; cursor: pointer; font-size: 13px; font-family: inherit; color: var(--ink-2); }
+  .btn:hover { background: var(--brand-tint); border-color: var(--brand); color: var(--brand-2); }
+  .btn.primary { background: var(--brand); border-color: var(--brand); color: #fff; font-weight: 600; }
+  .btn.primary:hover { background: var(--brand-2); }
+  .btn:disabled { opacity: .45; cursor: not-allowed; }
+  .status { font-size: 12px; color: var(--ink-4); }
+  .status.ok { color: var(--brand-2); } .status.err { color: var(--danger); }
+  /* 布局 */
+  .wrap { display: flex; height: calc(100vh - 51px); }
+  /* 画布区 */
+  .canvas { flex: 1; overflow: auto; padding: 24px; }
+  .canvas-inner { display: inline-block; min-width: 100%; }
+  /* 预览里可选中/编辑的节点 */
+  .sn { position: relative; }
+  .sn.hover { outline: 1.5px dashed var(--brand); outline-offset: -1px; cursor: pointer; }
+  .sn.selected { outline: 2px solid var(--brand); outline-offset: -1px; }
+  .sn.selected::after { content: attr(data-name); position: absolute; top: -18px; left: 0; font-size: 11px; background: var(--brand); color: #fff; padding: 1px 6px; border-radius: 4px; white-space: nowrap; z-index: 10; pointer-events: none; }
+  .sn span, .sn div { display: inline-block; }
+  /* 右侧面板 */
+  .side { width: 300px; background: var(--panel); border-left: 1px solid var(--line); display: flex; flex-direction: column; }
+  .side-hd { padding: 12px 16px; border-bottom: 1px solid var(--line); font-weight: 700; color: var(--ink-2); }
+  .side-bd { flex: 1; overflow: auto; padding: 14px 16px; }
+  .field { margin-bottom: 14px; }
+  .field label { display: block; font-size: 12px; color: var(--ink-3); margin-bottom: 5px; font-weight: 600; }
+  .field input[type=text], .field textarea, .field select { width: 100%; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; font-size: 13px; font-family: inherit; color: var(--ink); background: #fff; }
+  .field textarea { min-height: 60px; resize: vertical; }
+  .swatches { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; }
+  .swatch { width: 100%; aspect-ratio: 1; border-radius: 6px; border: 1px solid rgba(0,0,0,.08); cursor: pointer; }
+  .swatch.on { box-shadow: 0 0 0 2px var(--brand); }
+  .hint { font-size: 12px; color: var(--ink-4); line-height: 1.6; }
+  .empty { color: var(--ink-4); font-size: 13px; padding: 20px; text-align: center; }
+  .drag-hint { font-size: 12px; color: var(--ink-4); background: #f7faf8; border: 1px dashed var(--line); border-radius: 8px; padding: 10px; margin-bottom: 14px; line-height: 1.6; }
+  .col-drag { display: flex; flex-direction: column; gap: 8px; }
+  .col-drag .drag-item { padding: 8px 10px; background: #f7faf8; border: 1px solid var(--line); border-radius: 8px; cursor: grab; font-size: 13px; }
+  .col-drag .drag-item:hover { border-color: var(--brand); }
+  .col-drag .drag-item.dragging { opacity: .5; }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <span class="logo">FitFlow · 客户管理设计器</span>
+  <button class="btn" id="btnReload">↻ 重新加载</button>
+  <button class="btn primary" id="btnSave">保存 + 导出回 Figma</button>
+  <div class="spacer"></div>
+  <span class="status" id="status">就绪</span>
+</div>
+
+<div class="wrap">
+  <div class="canvas" id="canvas"><div class="canvas-inner" id="preview"><div class="empty">加载中…</div></div></div>
+
+  <div class="side">
+    <div class="side-hd">属性</div>
+    <div class="side-bd" id="panel">
+      <div class="empty">点击左侧任意节点查看属性</div>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { renderScreen, renderNode, COLORS } from './js/screenRenderer.js';
+
+let screen = null;        // { screen, frame }
+let tokens = COLORS;      // 颜色 token 表
+let selected = null;      // 当前选中节点 path（如 'frame.2.0'）
+let selectedNode = null;  // 节点对象引用
+
+/* ---------- 加载 ---------- */
+async function load() {
+  const res = await fetch('/screen.json');
+  screen = await res.json();
+  if (screen.tokens) { tokens = screen.tokens; delete screen.tokens; }
+  selected = null; selectedNode = null;
+  render();
+}
+
+/* ---------- 渲染预览 ---------- */
+function render() {
+  document.getElementById('preview').innerHTML = renderScreen(screen);
+  bindPreview();
+  renderPanel();
+}
+
+/* path 解析：'frame.2.0' → 从根按 children 索引下钻 */
+function nodeAt(path) {
+  let parts = path.split('.').map((s) => (s === 'frame' ? null : Number(s))).filter((x) => x !== null);
+  let cur = screen.frame;
+  for (const i of parts) { cur = cur.children?.[i]; if (!cur) return null; }
+  return cur;
+}
+/* 反向：已知 path，拿它的父与索引 */
+function parentAndIndex(path) {
+  const parts = path.split('.');
+  const idx = Number(parts[parts.length - 1]);
+  const parentPath = parts.slice(0, -1).join('.');
+  return { parent: nodeAt(parentPath), idx, parentPath };
+}
+
+/* ---------- 预览交互 ---------- */
+function bindPreview() {
+  const root = document.getElementById('preview');
+  root.querySelectorAll('.sn').forEach((el) => {
+    el.addEventListener('mouseenter', () => { if (!el.classList.contains('selected')) el.classList.add('hover'); });
+    el.addEventListener('mouseleave', () => el.classList.remove('hover'));
+    el.addEventListener('click', (e) => { e.stopPropagation(); select(el.dataset.path, el); });
+    el.addEventListener('dblclick', (e) => {
+      e.stopPropagation();
+      if (el.dataset.type === 'text') editText(el.dataset.path, el);
+    });
+  });
+}
+
+function select(path, el) {
+  selected = path; selectedNode = nodeAt(path);
+  document.querySelectorAll('.sn.selected').forEach((x) => x.classList.remove('selected'));
+  if (el) el.classList.add('selected');
+  renderPanel();
+}
+
+/* ---------- 编辑文字（双击） ---------- */
+function editText(path, el) {
+  const node = nodeAt(path);
+  if (!node) return;
+  const cur = node.text || '';
+  const val = prompt('修改文字：', cur);
+  if (val === null) return;
+  node.text = val;
+  el.textContent = val;
+  markDirty();
+}
+
+/* ---------- 右侧面板 ---------- */
+function renderPanel() {
+  const box = document.getElementById('panel');
+  if (!selectedNode) { box.innerHTML = '<div class="empty">点击左侧任意节点查看属性</div>'; return; }
+  const n = selectedNode;
+  const colorNames = Object.keys(tokens);
+  const curFill = n.fill || '';
+  const curStroke = n.stroke || '';
+
+  let html = '';
+  html += `<div class="field"><label>节点类型</label><input type="text" value="${escAttr(n.type)}" disabled></div>`;
+  html += `<div class="field"><label>名称</label><input type="text" id="pName" value="${escAttr(n.name || '')}"></div>`;
+
+  if (n.type === 'text') {
+    html += `<div class="field"><label>文字</label><textarea id="pText">${esc(n.text || '')}</textarea></div>`;
+    html += `<div class="field"><label>字号（px）</label><input type="number" id="pSize" value="${n.size || 13}"></div>`;
+    html += `<div class="field"><label>字重</label><select id="pWeight">${weightOpts(n.weight)}</select></div>`;
+  }
+  if (n.type === 'rect') {
+    html += `<div class="field"><label>宽（px）</label><input type="number" id="pW" value="${n.w || 0}"></div>`;
+    html += `<div class="field"><label>高（px）</label><input type="number" id="pH" value="${n.h || 0}"></div>`;
+  }
+  if (n.type === 'frame') {
+    html += `<div class="field"><label>布局方向</label><select id="pLayout"><option value="">自动</option><option value="H" ${n.layout === 'H' ? 'selected' : ''}>横向</option><option value="V" ${n.layout === 'V' ? 'selected' : ''}>纵向</option></select></div>`;
+    html += `<div class="field"><label>间距 gap（px）</label><input type="number" id="pGap" value="${n.gap || 0}"></div>`;
+    html += `<div class="field"><label>内边距 pad（px）</label><input type="number" id="pPad" value="${n.pad ?? ''}"></div>`;
+    html += `<div class="field"><label>宽（px）</label><input type="number" id="pW" value="${n.w || 0}"></div>`;
+    html += `<div class="field"><label>圆角 radius（px）</label><input type="number" id="pRadius" value="${n.radius || 0}"></div>`;
+  }
+
+  /* 颜色 token */
+  if (n.type !== 'text' || n.fill) {
+    html += `<div class="field"><label>填充色</label><div class="swatches">${swatches(colorNames, curFill, 'fill')}</div></div>`;
+  }
+  if (n.type === 'frame' || n.type === 'rect') {
+    html += `<div class="field"><label>描边色</label><div class="swatches">${swatches(colorNames, curStroke, 'stroke')}</div></div>`;
+  }
+
+  /* 拖拽换位（仅 board 下的四栏） */
+  html += renderBoardDrag();
+
+  box.innerHTML = html;
+  bindPanel(n);
+}
+
+function weightOpts(cur) {
+  return [400, 500, 600, 700].map((w) => `<option value="${w}" ${Number(cur) === w ? 'selected' : ''}>${w}</option>`).join('');
+}
+function swatches(names, cur, key) {
+  return names.map((c) => `<div class="swatch ${cur === c ? 'on' : ''}" data-color="${c}" data-key="${key}" title="${c} · ${tokens[c]}" style="background:${tokens[c]}"></div>`).join('');
+}
+
+/* 四栏拖拽排序：只对 board 的直接子节点（frame 类型的四个栏） */
+function renderBoardDrag() {
+  const board = nodeAt('frame.2');
+  if (!board || !selected || !selected.startsWith('frame.2.')) {
+    /* 只有选中 board 本身时才显示 */
+    if (selected === 'frame.2') {
+      const cols = board.children || [];
+      return `<div class="field"><label>四栏顺序（拖拽）</label><div class="col-drag" id="colDrag">${cols.map((c, i) => `<div class="drag-item" draggable="true" data-idx="${i}">${esc(c.name || '第' + (i + 1) + '栏')}</div>`).join('')}</div></div>`;
+    }
+    return '';
+  }
+  return '';
+}
+
+function bindPanel(n) {
+  const box = document.getElementById('panel');
+  const saveNum = (id, key) => {
+    const el = box.querySelector('#' + id);
+    if (el) el.addEventListener('change', () => { n[key] = Number(el.value) || 0; applyNode(n); });
+  };
+  const el = (id) => box.querySelector('#' + id);
+  if (el('pName')) el('pName').addEventListener('change', (e) => { n.name = e.target.value; applyNode(n); });
+  if (el('pText')) el('pText').addEventListener('input', (e) => { n.text = e.target.value; applyNode(n); });
+  if (el('pSize')) saveNum('pSize', 'size');
+  if (el('pWeight')) el('pWeight').addEventListener('change', (e) => { n.weight = Number(e.target.value); applyNode(n); });
+  saveNum('pW', 'w'); saveNum('pH', 'h'); saveNum('pGap', 'gap'); saveNum('pRadius', 'radius');
+  if (el('pPad')) el('pPad').addEventListener('change', (e) => { n.pad = e.target.value === '' ? null : (Number(e.target.value) || 0); applyNode(n); });
+  if (el('pLayout')) el('pLayout').addEventListener('change', (e) => { n.layout = e.target.value || null; applyNode(n); });
+
+  box.querySelectorAll('.swatch').forEach((sw) => {
+    sw.addEventListener('click', () => {
+      const key = sw.dataset.key; const color = sw.dataset.color;
+      n[key] = (n[key] === color) ? null : color;
+      applyNode(n);
+    });
+  });
+
+  /* 四栏拖拽 */
+  const drag = box.querySelector('#colDrag');
+  if (drag) {
+    let dragging = null;
+    drag.querySelectorAll('.drag-item').forEach((item) => {
+      item.addEventListener('dragstart', () => { dragging = item; item.classList.add('dragging'); });
+      item.addEventListener('dragend', () => { item.classList.remove('dragging'); dragging = null; });
+      item.addEventListener('dragover', (e) => e.preventDefault());
+      item.addEventListener('drop', (e) => {
+        e.preventDefault();
+        if (!dragging || dragging === item) return;
+        const board = nodeAt('frame.2');
+        const from = Number(dragging.dataset.idx);
+        const to = Number(item.dataset.idx);
+        const arr = board.children;
+        const [mv] = arr.splice(from, 1);
+        arr.splice(to, 0, mv);
+        markDirty(); render(); select('frame.2', document.querySelector('[data-path="frame.2"]'));
+      });
+    });
+  }
+}
+
+/* 应用节点修改后局部刷新预览，保持选中态 */
+function applyNode(node) {
+  const el = document.querySelector(`[data-path="${selected}"]`);
+  if (!el) { markDirty(); render(); return; }
+  /* 简单做法：整体重渲染 + 重新选中 */
+  markDirty(); render();
+  const sel = document.querySelector(`[data-path="${selected}"]`);
+  if (sel) select(selected, sel);
+}
+
+/* ---------- 保存 / 导出回 Figma ---------- */
+let dirty = false;
+function markDirty() { dirty = true; setStatus('有未保存改动', ''); }
+
+function setStatus(msg, cls) {
+  const s = document.getElementById('status');
+  s.textContent = msg; s.className = 'status ' + (cls || '');
+}
+
+async function save() {
+  const btn = document.getElementById('btnSave');
+  btn.disabled = true; setStatus('保存中…', '');
+  try {
+    const res = await fetch('/save', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ screen: screen.screen, frame: screen.frame }),
+    });
+    const r = await res.json();
+    if (r.ok) { dirty = false; setStatus(`已保存，code.js 已重新生成（${r.bytes} bytes），回 Figma 运行插件即可刷新`, 'ok'); }
+    else setStatus('保存失败：' + r.error, 'err');
+  } catch (e) {
+    setStatus('保存失败：' + e.message, 'err');
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+/* ---------- 工具 ---------- */
+function esc(s) { return String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+function escAttr(s) { return esc(s).replace(/"/g, '&quot;'); }
+
+/* 离开前提醒未保存 */
+window.addEventListener('beforeunload', (e) => { if (dirty) e.preventDefault(); });
+
+document.getElementById('btnReload').addEventListener('click', load);
+document.getElementById('btnSave').addEventListener('click', save);
+
+load();
+</script>
+</body>
+</html>

@@ -1,0 +1,2098 @@
+/* ============================================================
+   FitFlow · 设计系统
+   浅色为主、绿色点缀、移动优先；桌面端呈现为手机容器
+
+   圆角系统（全站统一，不混用）：
+     容器 / 卡片 14-18px ｜ 按钮与输入 11px ｜ 抽屉 22px ｜ 标签胶囊 999px
+   色彩系统（只允许一个品牌色，其余颜色仅承担语义）：
+     品牌绿 #0E8F5B = 出价动作与正向状态
+     语义色：蓝=进行中 青=体验期 琥珀=需干预 红=已流失 灰=中性/未知
+   字体：系统中文字体栈（离线可用），数字一律 tabular-nums 对齐
+   ============================================================ */
+
+:root{
+  /* 灰阶按对比度定，不按"看起来淡不淡"定。
+     正文与提示文字都要过 4.5:1（WCAG AA）：
+       旧的 ink-3 4.46:1、ink-4 2.46:1，短提示在户外光下基本看不见。
+       手机是拿到器械边上用的，阳光底下读不清就是不能用。
+     ink-3 现在 6.3:1（次要信息），ink-4 现在 4.6:1（提示/占位）。 */
+  --ink:#0F1A17;
+  --ink-2:#39463F;
+  --ink-3:#55635C;
+  --ink-4:#6A7871;
+
+  --bg:#EDF1EE;
+  --surface:#FFFFFF;
+  --surface-2:#F7FAF8;
+  --surface-3:#F1F5F2;
+
+  --line:#E2E9E4;
+  --line-2:#EFF4F0;
+
+  --brand:#0E8F5B;
+  --brand-2:#0A6E46;
+  --brand-tint:#E6F4EC;
+  --brand-tint-2:#CFE9DB;
+
+  /* 灰阶和橙色都往深里压过一档。
+     这些东西都是在器械边上、户外光下看的，白底上勉强能认的字不算能认：
+     #A96500 落在 #FCF2E1 上只有 4.16:1，够不上 AA 的 4.5。 */
+  --warn:#9A5B00;
+  --warn-tint:#FCF2E1;
+  --danger:#B93B2C;
+  --danger-tint:#FBECE9;
+  --info:#2C6BA8;
+  --info-tint:#E9F1F9;
+  --teal:#0F7A8C;
+  --teal-tint:#E4F2F4;
+  --slate-tint:#EFF2F1;
+
+  /* 选中态的胶囊。不能直接写"品牌色底 + 白字"：
+     亮色下白字落在 --brand 上只有 4.12:1，暗色下更糟，2.83:1。
+     所以底色拣更深的那支，文字色跟着主题换边。 */
+  --chip-on-bg:#0A6E46;
+  --chip-on-fg:#FFFFFF;
+
+  --r-xs:8px; --r-sm:10px; --r-md:12px; --r:14px; --r-lg:18px; --r-xl:24px;
+  /* 控件圆角单列：按钮 / 输入 / 分段块统一取这里，不再各写 9/11/13 */
+  --r-ctl:11px; --r-ctl-sm:9px; --r-pill:999px;
+  --sh-1:0 1px 2px rgba(15,26,23,.05);
+  --sh-2:0 12px 32px -18px rgba(15,26,23,.28);
+  --sh-3:0 24px 60px -30px rgba(15,26,23,.35);
+
+  --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+
+  --h-header:52px;
+  --h-tab:62px;
+
+  /* 品牌渐变只在这里定义一次。换主题时替换这四个色标即可，
+     用到它的地方（小字标、通栏海报、logo）不用改一行。
+     拆成 a/b/c/d 四个独立色标，是因为海报走 SVG <linearGradient>，
+     SVG 的 stop 只能吃单个颜色，吃不下整条 gradient。 */
+  --grad-a:#0A6E46; --grad-b:#12A167; --grad-c:#0F7A8C; --grad-d:#0F1A17;
+  --grad-brand:linear-gradient(96deg,var(--grad-a) 0%,var(--grad-b) 32%,var(--grad-c) 62%,var(--grad-d) 100%);
+  --wash-1:rgba(18,161,103,.13);
+  --wash-2:rgba(15,122,140,.12);
+
+  /* 主区左右内边距。桌面断点会调大它（见文件末尾的响应式段），
+     .app-main 与通栏 .poster 的负外边距共用这一个变量，不再各写各的 14px。 */
+  --pad-x:14px;
+
+  /* 动效：全站只取这一组时长与曲线。禁止再出现 .12/.13/.15/.16 各写各的。 */
+  --t-xs:.1s; --t-s:.14s; --t:.18s; --t-l:.26s;
+  --ease:cubic-bezier(.2,.8,.2,1);
+
+  /* 键盘焦点环：按钮 / 链接 / 自定义控件统一取这里 */
+  --focus-w:2px; --focus-o:2px;
+
+  /* 语义「深色墨水」：浅色底上的同色系正文色（过 AA）。
+     是 .notice / .demo-banner / .model-status 这类「色底 + 同色字」的落点。
+     暗色模式必须整体覆盖，否则深字落在深底上不可读（见 dark 段）。 */
+  --warn-ink:#6E4A05; --info-ink:#1F4E7A; --danger-ink:#8C2C20;
+  /* 条形 / 时间轴上的语义标记填充色（比正文墨水亮，专用于填充） */
+  --warn-mark:#D9922E; --danger-mark:#CE5A49;
+  /* 调用代价 5 档（cost-1 最省 → cost-5 最贵），浅 / 暗各一套 */
+  --tier1-bg:#E7F6EC; --tier1-fg:#1F8A4D;
+  --tier2-bg:#EAF4E4; --tier2-fg:#3E8E2F;
+  --tier3-bg:#FFF3DA; --tier3-fg:#9A6B12;
+  --tier4-bg:#FDE7D6; --tier4-fg:#B5641A;
+  --tier5-bg:#FBDDDC; --tier5-fg:#B23B3B;
+}
+
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;height:100%}
+body{
+  font-family:var(--font);
+  color:var(--ink);
+  background:var(--bg);
+  font-size:15px;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  overflow:hidden;
+}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:none;background:none;padding:0}
+a{color:inherit;text-decoration:none}
+h1,h2,h3,h4,p{margin:0}
+ul{margin:0;padding:0;list-style:none}
+.num{font-variant-numeric:tabular-nums;font-feature-settings:"tnum"}
+
+/* ---------- 浏览器自带的那几件东西 ----------
+   选中的底色、光标、滚动条、复选框的勾，默认都是浏览器自己的蓝灰，
+   跟这套配色没关系。它们出现在每一次选中文字和每一次滚动里，
+   是"由人做过"和"拼起来的"之间最明显的一处差别。 */
+:root{accent-color:var(--brand);caret-color:var(--brand)}
+::selection{background:var(--brand-tint-2);color:var(--ink)}
+.app-main{scrollbar-width:thin;scrollbar-color:var(--line) transparent}
+.app-main::-webkit-scrollbar{width:8px}
+.app-main::-webkit-scrollbar-thumb{background:var(--line);border-radius:4px}
+.app-main::-webkit-scrollbar-thumb:hover{background:var(--ink-4)}
+.app-main::-webkit-scrollbar-track{background:transparent}
+.sheet-bd{scrollbar-width:thin;scrollbar-color:var(--line) transparent}
+.sheet-bd::-webkit-scrollbar{width:8px}
+.sheet-bd::-webkit-scrollbar-thumb{background:var(--line);border-radius:4px}
+
+/* 键盘焦点。表单控件自己已有描边环（见 .input:focus），
+   这里只补按钮和链接，避免同一个元素叠出两圈。 */
+:where(button,a,[tabindex],[role="button"]):focus-visible{
+  outline:2px solid var(--brand);outline-offset:2px;
+}
+.input:focus-visible,.select:focus-visible,.textarea:focus-visible{outline:none}
+
+/* ---------- 手机容器 ---------- */
+.app-shell{
+  position:relative;
+  display:flex;flex-direction:column;
+  height:100dvh;
+  max-width:480px;
+  margin:0 auto;
+  background:var(--surface-2);
+  overflow:hidden;
+}
+@media (min-width:560px){
+  body{
+    display:grid;place-items:center;
+    background:
+      radial-gradient(1100px 520px at 12% -8%, #E4F1EA 0%, rgba(228,241,234,0) 62%),
+      radial-gradient(900px 480px at 100% 108%, #E9EEF5 0%, rgba(233,238,245,0) 60%),
+      var(--bg);
+  }
+  .app-shell{
+    height:min(900px, calc(100dvh - 40px));
+    border:1px solid rgba(15,26,23,.09);
+    border-radius:30px;
+    box-shadow:var(--sh-3);
+  }
+}
+
+/* ---------- 顶栏 ----------
+   默认是空的：只有右上角一颗星星气泡，其余全部收进抽屉里，
+   点气泡才滑下来盖住字标。这样首页第一眼只剩品牌，
+   门店名、顾问名、运行按钮这些"天天看但不用一直盯着"的东西不占视线。
+   下滑之后顶栏补上底色，正中间浮出一个平铺的 F。 */
+.app-header{
+  flex:0 0 auto;
+  position:relative;z-index:40;
+  min-height:var(--h-header);
+  padding:8px 14px 8px;
+  background:transparent;
+  border-bottom:1px solid transparent;
+  display:flex;align-items:center;justify-content:flex-end;gap:10px;
+  transition:background .22s ease,border-color .22s ease;
+}
+.app-header.solid{
+  background:rgba(255,255,255,.92);
+  backdrop-filter:saturate(180%) blur(14px);
+  border-bottom-color:var(--line);
+}
+
+/* 星星气泡：顶栏唯一常驻的控件 */
+.bubble{
+  width:36px;height:36px;border-radius:999px;flex:0 0 auto;
+  display:grid;place-items:center;
+  background:var(--surface);color:var(--ink-2);
+  border:1px solid var(--line);box-shadow:var(--sh-1);
+  transition:transform var(--t-xs) var(--ease),background var(--t-s) var(--ease),color var(--t-s) var(--ease),border-color var(--t-s) var(--ease);
+}
+.bubble:active{transform:scale(.93)}
+.bubble.on{background:var(--brand);border-color:var(--brand);color:#fff}
+.bubble svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+
+/* 下滑后居中平铺的 F。不做圆角方块、不做渐变，就是一个平的字 */
+.hd-mark-flat{
+  position:absolute;left:50%;top:50%;
+  transform:translate(-50%,-50%);
+  font-size:16px;font-weight:800;letter-spacing:.04em;
+  color:var(--ink);opacity:0;pointer-events:none;
+  transition:opacity .2s ease;
+}
+.app-header.solid .hd-mark-flat{opacity:1}
+
+/* 滑下来盖住字标的那一层。平时藏在上边界之外，点气泡才落下来 */
+.app-header .hd-panel{
+  position:absolute;left:0;right:0;top:0;
+  padding:13px 16px 12px;
+  display:flex;align-items:flex-start;gap:10px;
+  background:linear-gradient(180deg,#FFFFFF 0%,#FBFDFC 100%);
+  border-bottom:1px solid var(--line);
+  box-shadow:var(--sh-2);
+  transform:translateY(-100%);
+  transition:transform .3s cubic-bezier(.2,.85,.25,1);
+  /* 高度要够把整条通栏字标盖住，而不是只盖住上半截。
+     字标带高 ≈ 52(顶栏) + 18 + 17% 屏宽 + 15 ≈ 168px（480 宽的机器上）。
+     外壳最宽就是 480，所以这里可以直接写死，不必去算屏宽。 */
+  min-height:168px;
+}
+.app-header .hd-panel.on{transform:translateY(0)}
+.app-header .hd-main{min-width:0;flex:1}
+.app-header .hd-title{display:flex;align-items:center;gap:7px;font-size:17px;font-weight:700;letter-spacing:-.2px}
+.app-header .hd-sub{
+  margin-top:2px;font-size:11.5px;color:var(--ink-3);
+  display:flex;align-items:center;gap:6px;flex-wrap:wrap;
+}
+.hd-actions{display:flex;align-items:center;gap:6px}
+.icon-btn{
+  width:34px;height:34px;border-radius:var(--r-ctl);
+  display:grid;place-items:center;
+  color:var(--ink-2);background:var(--surface-3);
+  transition:background var(--t-s) var(--ease),color var(--t-s) var(--ease),transform var(--t-xs) var(--ease);
+}
+.icon-btn:hover{background:var(--brand-tint);color:var(--brand-2)}
+.icon-btn:active{transform:scale(.94)}
+.icon-btn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.icon-btn.accent{background:var(--brand);color:#fff}
+.icon-btn.accent:hover{background:var(--brand-2);color:#fff}
+/* 返回按钮：同一个 chevron 图标左翻，不另外画一个形状。
+   图标库里每多一个形状，就要多维护一处一致性。
+   之所以还要带一行字：会员档案能从智能体、客户、预约、续费好几个地方点开，
+   只画一个箭头，按下去之前没人知道会回到哪一屏。文字把目的地说破。 */
+.back-btn{
+  display:flex;align-items:center;gap:1px;flex:0 0 auto;
+  height:34px;padding:0 10px 0 5px;border-radius:var(--r-ctl);
+  color:var(--brand-2);background:var(--brand-tint);
+  font-size:12.5px;font-weight:650;letter-spacing:-.1px;white-space:nowrap;
+  transition:background var(--t-s) var(--ease),transform var(--t-xs) var(--ease);
+}
+.back-btn:hover{background:var(--brand-tint-2)}
+.back-btn:active{transform:scale(.96)}
+.back-btn svg{
+  width:16px;height:16px;transform:scaleX(-1);
+  fill:none;stroke:currentColor;stroke-width:2.1;stroke-linecap:round;stroke-linejoin:round;
+}
+
+.logo-mark{
+  width:30px;height:30px;border-radius:10px;flex:0 0 auto;
+  background:linear-gradient(145deg,#12A167,#0A6E46);
+  display:grid;place-items:center;color:#fff;font-weight:800;font-size:14px;
+  box-shadow:0 6px 14px -8px rgba(10,110,70,.9);
+}
+
+/* ---------- 主区域 ---------- */
+.app-main{
+  flex:1 1 auto;overflow-y:auto;overflow-x:hidden;
+  padding:14px var(--pad-x) calc(var(--h-tab) + 26px);
+  scroll-behavior:smooth;
+  overscroll-behavior:contain;
+}
+.page-head{margin:2px 2px 14px}
+.page-head h2{font-size:20px;font-weight:700;letter-spacing:-.4px}
+.page-head p{margin-top:4px;font-size:12.5px;color:var(--ink-3)}
+
+/* ---------- 底部导航 ---------- */
+.tabbar{
+  position:absolute;left:0;right:0;bottom:0;
+  height:calc(var(--h-tab) + env(safe-area-inset-bottom));
+  padding-bottom:env(safe-area-inset-bottom);
+  background:rgba(255,255,255,.92);
+  backdrop-filter:saturate(180%) blur(14px);
+  border-top:1px solid var(--line);
+  display:grid;grid-template-columns:repeat(5,1fr);
+  z-index:30;
+}
+.tab{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+  color:var(--ink-4);font-size:10.5px;font-weight:600;
+  position:relative;transition:color var(--t-s) var(--ease);
+}
+.tab svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.tab:hover{color:var(--ink-2)}
+.tab.on{color:var(--brand)}
+.tab:disabled{opacity:.4;cursor:not-allowed}
+.tab.on::before{
+  content:"";position:absolute;top:6px;width:26px;height:3px;border-radius:2px;background:var(--brand);
+}
+.tab .badge{
+  position:absolute;top:6px;left:calc(50% + 8px);
+  min-width:16px;height:16px;padding:0 4px;border-radius:8px;
+  background:var(--danger);color:#fff;font-size:10px;line-height:16px;text-align:center;font-weight:700;
+}
+/* 左栏品牌。手机端 .tabbar 是 5 等分的网格，多一个子元素就会挤掉一格，
+   所以这里默认不显示；1024px 的桌面断点里 .tabbar 改成竖排 flex 才放出来。 */
+.nav-brand{display:none}
+
+/* ---------- 通用块 ---------- */
+.card{
+  background:var(--surface);border:1px solid var(--line);
+  border-radius:var(--r-lg);padding:14px;margin-bottom:12px;
+  box-shadow:var(--sh-1);
+}
+.card.tight{padding:12px}
+.card-group{padding:12px;margin-bottom:12px;border:1px solid var(--line);border-radius:var(--r-lg);background:var(--surface);box-shadow:var(--sh-1)}
+.cg-head{display:flex;align-items:center;gap:10px}
+.cg-head .avatar{width:38px;height:38px;flex:0 0 auto}
+.cg-cards{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:11px}
+.mini-card{border:1px solid var(--line);border-radius:12px;padding:10px;background:var(--surface-2)}
+.card.flush{padding:0;overflow:hidden}
+.card-hd{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.card-hd h3{font-size:14.5px;font-weight:700;letter-spacing:-.2px}
+.card-hd .sub{font-size:11.5px;color:var(--ink-3);font-weight:400;margin-top:2px}
+.section-title{
+  display:flex;align-items:center;gap:8px;
+  margin:20px 2px 10px;font-size:13px;font-weight:700;color:var(--ink-2);
+  letter-spacing:.2px;text-transform:none;
+}
+.section-title::before{content:"";width:3px;height:13px;border-radius:2px;background:var(--brand);flex:0 0 auto}
+.section-title::after{content:"";flex:1;height:1px;background:var(--line)}
+.section-title .count{font-size:11px;color:var(--ink-4);font-weight:600}
+
+/* ---------- 徽章 / 标签 ---------- */
+.badge{
+  display:inline-flex;align-items:center;gap:4px;
+  padding:2px 8px;border-radius:999px;
+  font-size:11px;font-weight:600;line-height:18px;white-space:nowrap;
+  background:var(--slate-tint);color:var(--ink-2);
+}
+.badge svg{width:12px;height:12px;fill:none;stroke:currentColor;stroke-width:2}
+.b-green{background:var(--brand-tint);color:var(--brand-2)}
+.b-warn{background:var(--warn-tint);color:var(--warn)}
+.b-danger{background:var(--danger-tint);color:var(--danger)}
+.b-info{background:var(--info-tint);color:var(--info)}
+.b-teal{background:var(--teal-tint);color:var(--teal)}
+.b-plain{background:var(--surface-3);color:var(--ink-3)}
+.dot{width:6px;height:6px;border-radius:50%;background:currentColor;flex:0 0 auto}
+
+/* ---------- 按钮 ----------
+   一次给全六个可控状态：默认 / 悬停 / 点击 / 禁用 / 加载 / 焦点（焦点环见文件头）。
+   两种尺寸只改盒模型，语义色两档共用。 */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  height:38px;padding:0 15px;border-radius:var(--r-ctl);
+  font-size:13.5px;font-weight:650;letter-spacing:-.1px;
+  background:var(--surface-3);color:var(--ink-2);
+  transition:transform var(--t-xs) var(--ease),background var(--t-s) var(--ease),color var(--t-s) var(--ease),box-shadow var(--t-s) var(--ease);
+}
+.btn svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.btn:hover{background:var(--brand-tint);color:var(--brand-2)}
+.btn:active{transform:scale(.97)}
+.btn.primary{background:var(--brand);color:#fff;box-shadow:0 8px 18px -12px rgba(14,143,91,.9)}
+.btn.primary:hover{background:var(--brand-2);color:#fff}
+.btn.ghost{background:transparent;border:1px solid var(--line);color:var(--ink-2)}
+.btn.ghost:hover{background:var(--surface-3);color:var(--ink)}
+.btn.danger{background:var(--danger-tint);color:var(--danger)}
+.btn.danger:hover{background:var(--danger);color:#fff}
+.btn.sm{height:30px;padding:0 10px;font-size:12px;border-radius:var(--r-ctl-sm)}
+.btn.sm svg{width:13px;height:13px}
+.btn.block{width:100%}
+/* 禁用：所有变体统一压平 —— 去掉投影与位移、退到中性色、游标改成不可点。
+   放在全部变体之后，并用变体前缀抬高优先级，确保盖掉各自的 :hover。 */
+.btn:disabled,.btn[disabled],.btn.is-disabled,
+.btn.primary:disabled,.btn.primary[disabled],.btn.primary.is-disabled,
+.btn.ghost:disabled,.btn.ghost[disabled],.btn.ghost.is-disabled,
+.btn.danger:disabled,.btn.danger[disabled],.btn.danger.is-disabled{
+  cursor:not-allowed;transform:none;box-shadow:none;opacity:.7;
+  background:var(--surface-3);color:var(--ink-4);border-color:var(--line);
+}
+/* 加载：进行中的按钮不可重复点，前置一枚随文字色走的旋转圈，隐藏原图标避免两个图形打架 */
+.btn.is-loading{pointer-events:none;cursor:progress}
+.btn.is-loading svg{display:none}
+.btn.is-loading::before{
+  content:"";width:14px;height:14px;flex:0 0 auto;border-radius:50%;
+  border:2px solid currentColor;border-top-color:transparent;
+  animation:btnSpin .6s linear infinite;
+}
+@keyframes btnSpin{to{transform:rotate(360deg)}}
+/* narrow：宽度由文字决定，不参与同排的 1fr 均分。
+   用于「跟进」这类两字按钮 —— 图标与配色沿用所在语义类（primary/ghost），
+   只改盒模型，不改颜色。 */
+.btn.narrow{flex:0 0 auto;padding:0 12px;gap:5px}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap}
+.btn-row .btn{flex:1 1 auto}
+.btn-row .btn.narrow{flex:0 0 auto}
+
+/* ---------- 统计格 ---------- */
+.stat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+/* g2 = 两列，与不写修饰类时一致。显式写出来是为了让类名和视觉对得上，
+   避免「写了 g2 却没有任何规则命中它」这种看不出问题的悬空类。 */
+.stat-grid.g2{grid-template-columns:repeat(2,1fr);gap:10px}
+.stat-grid.g3{grid-template-columns:repeat(3,1fr)}
+.stat-grid.g4{grid-template-columns:repeat(4,1fr);gap:8px}
+.stat-grid.g4 .stat{padding:9px 8px}
+.stat-grid.g4 .stat .v{font-size:18px;letter-spacing:-.5px}
+.stat-grid.g4 .stat .k{font-size:10px}
+.stat{
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
+  padding:11px 12px;
+}
+.stat .k{font-size:11px;color:var(--ink-3);display:flex;align-items:center;gap:5px}
+.stat .v{font-size:21px;font-weight:750;letter-spacing:-.8px;margin-top:3px}
+.stat .v small{font-size:11.5px;font-weight:600;color:var(--ink-3);letter-spacing:0;margin-left:2px}
+.stat .d{font-size:11px;margin-top:2px;color:var(--ink-3)}
+.stat .d.up{color:var(--brand-2);font-weight:600}
+.stat .d.down{color:var(--danger);font-weight:600}
+
+/* ---------- 列表项 ---------- */
+.list{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden}
+.list-item{
+  display:flex;align-items:center;gap:11px;
+  padding:12px 13px;border-bottom:1px solid var(--line-2);
+  background:var(--surface);transition:background var(--t-s) var(--ease);
+  width:100%;text-align:left;
+}
+.list-item:last-child{border-bottom:none}
+.list-item:hover{background:var(--surface-2)}
+.list-item:active{background:var(--surface-3)}
+/* 已登记流失的客户卡：灰底 + 灰边框（左侧灰条）+ 头像去色，与在册会员明确区分。
+   档案仍可点开查看全部历史，只是不再进入在册口径与智能体待办。 */
+.list-item.lost{
+  background:var(--surface-3);
+  border-bottom-color:var(--line);
+  box-shadow:inset 3px 0 0 var(--ink-4);
+}
+.list-item.lost:hover{background:var(--surface-3)}
+.list-item.lost .li-name{color:var(--ink-3)}
+.list-item.lost .li-meta{opacity:.72}
+.list-item.lost .avatar{filter:grayscale(1);opacity:.7}
+.card.tight.lost{
+  background:var(--surface-3);
+  border-color:var(--ink-4);
+}
+.card.tight.lost .li-name{color:var(--ink-3)}
+.card.tight.lost .avatar{filter:grayscale(1);opacity:.7}
+/* 行内主体区：整行是容器，只有这块负责跳转，右侧留给快捷动作按钮。
+   按钮不能嵌在按钮里，所以整行改成 div，跳转落在这一层。 */
+.li-hit{
+  display:flex;align-items:center;gap:11px;flex:1;min-width:0;
+  background:none;border:none;margin:0;padding:0;font:inherit;color:inherit;
+  text-align:left;cursor:pointer;
+}
+.avatar{
+  width:40px;height:40px;border-radius:13px;flex:0 0 auto;
+  display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;
+  letter-spacing:-.3px;
+}
+.av-a{background:linear-gradient(145deg,#1AA36B,#0B7A4E)}
+.av-b{background:linear-gradient(145deg,#4C7FB0,#2E5C87)}
+.av-c{background:linear-gradient(145deg,#B07A4C,#8A5A30)}
+.av-d{background:linear-gradient(145deg,#7A6BC4,#54469B)}
+.av-e{background:linear-gradient(145deg,#B05A5A,#8C3D3D)}
+.av-f{background:linear-gradient(145deg,#3F8F8F,#2A6C6C)}
+.li-body{min-width:0;flex:1}
+.li-top{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.li-name{font-size:14.5px;font-weight:650;letter-spacing:-.2px}
+.li-meta{font-size:11.5px;color:var(--ink-3);margin-top:3px;display:flex;gap:8px;flex-wrap:wrap}
+.li-right{flex:0 0 auto;display:flex;flex-direction:column;align-items:flex-end;gap:5px}
+.chev{width:16px;height:16px;stroke:var(--ink-4);stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round;flex:0 0 auto}
+
+/* ---------- 表单 ---------- */
+.field{margin-bottom:12px}
+.field > label{display:block;font-size:11.5px;font-weight:650;color:var(--ink-3);margin-bottom:6px}
+.input,.select,.textarea{
+  width:100%;border:1px solid var(--line);border-radius:var(--r-ctl);
+  background:var(--surface);padding:10px 12px;font-size:14px;
+  transition:border-color var(--t-s) var(--ease),box-shadow var(--t-s) var(--ease),background var(--t-s) var(--ease);outline:none;
+}
+.input::placeholder,.textarea::placeholder{color:var(--ink-4);opacity:1}
+.input:hover,.select:hover,.textarea:hover{border-color:var(--brand-tint-2)}
+.input:focus,.select:focus,.textarea:focus{border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-tint)}
+/* 只读 / 禁用：灰底灰字、游标不可点，与可编辑区一眼分开 */
+.input:disabled,.select:disabled,.textarea:disabled,
+.input[readonly],.textarea[readonly]{
+  background:var(--surface-3);color:var(--ink-4);cursor:not-allowed;border-color:var(--line);
+}
+/* 校验失败：描边与光环换成语义红，形状与 :focus 一致（不叠两圈） */
+.input.is-invalid,.select.is-invalid,.textarea.is-invalid,
+.input[aria-invalid="true"],.select[aria-invalid="true"],.textarea[aria-invalid="true"]{
+  border-color:var(--danger);
+}
+.input.is-invalid:focus,.select.is-invalid:focus,.textarea.is-invalid:focus,
+.input[aria-invalid="true"]:focus,.select[aria-invalid="true"]:focus,.textarea[aria-invalid="true"]:focus{
+  box-shadow:0 0 0 3px var(--danger-tint);
+}
+.err{font-size:11.5px;color:var(--danger);margin-top:5px;line-height:1.5}
+.textarea{min-height:88px;resize:vertical;line-height:1.6}
+.select{appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236A7871' stroke-width='2' stroke-linecap='round'><path d='M6 9l6 6 6-6'/></svg>");background-repeat:no-repeat;background-position:right 11px center;padding-right:34px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.hint{font-size:11px;color:var(--ink-4);margin-top:5px;line-height:1.5}
+
+/* ---------- 只读字段（来源系统同步来的） ----------
+   与可编辑输入框同高同圆角，只换底色与字色：灰底 + 灰字 + 虚线边，
+   一眼能看出"这不是输入区"。同时根本不渲染 input —— 视觉上不可编辑，
+   DOM 里也确实没有可编辑节点，两件事一起做到。 */
+.field.sys-ro > label{display:flex;align-items:center;gap:6px}
+.ro-tag{
+  padding:1.5px 5px;border-radius:5px;font-size:9.5px;font-weight:700;line-height:1;
+  letter-spacing:.02em;background:var(--surface-3);color:var(--ink-4);
+}
+.ro-val{
+  min-height:40px;display:flex;align-items:center;
+  padding:10px 12px;border:1px dashed var(--line-2,var(--line));border-radius:11px;
+  background:var(--surface-2);color:var(--ink-4);
+  font-size:14px;line-height:1.45;word-break:break-all;
+}
+
+/* ---------- 开关（复选框变切换） ---------- */
+.sw{position:relative;display:inline-flex;width:42px;height:24px;flex:0 0 auto;cursor:pointer}
+.sw input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer;z-index:1}
+.sw > span{position:absolute;inset:0;border-radius:999px;background:var(--surface-3);border:1px solid var(--line);transition:background .18s,border-color .18s}
+.sw > span::after{content:"";position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:var(--sh-1);transition:transform .18s}
+.sw input:checked + span{background:var(--brand);border-color:var(--brand)}
+.sw input:checked + span::after{transform:translateX(18px)}
+.sw input:focus-visible + span{box-shadow:0 0 0 3px var(--brand-tint)}
+.sw input:disabled,.sw input[disabled]{cursor:not-allowed}
+.sw input:disabled + span{opacity:.5}
+.sw-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 0}
+.sw-label{font-size:13px;color:var(--ink-2);font-weight:550}
+
+/* ---------- 分段控件 ---------- */
+.seg{
+  display:flex;gap:3px;padding:3px;background:var(--surface-3);
+  border-radius:12px;border:1px solid var(--line);
+}
+.seg button{
+  flex:1;height:30px;border-radius:var(--r-ctl-sm);font-size:12.5px;font-weight:650;color:var(--ink-3);
+  transition:background var(--t-s) var(--ease),color var(--t-s) var(--ease),box-shadow var(--t-s) var(--ease);
+}
+.seg button:hover{color:var(--ink)}
+.seg button.on{background:var(--surface);color:var(--brand-2);box-shadow:var(--sh-1)}
+.seg button:disabled{opacity:.45;cursor:not-allowed}
+
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{
+  height:28px;padding:0 11px;border-radius:var(--r-pill);
+  background:var(--surface);border:1px solid var(--line);
+  font-size:12px;font-weight:600;color:var(--ink-3);
+  display:inline-flex;align-items:center;gap:5px;
+  transition:background var(--t-s) var(--ease),color var(--t-s) var(--ease),border-color var(--t-s) var(--ease),box-shadow var(--t-s) var(--ease);
+}
+.chip:hover{border-color:var(--brand-tint-2);color:var(--ink-2)}
+.chip:disabled,.chip.is-disabled{opacity:.5;cursor:not-allowed;pointer-events:none}
+.chip.on{background:var(--chip-on-bg);border-color:var(--chip-on-bg);color:var(--chip-on-fg)}
+/* 未到店预警两档：不靠"有没有选中"区分，靠颜色自带语义。
+   选中态统一回到品牌色，避免一个 chip 同时说两件事。 */
+.chip.w7{border-color:var(--warn);color:var(--warn);background:var(--warn-tint)}
+.chip.w21{border-color:var(--danger);color:var(--danger);background:var(--danger-tint)}
+.chip.w7.on,.chip.w21.on{background:var(--chip-on-bg);border-color:var(--chip-on-bg);color:var(--chip-on-fg)}
+.chip .c{font-size:10.5px;opacity:.85}
+/* 渠道气泡：一次点击选定，圆角卡片 + 图标，选中态用品牌色 */
+.channel-bubbles{display:flex;gap:7px;flex-wrap:wrap}
+.ch-bubble{height:34px;padding:0 13px;border-radius:12px;gap:6px;font-size:12.5px;font-weight:600}
+.ch-bubble .bi{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.ch-bubble.on{background:var(--brand);border-color:var(--brand);color:#fff}
+
+/* 关系推进阶段轴（6 阶段横向铺开） */
+.journey-track{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px}
+.j-node{flex:1 0 0;min-width:80px;border:1px solid var(--line);border-radius:10px;padding:8px 7px;background:var(--surface);text-align:center}
+.j-node.reached{border-color:var(--brand-tint-2);background:var(--brand-tint)}
+.j-node.current{border-color:var(--brand);box-shadow:0 0 0 2px var(--brand-tint-2)}
+.j-dot{width:18px;height:18px;line-height:18px;border-radius:50%;margin:0 auto 5px;font-size:11px;background:var(--surface-3);color:var(--ink-3)}
+.j-node.reached .j-dot,.j-node.current .j-dot{background:var(--brand);color:#fff}
+.j-node.current .j-dot{box-shadow:0 0 0 3px var(--brand-tint)}
+.j-name{font-size:11.5px;font-weight:700;color:var(--ink)}
+.j-node.current .j-name{color:var(--brand-2)}
+.j-goal{font-size:10px;line-height:1.35;color:var(--ink-3);margin-top:3px}
+
+/* 会员详情：客户信息卡置顶，其下为 tab 切换 + 面板（出勤/档案/会籍/跟进/预约/续费） */
+.member-detail{display:block}
+
+/* ---------- 键值行 ---------- */
+.kv{display:flex;align-items:baseline;gap:10px;padding:8px 0;border-bottom:1px dashed var(--line);font-size:13px}
+.kv:last-child{border-bottom:none}
+.kv .k{flex:0 0 92px;color:var(--ink-3);font-size:12px}
+.kv .v{flex:1;font-weight:600;word-break:break-all}
+.kv .v.muted{font-weight:500;color:var(--ink-4);font-style:italic}
+
+/* ---------- 进度 ----------
+   下面这些进度条过渡的是 width / height 本身。
+   不改成 transform:scaleX/Y 的原因：这些条同时带圆角和渐变，
+   缩放会把端头的圆角压成椭圆、把渐变一起拉变形，是看得见的退化。
+   条长只在每次重渲染时变一次，不构成逐帧的布局抖动。 */
+.bar{height:7px;border-radius:5px;background:var(--surface-3);overflow:hidden}
+.bar > i{display:block;height:100%;border-radius:5px;background:var(--brand);transition:width .5s cubic-bezier(.2,.8,.2,1)} /* impeccable-disable-line layout-transition */
+.bar.warn > i{background:var(--warn-mark)}
+.bar.danger > i{background:var(--danger-mark)}
+.bar.thin{height:5px}
+
+.ring-wrap{position:relative;display:grid;place-items:center}
+.ring-wrap .ring-label{position:absolute;text-align:center}
+.ring-wrap .ring-label b{display:block;font-size:17px;font-weight:750;letter-spacing:-.6px}
+.ring-wrap .ring-label span{font-size:10px;color:var(--ink-3)}
+
+/* ---------- 时间线 ---------- */
+.timeline{position:relative;padding-left:20px}
+.timeline::before{content:"";position:absolute;left:5px;top:6px;bottom:6px;width:2px;background:var(--line);border-radius:2px}
+.tl-item{position:relative;padding-bottom:14px}
+.tl-item:last-child{padding-bottom:0}
+.tl-item::before{
+  content:"";position:absolute;left:-19px;top:4px;width:10px;height:10px;border-radius:50%;
+  background:var(--surface);border:2px solid var(--ink-4);
+}
+.tl-item.on::before{border-color:var(--brand);background:var(--brand)}
+.tl-item.warn::before{border-color:var(--warn-mark)}
+.tl-date{font-size:11px;color:var(--ink-4);font-weight:600}
+.tl-title{font-size:13.5px;font-weight:650;margin-top:2px}
+.tl-body{font-size:12.5px;color:var(--ink-2);margin-top:3px;line-height:1.6}
+
+/* ---------- 表格 ---------- */
+.tbl{width:100%;border-collapse:collapse;font-size:12.5px}
+.tbl th{
+  text-align:left;font-size:11px;font-weight:650;color:var(--ink-3);
+  padding:8px 10px;background:var(--surface-2);border-bottom:1px solid var(--line);white-space:nowrap;
+}
+.tbl td{padding:9px 10px;border-bottom:1px solid var(--line-2);vertical-align:top}
+.tbl tr:last-child td{border-bottom:none}
+.tbl td.n{font-variant-numeric:tabular-nums;font-weight:600}
+.tbl-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+
+/* ---------- 空状态 / 提示条 ---------- */
+.empty{
+  padding:26px 18px;text-align:center;color:var(--ink-4);
+  border:1px dashed var(--line);border-radius:var(--r-lg);background:var(--surface-2);
+}
+.empty svg{width:26px;height:26px;stroke:var(--ink-4);fill:none;stroke-width:1.6;margin-bottom:8px}
+.empty p{font-size:12.5px;line-height:1.6}
+
+.notice{
+  display:flex;gap:9px;padding:11px 12px;border-radius:var(--r);
+  font-size:12.5px;line-height:1.6;
+}
+.notice svg{width:16px;height:16px;flex:0 0 auto;margin-top:1px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.notice.warn{background:var(--warn-tint);color:var(--warn-ink)}
+.notice.info{background:var(--info-tint);color:var(--info-ink)}
+.notice.green{background:var(--brand-tint);color:var(--brand-2)}
+.notice.danger{background:var(--danger-tint);color:var(--danger-ink)}
+
+/* ---------- 底部抽屉 / 弹窗 ---------- */
+.sheet-mask{
+  position:fixed;inset:0;background:rgba(15,26,23,.42);
+  display:flex;align-items:flex-end;justify-content:center;
+  z-index:60;animation:fade .18s ease;
+}
+@media (min-width:560px){.sheet-mask{align-items:center}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes slideUp{from{transform:translateY(14px);opacity:.6}to{transform:translateY(0);opacity:1}}
+.sheet{
+  width:100%;max-width:480px;max-height:88dvh;
+  background:var(--surface);
+  border-radius:22px 22px 0 0;
+  display:flex;flex-direction:column;overflow:hidden;
+  animation:slideUp .22s cubic-bezier(.2,.8,.2,1);
+}
+@media (min-width:560px){.sheet{border-radius:22px;max-height:80dvh}}
+/* 尺寸档：原来是由 openSheet 写行内 style 的，行内优先级压过样式表，
+   桌面断点就没法再调。挪到这里之后只有一处定义，宽度与高度一起管。
+   选择器比裸 .sheet 多一个类，所以能盖掉上面两档的 max-height。 */
+.sheet.size-tall{max-height:86dvh}
+.sheet.size-full{max-height:92dvh}
+.sheet-hd{
+  flex:0 0 auto;padding:14px 16px 11px;border-bottom:1px solid var(--line);
+  display:flex;align-items:flex-start;gap:10px;background:var(--surface);
+}
+.sheet-hd h3{font-size:15.5px;font-weight:700;letter-spacing:-.2px;flex:1}
+.sheet-hd .sub{font-size:11.5px;color:var(--ink-3);margin-top:3px;font-weight:400}
+.sheet-bd{flex:1 1 auto;overflow-y:auto;padding:14px 16px;-webkit-overflow-scrolling:touch}
+.sheet-ft{
+  flex:0 0 auto;padding:11px 16px calc(13px + env(safe-area-inset-bottom));
+  border-top:1px solid var(--line);background:var(--surface-2);
+  display:flex;gap:8px;
+}
+.sheet-ft .btn{flex:1}
+
+/* ---------- Toast ---------- */
+.toast-root{position:fixed;left:0;right:0;bottom:86px;z-index:80;display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:none}
+.toast{
+  max-width:88%;padding:9px 15px;border-radius:999px;
+  background:rgba(15,26,23,.9);color:#fff;font-size:12.5px;font-weight:600;
+  box-shadow:var(--sh-2);animation:slideUp .2s ease;display:flex;align-items:center;gap:7px;
+}
+.toast svg{width:14px;height:14px;stroke:#fff;fill:none;stroke-width:2.2}
+
+/* ---------- 抖音作品明细 ---------- */
+.work-row{padding:9px 0;border-bottom:1px solid var(--line-2)}
+.work-row:last-of-type{border-bottom:0}
+.wr-top{display:flex;align-items:flex-start;gap:7px}
+.wr-title{font-size:13px;font-weight:650;line-height:1.5;min-width:0;flex:1;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.wr-meta{display:flex;flex-wrap:wrap;gap:4px 12px;margin-top:5px;font-size:11.5px;color:var(--ink-3)}
+.wr-meta b{color:var(--ink-2);font-weight:650}
+.wr-time{margin-top:3px;font-size:11px;color:var(--ink-4)}
+
+/* ---------- 居中灰片（运行后顶一次今日工作量） ----------
+   只裹住文字那么大的一块，不是全屏蒙层。
+   pointer-events:none 是必须的 —— 它挂在 .toast-root 里，那一层本来就不拦点击，
+   这里再拦就会挡住首页下滑和切页，所以整片不接收任何指针事件。 */
+.cn-mask{
+  position:fixed;left:0;right:0;top:44%;z-index:80;
+  display:flex;justify-content:center;
+  transform:translateY(-50%);
+  pointer-events:none;
+}
+.cn-slab{
+  position:relative;text-align:center;
+  padding:13px 22px 14px;border-radius:15px;
+  background:rgba(38,43,41,.66);
+  box-shadow:0 6px 22px rgba(10,18,15,.16);
+  animation:cnIn .2s ease;
+}
+.cn-title{font-size:19px;font-weight:750;color:#fff;letter-spacing:2.5px;line-height:1.35}
+.cn-sub{margin-top:4px;font-size:12px;color:rgba(255,255,255,.82);letter-spacing:1.2px}
+
+/* 光点层：平时透明不动，溶解阶段才起飞 */
+.cn-dust{position:absolute;inset:0;pointer-events:none}
+.cn-dust i{
+  position:absolute;width:4px;height:4px;border-radius:999px;
+  background:#FFE6A3;box-shadow:0 0 7px rgba(255,206,110,.9);
+  opacity:0;transform:translate(-50%,-50%) scale(.6);
+}
+
+/* 溶解：文字先虚化散开，光点错落起飞、最后收进顶栏星星 */
+.cn-mask.out .cn-slab{animation:cnDissolve .62s ease forwards}
+.cn-mask.out .cn-dust i{animation:dustFly var(--dur,.9s) cubic-bezier(.5,.02,.62,.2) var(--delay,0s) forwards}
+@keyframes cnIn{from{opacity:0;transform:translateY(6px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes cnDissolve{
+  0%{opacity:1;filter:blur(0);letter-spacing:0}
+  35%{opacity:.85;filter:blur(1.4px)}
+  100%{opacity:0;filter:blur(5px);letter-spacing:1.5px}
+}
+@keyframes dustFly{
+  0%{opacity:0;transform:translate(-50%,-50%) scale(.5)}
+  16%{opacity:1;transform:translate(-50%,-50%) scale(1)}
+  60%{opacity:.9}
+  100%{opacity:0;transform:translate(calc(-50% + var(--dx,0px)),calc(-50% + var(--dy,-120px))) scale(.22)}
+}
+
+/* ---------- 图表 ---------- */
+.chart{width:100%;display:block;overflow:visible}
+.chart text{font-family:var(--font)}
+.legend{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px;font-size:11.5px;color:var(--ink-3)}
+.legend i{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:5px}
+
+/* ---------- 学习阶段 ---------- */
+.stage-tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;margin-bottom:12px;scrollbar-width:none}
+.stage-tabs::-webkit-scrollbar{display:none}
+.stage-tab{
+  flex:0 0 auto;padding:8px 13px;border-radius:12px;border:1px solid var(--line);
+  background:var(--surface);text-align:left;min-width:118px;transition:all .15s;
+}
+.stage-tab b{display:block;font-size:12.5px;font-weight:700}
+.stage-tab span{display:block;font-size:10.5px;color:var(--ink-3);margin-top:2px}
+.stage-tab.on{background:var(--brand);border-color:var(--brand);color:#fff;box-shadow:0 8px 18px -12px rgba(14,143,91,.9)}
+.stage-tab.on span{color:rgba(255,255,255,.82)}
+
+.topic{
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
+  padding:12px;margin-bottom:9px;transition:border-color .15s,box-shadow .15s;
+}
+.topic:hover{border-color:var(--brand-tint-2);box-shadow:var(--sh-1)}
+.topic.done{background:var(--surface-2);border-color:var(--brand-tint-2)}
+.topic-hd{display:flex;align-items:flex-start;gap:9px}
+.check{
+  width:20px;height:20px;border-radius:7px;border:1.6px solid var(--line);
+  flex:0 0 auto;display:grid;place-items:center;background:var(--surface);margin-top:1px;
+}
+.check svg{width:12px;height:12px;stroke:#fff;fill:none;stroke-width:2.6;opacity:0}
+.check.on{background:var(--brand);border-color:var(--brand)}
+.check.on svg{opacity:1}
+.topic-t{font-size:13.5px;font-weight:680;letter-spacing:-.1px}
+.topic-o{font-size:12px;color:var(--ink-3);margin-top:3px;line-height:1.55}
+.topic-detail{margin-top:9px;padding-top:9px;border-top:1px dashed var(--line);font-size:12px;color:var(--ink-2);line-height:1.65}
+.topic-detail b{color:var(--ink);font-weight:650}
+.topic-metric{
+  display:inline-flex;align-items:center;gap:5px;margin-top:8px;
+  padding:4px 9px;border-radius:8px;background:var(--brand-tint);
+  font-size:11px;font-weight:650;color:var(--brand-2);
+}
+
+/* ---------- AI 任务包 ---------- */
+.ai-pack{border:1px solid var(--line);border-radius:var(--r);padding:12px;margin-bottom:10px;background:var(--surface)}
+.ai-pack-hd{display:flex;align-items:center;gap:8px}
+.ai-pack-hd .t{flex:1;font-size:13.5px;font-weight:680}
+.prompt-box{
+  position:relative;margin-top:9px;background:#0F1A17;border-radius:11px;overflow:hidden;
+}
+.prompt-box pre{
+  margin:0;padding:11px 12px;font-family:var(--mono);
+  font-size:11.5px;line-height:1.7;color:#DCE9E2;
+  white-space:pre-wrap;word-break:break-word;max-height:220px;overflow-y:auto;
+}
+.prompt-box .pb-actions{
+  display:flex;gap:6px;padding:7px 9px;background:rgba(255,255,255,.06);
+  border-top:1px solid rgba(255,255,255,.08);
+}
+.prompt-box .pb-actions button{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:11.5px;font-weight:650;color:#B9D6C7;padding:4px 8px;border-radius:7px;
+}
+.prompt-box .pb-actions button:hover{background:rgba(255,255,255,.1);color:#fff}
+.prompt-box .pb-actions svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.paste-zone{margin-top:9px}
+.paste-zone textarea{
+  width:100%;min-height:74px;border:1px dashed var(--line);border-radius:11px;
+  padding:10px;font-size:12.5px;line-height:1.6;background:var(--surface-2);
+  resize:vertical;outline:none;
+}
+.paste-zone textarea:focus{border-color:var(--brand);border-style:solid;background:var(--surface)}
+
+/* ---------- AI Hub 模型市场入口 ---------- */
+.ai-hub-banner{
+  display:flex;align-items:center;gap:10px;cursor:pointer;
+  border:1px solid var(--info);border-radius:var(--r);padding:11px 12px;margin-bottom:12px;
+  background:var(--info-tint);transition:transform .12s ease,box-shadow .12s ease;
+}
+.ai-hub-banner:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(44,107,168,.14)}
+.ai-hub-banner .aihb-l{display:flex;align-items:center;gap:10px;flex:1}
+.ai-hub-banner .t{font-size:13px;font-weight:700;color:var(--info-ink)}
+.ai-hub-banner .chev{width:18px;height:18px;stroke:var(--info);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+
+/* ---------- 模型直接调用区（AI 话术抽屉内） ---------- */
+.model-call{margin-top:9px;border:1px solid var(--line);border-radius:11px;padding:11px;background:var(--surface-2)}
+.form-grid{display:flex;gap:10px;flex-wrap:wrap}
+.fg-col{flex:1;min-width:140px;display:flex;flex-direction:column;gap:4px;margin-bottom:9px}
+.fld-label{font-size:11.5px;font-weight:640;color:var(--ink-3)}
+.fld-label .muted{font-weight:500}
+.model-call select,.model-call input{
+  width:100%;height:34px;border:1px solid var(--line);border-radius:8px;
+  padding:0 9px;font-size:12.5px;background:var(--surface);outline:none;
+}
+.model-call select:focus,.model-call input:focus{border-color:var(--info)}
+.model-adv{margin:2px 0 9px;border-top:1px dashed var(--line-2);padding-top:8px}
+.model-adv summary{cursor:pointer;font-size:12px;color:var(--ink-3);font-weight:620;list-style:none}
+.model-adv summary::-webkit-details-marker{display:none}
+.model-adv summary::before{content:"▸ ";color:var(--ink-4)}
+.model-adv[open] summary::before{content:"▾ "}
+.sw-row{display:flex;align-items:center;gap:7px;height:34px;font-size:12.5px;color:var(--ink-2);cursor:pointer}
+.model-call-bar{display:flex;gap:8px;flex-wrap:wrap;margin-top:2px}
+.model-status{margin-top:9px;font-size:12px;line-height:1.55;border-radius:8px;padding:8px 10px;display:none}
+.model-status.is-loading{display:block;background:var(--info-tint);color:var(--info-ink)}
+.model-status.is-ok{display:block;background:var(--brand-tint);color:var(--brand-2)}
+.model-status.is-err{display:block;background:var(--danger-tint);color:var(--danger-ink)}
+
+/* ---------- 模型市场卡片 ---------- */
+.model-list{display:flex;flex-direction:column;gap:12px;margin-top:10px}
+.model-card{border:1px solid var(--line);border-radius:var(--r);padding:13px 14px;background:var(--surface)}
+.mc-hd{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.mc-title{font-size:14.5px;font-weight:720}
+.mc-vendor{font-size:12px;color:var(--ink-4);font-weight:600}
+.mc-flag{font-size:12px;color:var(--ink-3);margin:5px 0 11px}
+.mc-block{padding:9px 0;border-top:1px solid var(--line-2)}
+.mc-blk-h{font-size:11.5px;font-weight:700;color:var(--ink-3);letter-spacing:.3px;margin-bottom:7px}
+.mc-cost-row{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:5px}
+.mc-price{font-size:12.5px;color:var(--ink-2);font-family:var(--mono)}
+.mc-free{font-size:12px;color:var(--ink-3)}
+.mc-auth{font-size:12.5px;line-height:1.6;color:var(--ink-2)}
+.mc-endpoint{font-family:var(--mono);font-size:11.5px;color:var(--ink-4);margin-top:4px;word-break:break-all}
+.mc-strength{font-size:12px;color:var(--ink-3);margin-top:6px}
+.mc-note{font-size:11.5px;color:var(--ink-4);margin-top:4px;line-height:1.55}
+.mc-actions{display:flex;gap:8px;margin-top:11px;flex-wrap:wrap}
+
+/* 成本档徽章 */
+.cost-badge{font-size:11.5px;font-weight:700;padding:3px 9px;border-radius:20px}
+.cost-1{background:var(--tier1-bg);color:var(--tier1-fg)}
+.cost-2{background:var(--tier2-bg);color:var(--tier2-fg)}
+.cost-3{background:var(--tier3-bg);color:var(--tier3-fg)}
+.cost-4{background:var(--tier4-bg);color:var(--tier4-fg)}
+.cost-5{background:var(--tier5-bg);color:var(--tier5-fg)}
+
+/* 难度刻度条 */
+.diff-meter{display:flex;align-items:center;gap:5px}
+.dm-seg{width:26px;height:8px;border-radius:3px;background:var(--line-2)}
+.dm-seg.on.diff-1{background:var(--tier1-fg)}
+.dm-seg.on.diff-2{background:var(--tier2-fg)}
+.dm-seg.on.diff-3{background:var(--tier3-fg)}
+.dm-seg.on.diff-4{background:var(--tier4-fg)}
+.dm-seg.on.diff-5{background:var(--tier5-fg)}
+.dm-label{font-size:12px;font-weight:680;margin-left:4px;color:var(--ink-2)}
+.mc-diff-desc{font-size:11.5px;color:var(--ink-4);margin-top:6px;line-height:1.55}
+
+/* ---------- 连接状态卡 ---------- */
+.conn{
+  border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;background:var(--surface);
+}
+.conn-hd{padding:14px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--line-2)}
+.conn-logo{
+  width:42px;height:42px;border-radius:13px;flex:0 0 auto;
+  background:linear-gradient(145deg,#2F6FB0,#1E4E80);color:#fff;
+  display:grid;place-items:center;font-weight:800;font-size:15px;
+}
+.conn-bd{padding:4px 14px 12px}
+
+/* ---------- 会员详情 ---------- */
+.detail-hero{
+  display:flex;align-items:center;gap:14px;padding:16px;border-radius:var(--r-lg);
+  background:linear-gradient(135deg,#F0F8F4,#F7FBF9);border:1px solid var(--brand-tint-2);
+  box-shadow:0 1px 2px rgba(16,40,30,.05);
+}
+.detail-hero .avatar{width:54px;height:54px;border-radius:16px;font-size:18px}
+.detail-hero h3{font-size:17px;font-weight:740;letter-spacing:-.3px}
+.detail-hero .m{font-size:12px;color:var(--ink-3);margin-top:4px;display:flex;gap:8px;flex-wrap:wrap}
+
+/* 详情端子集切换：胶囊式分段控件，标签 + 计数徽标，激活态为品牌填充 */
+.tabs-mini{display:flex;gap:6px;margin:16px 0 14px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.tabs-mini::-webkit-scrollbar{display:none}
+.tabs-mini button{
+  flex:0 0 auto;display:inline-flex;align-items:center;gap:6px;
+  padding:7px 13px;border-radius:999px;
+  font-size:13px;font-weight:600;color:var(--ink-3);
+  background:var(--surface-2);border:1px solid var(--line);
+  white-space:nowrap;cursor:pointer;
+  transition:background .15s,color .15s,border-color .15s,box-shadow .15s;
+}
+.tabs-mini button:hover{color:var(--ink-2);background:var(--brand-tint);border-color:var(--brand-tint-2)}
+.tabs-mini button.on{
+  color:#fff;background:var(--brand);border-color:var(--brand);
+  box-shadow:0 6px 14px -8px rgba(14,143,91,.85);
+}
+.tabs-mini .cnt{
+  font-size:11px;font-weight:700;line-height:1;
+  padding:2px 6px;border-radius:999px;
+  background:var(--surface-3);color:var(--ink-3);font-variant-numeric:tabular-nums;
+}
+.tabs-mini button.on .cnt{background:rgba(255,255,255,.22);color:#fff}
+
+/* ---------- 粘性筛选 ---------- */
+.sticky-tools{
+  position:sticky;top:-14px;z-index:10;
+  margin:-14px -14px 12px;padding:12px 14px 10px;
+  background:rgba(247,250,248,.94);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line-2);
+}
+.search-wrap{position:relative}
+.search-wrap svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:15px;height:15px;stroke:var(--ink-4);fill:none;stroke-width:1.9}
+.search-wrap .input{padding-left:35px;background:var(--surface)}
+
+.metric-strip{display:flex;gap:0;overflow-x:auto;scrollbar-width:none;margin:0 -2px}
+.metric-strip::-webkit-scrollbar{display:none}
+.ms-item{flex:1 0 auto;padding:0 12px;border-right:1px solid var(--line-2);text-align:center}
+.ms-item:last-child{border-right:none}
+.ms-item .v{font-size:19px;font-weight:750;letter-spacing:-.7px}
+.ms-item .k{font-size:10.5px;color:var(--ink-3);margin-top:2px;white-space:nowrap}
+
+/* ---------- 其他 ---------- */
+.divider{height:1px;background:var(--line);margin:12px 0}
+.tag-row{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px}
+.spacer{height:6px}
+.muted{color:var(--ink-3)}
+.small{font-size:11.5px}
+.mono{font-family:var(--mono);font-size:11.5px}
+.grow{flex:1}
+.flex{display:flex;align-items:center;gap:8px}
+.between{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.nowrap{white-space:nowrap}
+.fab{
+  position:absolute;right:16px;bottom:calc(var(--h-tab) + 18px);
+  width:52px;height:52px;border-radius:18px;
+  background:var(--brand);color:#fff;display:grid;place-items:center;
+  box-shadow:0 14px 30px -12px rgba(14,143,91,.85);
+  z-index:25;transition:transform .14s;
+}
+.fab:active{transform:scale(.94)}
+.fab svg{width:23px;height:23px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round}
+
+/* ============================================================
+   漏斗图（HTML 版，比 SVG 更适应窄屏）
+   ============================================================ */
+.funnel{display:flex;flex-direction:column;gap:7px}
+.fn-row{display:grid;grid-template-columns:74px 1fr 54px;align-items:center;gap:9px}
+.fn-label{font-size:11.5px;color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fn-bar-wrap{position:relative;height:22px;display:flex;align-items:center}
+.fn-bar{
+  height:100%;border-radius:6px;
+  background:linear-gradient(90deg,var(--brand) 0%,#3FAF7D 100%);
+  min-width:5px;transition:width .5s cubic-bezier(.2,.8,.2,1); /* impeccable-disable-line layout-transition */
+}
+.fn-conv{
+  margin-left:7px;font-size:10.5px;font-weight:650;color:var(--ink-3);
+  font-variant-numeric:tabular-nums;
+}
+.fn-value{font-size:12px;font-weight:700;text-align:right;color:var(--ink)}
+
+/* ============================================================
+   骨架屏（连接、同步这类等待场景用骨架，不用转圈）
+   ============================================================ */
+.skeleton{
+  height:12px;border-radius:6px;
+  background:linear-gradient(90deg,var(--surface-3) 0%,#E7EEE9 50%,var(--surface-3) 100%);
+  background-size:220% 100%;
+  animation:shimmer 1.3s ease-in-out infinite;
+}
+.skeleton.w60{width:60%}
+.skeleton.w40{width:40%}
+@keyframes shimmer{0%{background-position:100% 0}100%{background-position:-60% 0}}
+
+/* ============================================================
+   数据连接卡
+   ============================================================ */
+.conn{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;margin-bottom:12px}
+.conn-hd{display:flex;align-items:center;gap:11px;padding:13px 14px}
+.conn-logo{
+  width:40px;height:40px;border-radius:13px;flex:0 0 auto;color:#fff;
+  display:grid;place-items:center;font-size:15px;font-weight:800;
+}
+.conn-hd .nm{font-size:14.5px;font-weight:700;letter-spacing:-.2px}
+.conn-hd .vd{font-size:11px;color:var(--ink-3);margin-top:2px;line-height:1.5}
+.conn-body{padding:0 14px 13px;border-top:1px solid var(--line-2);padding-top:12px}
+.conn-foot{padding:10px 14px;background:var(--surface-2);border-top:1px solid var(--line-2);display:flex;gap:8px}
+
+/* 字段映射行 */
+.map-row{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:center;padding:9px 0;border-bottom:1px solid var(--line-2)}
+.map-row:last-child{border-bottom:none}
+.map-row .k{font-size:12px;font-weight:650}
+.map-row .s{font-size:11.5px;color:var(--ink-3);font-family:var(--mono);word-break:break-all}
+.map-row .st{flex:0 0 auto}
+
+/* 接口规格勾选 */
+.spec-row{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--line-2)}
+.spec-row:last-child{border-bottom:none}
+.spec-row .m{font-family:var(--mono);font-size:11px;color:var(--ink-3);margin-top:3px;word-break:break-all}
+.spec-row .t{font-size:12.5px;font-weight:650}
+
+/* 示例数据提示条 */
+.demo-banner{
+  display:flex;align-items:center;gap:8px;
+  padding:9px 12px;border-radius:var(--r);
+  background:var(--warn-tint);color:var(--warn-ink);
+  font-size:11.5px;line-height:1.5;margin-bottom:12px;
+}
+.demo-banner svg{width:15px;height:15px;flex:0 0 auto;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.demo-banner button{font-size:11.5px;font-weight:700;color:inherit;text-decoration:underline;white-space:nowrap}
+
+/* 来源标识 */
+.src{
+  display:inline-flex;align-items:center;gap:4px;
+  padding:1px 7px;border-radius:6px;font-size:10.5px;font-weight:650;
+  background:var(--surface-3);color:var(--ink-3);
+}
+.src.tri{background:var(--info-tint);color:var(--info)}
+.src.qn{background:var(--brand-tint);color:var(--brand-2)}
+
+/* 自动 vs 手动的统一标识。
+   蓝色（--info）全站只留给"系统同步/智能体算出来"的信息，
+   手动填写保持正文色。图例在会员档案页写明，色弱也能靠「自动」角标区分。 */
+.auto-val{color:var(--info)}
+.auto-chip{
+  display:inline-block;vertical-align:1px;margin-left:5px;
+  padding:1.5px 5px;border-radius:5px;
+  font-size:9.5px;font-weight:700;line-height:1;letter-spacing:.02em;
+  background:var(--info-tint);color:var(--info);
+}
+.manual-chip{
+  display:inline-block;vertical-align:1px;margin-left:5px;
+  padding:1.5px 5px;border-radius:5px;
+  font-size:9.5px;font-weight:700;line-height:1;letter-spacing:.02em;
+  background:var(--surface-3);color:var(--ink-3);
+}
+
+/* ============================================================
+   今日时间块
+   不是日程表，是"我打算把精力花在哪"。一条竖轴 + 卡片，
+   正在进行的块整块提亮，完成态划掉标题。
+   ============================================================ */
+.dayplan{display:flex;flex-direction:column}
+.tb{display:grid;grid-template-columns:44px 18px 1fr;align-items:stretch}
+.tb-time{
+  font-size:11px;font-weight:650;color:var(--ink-3);
+  font-variant-numeric:tabular-nums;line-height:1.35;padding-top:3px;
+}
+.tb-time span{color:var(--ink-4);font-weight:500}
+.tb-line{position:relative;display:flex;justify-content:center}
+.tb-line::before{
+  content:"";position:absolute;top:0;bottom:0;left:50%;
+  width:2px;margin-left:-1px;background:var(--line);border-radius:2px;
+}
+.tb-line i{
+  position:relative;z-index:1;width:9px;height:9px;border-radius:50%;
+  margin-top:6px;box-shadow:0 0 0 3px var(--surface);
+}
+.dayplan .tb:last-child .tb-line::before{bottom:auto;height:15px}
+.tb-body{min-width:0;padding:0 0 13px}
+.tb-title{font-size:13.5px;font-weight:650;letter-spacing:-.1px;line-height:1.45}
+.tb.done .tb-title{color:var(--ink-3);text-decoration:line-through;text-decoration-color:var(--ink-4)}
+.tb.now .tb-body{
+  background:var(--brand-tint);border-radius:12px;
+  padding:9px 10px;margin:0 0 11px;
+}
+.tb.now .tb-line i{box-shadow:0 0 0 4px var(--brand-tint)}
+.tb.now .tb-time{color:var(--brand-2)}
+.tb .check{margin-top:1px}
+/* 时间块主体区：点它改内容和时段。勾选框与「删」各有自己的按钮，不冲突。 */
+.tb-hit{
+  display:flex;flex-direction:column;flex:1;min-width:0;
+  background:none;border:none;margin:0 0 0 9px;padding:0;font:inherit;color:inherit;
+  text-align:left;cursor:pointer;
+}
+.tb-hit .tb-title{display:block}
+
+/* ============================================================
+   线上营销 · 抖音账号监控 / 门店热度
+   ------------------------------------------------------------
+   全部只用 token 上色，不写死颜色值，
+   所以下面那段暗色模式不用为这里再写一遍覆盖。
+   ============================================================ */
+
+.seg.sub{padding:2px;border-radius:11px}
+.seg.sub button{height:28px;border-radius:8px;font-size:12px;font-weight:600}
+
+/* ---- 绑定引导 ---- */
+.req-list{margin:9px 0 2px}
+.req{display:flex;gap:9px;align-items:flex-start;padding:7px 0;border-top:1px dashed var(--line)}
+.req:first-child{border-top:none}
+.req b{
+  flex:0 0 18px;height:18px;border-radius:6px;background:var(--surface-3);
+  color:var(--ink-3);font-size:11px;font-weight:700;line-height:18px;text-align:center;
+}
+.req span{font-size:12.5px;line-height:1.6;color:var(--ink-2);min-width:0}
+code{
+  font-family:var(--mono);font-size:11.5px;background:var(--surface-3);
+  padding:1px 5px;border-radius:5px;color:var(--ink-2);white-space:nowrap;
+}
+
+/* ---- 已绑定账号卡 ---- */
+.acct-head{display:flex;gap:11px;align-items:center}
+.acct-meta{display:flex;gap:10px;flex-wrap:wrap;font-size:11.5px;color:var(--ink-3)}
+
+/* ---- 指标网格 ---- */
+.metric-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:1px;
+  background:var(--line-2);border-radius:10px;overflow:hidden;
+}
+.metric-cell{background:var(--surface);padding:9px 8px;min-width:0}
+.mc-k{font-size:10.5px;color:var(--ink-3);margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mc-v{font-size:14.5px;font-weight:700;letter-spacing:-.3px;line-height:1.15}
+.mc-v small{font-size:10px;font-weight:600;color:var(--ink-3);margin-left:2px}
+.mc-v.miss{font-size:11.5px;font-weight:600;color:var(--ink-4)}
+.mc-d{font-size:10px;margin-top:3px;color:var(--ink-4);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mc-d.good{color:var(--brand)}
+.mc-d.bad{color:var(--danger)}
+/* 无差异（delta === 0）走这一档。douyin.js 的 dirOf 会返回 neutral，
+   之前缺这条规则，涨不动也不跌的那批指标颜色会掉回未定义状态。 */
+.mc-d.neutral{color:var(--ink-4)}
+
+/* ---- 智能体建议 ----
+   左侧这道 3px 不是装饰：颜色由每条建议的紧急级别决定
+   （ops.js 逐条写 border-left-color），是这一列里唯一承载「轻重缓急」的信号。 */
+.advice-list{display:flex;flex-direction:column;gap:9px}
+.advice{
+  background:var(--surface);border:1px solid var(--line);
+  border-left:3px solid var(--brand); /* impeccable-disable-line side-tab */
+  border-radius:var(--r);padding:11px 12px;
+}
+
+/* ---- 对标账号 / 排名 ---- */
+.list-item.static{cursor:default}
+.list-item.static:hover{background:transparent}
+.reason{display:flex;gap:6px;align-items:flex-start;font-size:11.5px;color:var(--ink-3);margin-top:5px;line-height:1.5}
+.reason svg{
+  width:12px;height:12px;flex:0 0 auto;margin-top:2px;
+  stroke:var(--brand);fill:none;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;
+}
+.rank-row{padding:8px 0;border-bottom:1px solid var(--line-2)}
+.rank-row:last-child{border-bottom:none}
+.rank-no{
+  flex:0 0 20px;height:20px;border-radius:6px;background:var(--surface-3);
+  color:var(--ink-3);font-size:11px;font-weight:700;line-height:20px;text-align:center;
+}
+.rank-no.top{background:var(--brand-tint);color:var(--brand-2)}
+
+/* （官方赛道榜的样式集中定义在下方「抽屉里的监控开关行」之后那一份，
+   此处原有一份重复定义已删除 —— 两份曾互相覆盖，见下方注释。） */
+
+/* ---- 同步记录 ----
+   日志圆点必须限定在 .log-row 里：基础 .dot 是「徽章里的内联小圆点」
+   （6px、currentColor），这里若全局改尺寸/颜色，会连智能体摘要徽章里的
+   绿点一起改掉（它俩共用一个类名）。 */
+.log-row{padding:8px 0;border-bottom:1px solid var(--line-2)}
+.log-row:last-child{border-bottom:none}
+.log-row .dot{flex:0 0 7px;width:7px;height:7px;border-radius:50%;background:var(--ink-4);margin-top:6px}
+.log-row .dot.ok{background:var(--brand)}
+.log-row .dot.bad{background:var(--danger)}
+
+/* ---- 取数成本 ---- */
+.cost-row{padding:8px 0;border-bottom:1px solid var(--line-2)}
+.cost-row:last-child{border-bottom:none}
+
+/* ---- 门店热度 ---- */
+.heat-list{display:flex;flex-direction:column;gap:11px;margin-bottom:2px}
+.heat-card{padding:13px}
+.heat-num{font-size:26px;font-weight:750;letter-spacing:-.9px;line-height:1.1}
+.heat-num small{font-size:11.5px;font-weight:600;color:var(--ink-3);margin-left:3px;letter-spacing:0}
+.heat-num.miss{font-size:15px;font-weight:650;color:var(--ink-4);letter-spacing:0}
+.heat-sub{font-size:11.5px;color:var(--ink-3);margin-top:3px;line-height:1.55}
+
+/* ---- 抽屉里的监控开关行 ---- */
+.mon-row{display:flex;gap:10px;align-items:center;justify-content:space-between;padding:8px 0;border-top:1px solid var(--line-2)}
+.mon-row:first-child{border-top:none}
+.mon-row .select{height:32px;font-size:12.5px;padding:0 30px 0 10px}
+
+/* ---- 官方赛道榜 ----
+   这一段（含 .board-head / .board-row / .br-*）此前在文件里出现过两份，
+   后一份把前一份的 .br-rank 尺寸、「榜首」配色与 .br-score 字号盖掉，
+   渲染结果既非前一份的意图、也不是刻意设计。这里合并成唯一一份：
+   行分隔统一走 border-top（首行去掉）、榜首行整行浅底 + 实心品牌色名次块。 */
+.board-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.board-row{
+  display:flex;gap:10px;align-items:center;
+  padding:9px 0;border-top:1px solid var(--line-2);
+}
+.board-row:first-of-type{border-top:none}
+.board-row:last-child{border-bottom:none}
+.board-row.top{
+  padding:9px 8px;margin:0 -8px;border-radius:var(--r-xs);
+  background:var(--brand-tint);border-top-color:transparent;
+}
+.br-rank{
+  flex:0 0 26px;height:26px;border-radius:8px;background:var(--surface-3);
+  color:var(--ink-3);font-size:12.5px;font-weight:750;line-height:26px;text-align:center;
+  font-variant-numeric:tabular-nums;
+}
+.board-row.top .br-rank{background:var(--brand);color:#fff}
+.br-body{flex:1;min-width:0}
+.br-name{font-size:13px;font-weight:650;line-height:1.4;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.br-meta{display:flex;flex-wrap:wrap;gap:9px;font-size:11.5px;color:var(--ink-3);margin-top:3px;line-height:1.4}
+.br-meta b{font-weight:650;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.br-meta .up{color:var(--brand-2)}
+.br-score{flex:0 0 auto;text-align:right;font-size:16px;font-weight:750;letter-spacing:-.4px;color:var(--brand-2)}
+.br-score small{font-size:10.5px;font-weight:600;color:var(--ink-4);margin-left:2px;letter-spacing:0}
+
+/* ============================================================
+   未读提醒滚动条 / 可选配功能 / 交易后台
+   ------------------------------------------------------------
+   全部只用 token 上色，不写死浅色，暗色模式零额外适配。
+   ============================================================ */
+
+/* ---- 未读提醒条 ---- */
+.brief{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 11px;margin-bottom:13px;
+  border:1px solid var(--line);border-radius:var(--r);
+  background:var(--surface);box-shadow:var(--sh-1);
+  cursor:pointer;transition:border-color .15s,background .15s;
+}
+.brief:hover{border-color:var(--line-2);background:var(--surface-2)}
+/* 有未读时才给一层淡淡的品牌底色，读完了就收回到普通卡片 */
+.brief.unread{background:linear-gradient(180deg,var(--brand-tint) 0%,var(--surface) 78%);border-color:var(--brand-tint-2)}
+.brief.clear{cursor:default}
+.brief.clear:hover{background:var(--surface);border-color:var(--line)}
+
+.brief-tag{
+  flex:0 0 auto;display:flex;align-items:center;gap:6px;
+  padding:0 9px;height:24px;border-radius:999px;
+  background:var(--surface);border:1px solid var(--line);
+  font-size:11.5px;color:var(--ink-3);white-space:nowrap;
+}
+.brief.unread .brief-tag{background:var(--brand);border-color:var(--brand);color:#fff}
+.brief-tag b{font-weight:700;font-size:11px}
+.brief-pulse{
+  width:6px;height:6px;border-radius:50%;background:#fff;flex:0 0 auto;
+  animation:briefPulse 1.9s ease-in-out infinite;
+}
+.brief.clear .brief-pulse{display:none}
+@keyframes briefPulse{
+  0%,100%{opacity:1;transform:scale(1)}
+  50%{opacity:.35;transform:scale(.7)}
+}
+
+/* 纵向逐行滚动：中文长句横向跑马灯根本来不及看完 */
+.brief-view{flex:1;min-width:0;height:20px;overflow:hidden;position:relative}
+.brief-track{
+  transition:transform .55s cubic-bezier(.2,.8,.2,1);
+  will-change:transform;
+}
+.brief-line{
+  height:20px;display:flex;align-items:center;gap:7px;
+  font-size:12.5px;line-height:20px;color:var(--ink);
+}
+.brief-lv{flex:0 0 auto;width:6px;height:6px;border-radius:2px;display:inline-block}
+.brief-text{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600}
+.brief-src{flex:0 0 auto;font-size:10.5px;color:var(--ink-4);white-space:nowrap}
+
+.brief-acts{flex:0 0 auto;display:flex;gap:6px;align-items:center}
+.brief-btn{
+  height:26px;padding:0 10px;border-radius:999px;
+  background:var(--brand);color:#fff;
+  font-size:11.5px;font-weight:650;white-space:nowrap;
+  transition:opacity .15s;
+}
+.brief-btn:active{opacity:.8}
+.brief-btn.ghost{background:var(--surface-3);color:var(--ink-2);border:1px solid var(--line)}
+.brief.clear .brief-btn.ghost{background:transparent}
+
+/* ---- 分段上的「添加功能」 ---- */
+.seg-add{
+  flex:0 0 auto;display:inline-flex;align-items:center;gap:3px;
+  height:30px;padding:0 9px;border-radius:9px;
+  border:1px dashed var(--line);background:transparent;
+  font-size:12px;font-weight:600;color:var(--ink-3);
+  white-space:nowrap;transition:color .15s,border-color .15s;
+}
+.seg-add:hover{color:var(--brand-2);border-color:var(--brand-tint-2)}
+.seg-add svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round}
+.seg.sub .seg-add{height:28px;border-radius:8px}
+
+/* ---- 功能库 ---- */
+.feat-row{padding:12px}
+.feat-ico{
+  flex:0 0 auto;width:32px;height:32px;border-radius:10px;
+  background:var(--surface-3);color:var(--ink-2);
+  display:grid;place-items:center;
+}
+.feat-ico svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+
+/* ---- 提醒抽屉里的单条 ----
+   左侧 3px 的颜色由提醒的紧急级别决定（sheets.js 逐条写 border-left-color），
+   是状态轨道，不是可以去掉的装饰边。 */
+.brief-item{
+  padding:11px 12px;margin-bottom:9px;
+  border:1px solid var(--line);
+  border-left:3px solid var(--ink-4); /* impeccable-disable-line side-tab */
+  border-radius:var(--r);background:var(--surface);
+}
+.brief-item:last-child{margin-bottom:0}
+/* 已读压成低对比度，一眼能看出还剩几条没读 */
+.brief-item.read{background:var(--surface-2);opacity:.62}
+.brief-item.read:hover{opacity:.85}
+
+/* ---- 交易后台 ---- */
+.biz-card{padding:13px;margin-bottom:11px}
+.biz-card:last-of-type{margin-bottom:0}
+
+.na-row{
+  display:flex;align-items:flex-start;gap:7px;
+  padding:6px 0;border-bottom:1px solid var(--line-2);
+  font-size:12px;line-height:1.6;color:var(--ink-2);
+}
+.na-row:last-child{border-bottom:none}
+.na-row svg{
+  flex:0 0 auto;width:13px;height:13px;margin-top:3px;
+  fill:none;stroke:var(--danger);stroke-width:2.2;stroke-linecap:round;
+}
+
+/* ---- 经营漏斗 ---- */
+.bf-row{
+  display:flex;align-items:center;gap:9px;
+  padding:6px 0;
+}
+.bf-label{
+  flex:0 0 58px;font-size:11.5px;font-weight:650;color:var(--ink-2);
+  white-space:nowrap;
+}
+.bf-bar-wrap{
+  flex:1;min-width:0;height:20px;position:relative;
+  background:var(--surface-3);border-radius:6px;overflow:hidden;
+}
+.bf-bar{
+  height:100%;border-radius:6px;
+  background:linear-gradient(90deg,var(--brand),#35A878);
+  transition:width .5s cubic-bezier(.2,.8,.2,1); /* impeccable-disable-line layout-transition */
+}
+.bf-bar.miss{background:repeating-linear-gradient(135deg,var(--line) 0 6px,var(--surface-3) 6px 12px)}
+.bf-conv{
+  position:absolute;right:7px;top:50%;transform:translateY(-50%);
+  font-size:10.5px;font-weight:700;color:var(--ink-3);
+  font-variant-numeric:tabular-nums;
+}
+.bf-value{
+  flex:0 0 62px;text-align:right;
+  font-size:12.5px;font-weight:700;letter-spacing:-.2px;
+}
+.bf-value.miss{font-size:11px;font-weight:600;color:var(--ink-4);letter-spacing:0}
+
+@media (max-width:360px){
+  .bf-label{flex-basis:50px}
+  .bf-value{flex-basis:54px}
+  .brief-src{display:none}
+}
+@media (max-width:380px){ .cg-cards{grid-template-columns:1fr} }
+
+/* ============================================================
+   暗色模式：尊重系统偏好（同一套 token，不逐组件改写）
+   ============================================================ */
+@media (prefers-color-scheme: dark){
+  :root{
+    --ink:#ECF2EE; --ink-2:#C2CFC8; --ink-3:#93A49C; --ink-4:#7C8D86;
+    --bg:#0D1512; --surface:#131E1A; --surface-2:#0F1915; --surface-3:#1B2723;
+    --line:#25332D; --line-2:#1E2A25;
+    --brand:#2AAE79; --brand-2:#4CC492; --brand-tint:#15301F; --brand-tint-2:#1D422C;
+    --warn:#DFA248; --warn-tint:#2C2415; --danger:#E4786A; --danger-tint:#2E1C1A;
+    --info:#6BA6DC; --info-tint:#152538; --teal:#3FA8BA; --teal-tint:#12292E;
+    --slate-tint:#1E2A25;
+    --chip-on-bg:#4CC492; --chip-on-fg:#0D1512;
+    --grad-a:#4CC492; --grad-b:#2AAE79; --grad-c:#3FA8BA; --grad-d:#ECF2EE;
+    --wash-1:rgba(42,174,121,.16);
+    --wash-2:rgba(63,168,186,.15);
+    --sh-1:0 1px 2px rgba(0,0,0,.4);
+    --sh-2:0 12px 32px -18px rgba(0,0,0,.7);
+    --sh-3:0 24px 60px -30px rgba(0,0,0,.8);
+    /* 深色底上把「墨水」翻成浅色，否则 .notice / .demo-banner 会深字落深底 */
+    --warn-ink:#EDC77C; --info-ink:#9DC3EA; --danger-ink:#F0A79C;
+    /* 代价 5 档深色版：底压暗、字提亮，保持同一套语义顺序 */
+    --tier1-bg:#122B1C; --tier1-fg:#6FD79B;
+    --tier2-bg:#142C15; --tier2-fg:#8ED07A;
+    --tier3-bg:#2E2716; --tier3-fg:#E2BC63;
+    --tier4-bg:#2E2013; --tier4-fg:#E5A970;
+    --tier5-bg:#301A18; --tier5-fg:#F0A79C;
+  }
+  .app-header.solid{background:rgba(19,30,26,.92)}
+  .app-header .hd-panel{background:linear-gradient(180deg,#131E1A 0%,#111B17 100%);border-bottom-color:var(--line)}
+  .tabbar{background:rgba(19,30,26,.94)}
+  .sticky-tools{background:rgba(15,25,21,.94)}
+  .detail-hero{background:linear-gradient(135deg,#14261D,#13201A);border-color:var(--brand-tint-2)}
+  .toast{background:rgba(236,242,238,.94);color:#0F1A17}
+  .toast svg{stroke:#0F1A17}
+  .b-green{color:#5FCF9A}
+  .fn-bar{background:linear-gradient(90deg,#1E9A66,#3FAF7D)}
+  .tb.now .tb-body{background:#16301F}
+}
+@media (min-width:560px) and (prefers-color-scheme: dark){
+  body{
+    background:
+      radial-gradient(1100px 520px at 12% -8%, #16261E 0%, rgba(22,38,30,0) 62%),
+      radial-gradient(900px 480px at 100% 108%, #17222C 0%, rgba(23,34,44,0) 60%),
+      var(--bg);
+  }
+  .app-shell{border-color:rgba(255,255,255,.08)}
+}
+
+/* ============================================================
+   品牌字与首页海报
+   ------------------------------------------------------------
+   首页顶端只有一个字标：FitFlow。大字重、负字距、渐变填充。
+   渐变颜色走变量，换黑白主题时只换变量，不改这里的任何一行。
+   ============================================================ */
+.wordmark{
+  font-weight:800;letter-spacing:-.04em;
+  background-image:var(--grad-brand);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;color:transparent;
+}
+/* 这里曾经挂过一道缓慢扫过的流光。删掉的原因不是不好看，是代价：
+   渐变文字扫光是 background-position 动画，每帧都要重绘这个元素，
+   而首页的整体重渲染本来就频繁。字重 + 负字距 + 渐变已经足够立住，
+   为一个装饰动作常驻一条绘制管线不划算。 */
+/* 浏览器不支持文字裁切时，宁可退回纯色也不要变成看不见 */
+@supports not ((-webkit-background-clip:text) or (background-clip:text)){
+  .wordmark{-webkit-text-fill-color:var(--brand-2);color:var(--brand-2);background-image:none}
+}
+
+/* ---------- 首页通栏字标 ----------
+   负的左右外边距抵掉 .app-main 的 14px 内边距，做到真正的通栏；
+   负的上外边距把整条拉到透明顶栏底下，让它成为页面名副其实的第一行。
+   字本身由 SVG 横向拉伸铺满（见 agent.js 的 posterMark），
+   这里只负责给它一条能呼吸的色带。 */
+.poster{
+  position:relative;overflow:hidden;
+  margin:calc(-1 * var(--h-header) - 14px) calc(-1 * var(--pad-x)) 14px;
+  padding:calc(var(--h-header) + 18px) 0 15px;
+  background:
+    radial-gradient(118% 136% at 4% -26%, var(--wash-1) 0%, transparent 58%),
+    radial-gradient(112% 112% at 98% 126%, var(--wash-2) 0%, transparent 62%),
+    var(--surface-2);
+  border-bottom:1px solid var(--line-2);
+}
+.poster svg{display:block;width:100%;height:auto}
+.poster text{font-family:var(--font)}
+
+/* ============================================================
+   客户触达台与任务卡
+   ============================================================ */
+
+/* 触达台底部两个主动作：拨号与微信。
+   拨号是 <a href="tel:">，微信是 button，两者必须长得一样高一样宽。 */
+.ct-actions{display:flex;gap:8px;width:100%}
+.ct-actions .btn{flex:1;height:46px;font-size:14.5px;border-radius:13px}
+.ct-actions .btn svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+
+/* 自动标签：来源靠左侧一道细竖线标出，不额外占用横向空间。
+   颜色已经承担了紧急度，不能再拿来标来源。 */
+.src-tag{position:relative;padding-left:16px}
+.src-tag::before{
+  content:"";position:absolute;left:8px;top:50%;transform:translateY(-50%);
+  width:2px;height:10px;border-radius:2px;background:currentColor;opacity:.45;
+}
+.src-tag.tri::before,.src-tag.qn::before{opacity:.9}
+.src.warn{background:var(--warn-tint);color:var(--warn)}
+
+/* 任务卡上的备注：就地编辑，随手存。
+   字号 16px 是硬要求，iOS 上小于 16px 的输入框会在聚焦时把整页放大。 */
+.note-inline{margin-top:9px}
+.note-inline .input{
+  font-size:16px;padding:8px 11px;
+  background:var(--surface-2);border-color:var(--line-2);
+}
+.note-inline .input:focus{background:var(--surface)}
+.note-inline .input::placeholder{color:var(--ink-4)}
+.note-saved{
+  font-size:10.5px;font-weight:650;color:var(--brand-2);
+  opacity:0;transition:opacity .2s;
+}
+.note-saved.on{opacity:1}
+
+/* 设置里的主题色块 */
+.sw{width:13px;height:13px;border-radius:4px;flex:0 0 auto;box-shadow:inset 0 0 0 1px rgba(0,0,0,.1)}
+.sw.brand{background:linear-gradient(135deg,#12A167,#0A6E46)}
+.sw.mono{background:linear-gradient(135deg,#FFFFFF 0 48%,#111111 52% 100%)}
+
+/* ============================================================
+   主体色彩 · 黑白基础版
+   ------------------------------------------------------------
+   只把"主题 UI"那层换掉：顶栏、底栏、页面底色、按钮、分隔线、字标、
+   海报渐变、品牌色统统压成黑/白/灰。
+   客户那一头的提示和标签（流失预警、到期、运动频率、阶段、来源这些）
+   不动 —— 它们是带语义的信号色，洗成灰就分不出"今天必须打"和"例行维护"了。
+   做法上：警示/状态色（warn / danger / info / teal）直接沿用 :root 的真彩色，
+   只把上面那套 chrome token 灰化。不再用 blanket grayscale(1)，
+   否则会连客户标签一起洗掉。
+   ============================================================ */
+:root[data-theme="mono"]{
+  --ink:#0B0B0B; --ink-2:#3C3C3C; --ink-3:#707070; --ink-4:#A0A0A0;
+  --bg:#F2F2F2; --surface:#FFFFFF; --surface-2:#FAFAFA; --surface-3:#F0F0F0;
+  --line:#E3E3E3; --line-2:#EFEFEF;
+  --brand:#141414; --brand-2:#000000; --brand-tint:#EAEAEA; --brand-tint-2:#D6D6D6;
+  /* warn / danger / info / teal 不覆盖，沿用真彩，客户提示标签保持语义色 */
+  --slate-tint:#F0F0F0;
+  --grad-a:#000000; --grad-b:#4A4A4A; --grad-c:#8C8C8C; --grad-d:#111111;
+  --chip-on-bg:#000000; --chip-on-fg:#FFFFFF;
+  --wash-1:rgba(0,0,0,.05); --wash-2:rgba(0,0,0,.04);
+}
+:root[data-theme="mono"] .logo-mark{background:linear-gradient(145deg,#2A2A2A,#000)}
+:root[data-theme="mono"] .icon-btn.accent{background:#111;color:#fff}
+:root[data-theme="mono"] .icon-btn.accent:hover{background:#000;color:#fff}
+:root[data-theme="mono"] .tab.on::before{background:#111}
+:root[data-theme="mono"] .bf-bar,
+:root[data-theme="mono"] .fn-bar{background:linear-gradient(90deg,#2A2A2A,#6A6A6A)}
+:root[data-theme="mono"] .app-header.solid{background:rgba(255,255,255,.94)}
+:root[data-theme="mono"] .hd-mark-flat{color:#000}
+@media (min-width:560px){
+  :root[data-theme="mono"] body{
+    background:
+      radial-gradient(1100px 520px at 12% -8%, #E9E9E9 0%, rgba(233,233,233,0) 62%),
+      radial-gradient(900px 480px at 100% 108%, #EDEDED 0%, rgba(237,237,237,0) 60%),
+      var(--bg);
+  }
+}
+
+/* ============================================================
+   动效克制：尊重 prefers-reduced-motion
+   ============================================================ */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{
+    animation-duration:.001ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.001ms !important;
+    scroll-behavior:auto !important;
+  }
+  .skeleton{animation:none;background:var(--surface-3)}
+}
+
+/* ============================================================
+   打卡日历（会员档案·打卡标签）
+   月视图网格 + 周期性统计 + 近 6 月迷你柱状。
+   只用 CSS 变量，品牌主题 / 黑白主题自动适配。
+   ============================================================ */
+.cal-wrap{margin-top:4px}
+.cal-head{margin:2px 0 10px}
+.cal-title{font-size:15px;font-weight:700;letter-spacing:.3px;color:var(--ink)}
+.cal-weekdays{
+  display:grid;grid-template-columns:repeat(7,1fr);
+  gap:4px;margin-bottom:5px;
+}
+.cal-weekdays span{
+  text-align:center;font-size:11px;font-weight:600;color:var(--ink-4);
+  padding:3px 0;
+}
+.cal-grid{
+  display:grid;grid-template-columns:repeat(7,1fr);
+  gap:4px;
+}
+.cal-cell{
+  position:relative;
+  aspect-ratio:1/1;
+  display:flex;align-items:center;justify-content:center;
+  border-radius:10px;
+  font-size:13px;font-weight:600;
+  color:var(--ink-2);
+  background:var(--surface-2);
+  border:1px solid transparent;
+  font-variant-numeric:tabular-nums;
+}
+.cal-cell.empty{background:transparent;border:none}
+.cal-cell.future{color:var(--ink-4);opacity:.55}
+/* 已打卡：品牌色底 + 白字，最显眼 */
+.cal-cell.on{
+  background:var(--brand);
+  color:#fff;
+  font-weight:700;
+}
+.cal-cell.on::after{
+  content:"";position:absolute;right:4px;top:4px;
+  width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.85);
+}
+/* 今天：描品牌色环，未打卡也一眼能认 */
+.cal-cell.today{
+  border-color:var(--brand);
+  color:var(--brand-2);
+  box-shadow:inset 0 0 0 1.5px var(--brand);
+}
+.cal-cell.today.on{color:#fff;box-shadow:none}
+.cal-legend{
+  display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+  margin-top:9px;font-size:11.5px;color:var(--ink-3);
+}
+.cal-legend .dot{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.cal-legend .dot.on{background:var(--brand)}
+.cal-legend .dot.today{background:var(--surface);border:1.5px solid var(--brand);box-shadow:inset 0 0 0 1px var(--brand)}
+
+/* 三体建档元信息条 + 语义说明 */
+.cal-meta{
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+  font-size:12px;color:var(--ink-2);
+  margin:2px 0 10px;padding:8px 11px;
+  background:var(--brand-tint);border-radius:var(--r-sm);
+}
+.cal-meta .sep{color:var(--brand-2);opacity:.55}
+.cal-caption{
+  font-size:11.5px;color:var(--ink-4);line-height:1.6;
+  margin-top:11px;padding:0 2px;
+}
+
+/* 近 6 月迷你柱状 */
+.cal-bars{
+  display:grid;grid-template-columns:repeat(6,1fr);
+  gap:6px;align-items:end;
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
+  padding:14px 12px 10px;
+}
+.cal-bar-col{
+  display:flex;flex-direction:column;align-items:center;gap:5px;
+  height:96px;justify-content:flex-end;
+}
+.cal-bar-track{
+  flex:1;width:100%;
+  display:flex;align-items:flex-end;justify-content:center;
+}
+.cal-bar{
+  width:60%;max-width:22px;border-radius:6px 6px 2px 2px;
+  background:var(--surface-3);
+  min-height:3px;
+  transition:height .2s ease; /* impeccable-disable-line layout-transition */
+}
+.cal-bar.on{background:var(--brand)}
+.cal-bar-num{font-size:12px;font-weight:700;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.cal-bar-label{font-size:10.5px;color:var(--ink-4)}
+
+@media (max-width:380px){
+  .cal-cell{font-size:12px;border-radius:9px}
+  .cal-bars{grid-template-columns:repeat(6,1fr);gap:3px;padding:12px 6px 8px}
+}
+
+/* ---------- 客户管理 · 四栏看板 ---------- */
+.board{display:grid;grid-template-columns:1fr;gap:12px;align-items:start}
+@media (min-width:760px){.board{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (min-width:1180px){.board{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.col{min-width:0;display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--sh-1)}
+.col-hd{display:flex;align-items:center;gap:8px;padding:11px 13px;font-size:13px;font-weight:700;color:var(--ink-2);background:var(--surface-2);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:2}
+.col-idx{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:7px;background:var(--brand);color:#fff;font-size:12px;font-weight:700;flex:0 0 auto}
+.col-hd .count{margin-left:auto;font-size:11px;color:var(--ink-4);font-weight:600}
+.col-bd{padding:12px;display:flex;flex-direction:column;gap:10px}
+.col-bd .flex{min-width:0}
+.big-num{font-size:24px;font-weight:750;letter-spacing:-.8px;line-height:1.1}
+.bar.brand > i{background:var(--brand-2)}
+.list.dense{gap:7px}
+.list.dense .list-item{padding:9px 10px}
+.follow-card{transition:transform .25s ease,box-shadow .2s}
+/* 开关按钮：与 .sw 视觉一致，用于纯 JS 控制的切换（无隐藏 checkbox） */
+.switch{position:relative;width:42px;height:24px;border:0;padding:0;flex:0 0 auto;cursor:pointer;border-radius:var(--r-pill);background:var(--surface-3);border:1px solid var(--line);transition:background var(--t) var(--ease),border-color var(--t) var(--ease)}
+.switch::after{content:"";position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:var(--sh-1);transition:transform var(--t) var(--ease)}
+.switch.on{background:var(--brand);border-color:var(--brand)}
+.switch.on::after{transform:translateX(18px)}
+.switch:disabled,.switch.is-disabled{opacity:.5;cursor:not-allowed}
+.switch:focus-visible{outline:var(--focus-w) solid var(--brand);outline-offset:var(--focus-o)}
+
+/* ---------- 隐私告知 / 同意弹窗 ---------- */
+.consent-body{font-size:13px;line-height:1.7;color:var(--ink-2)}
+.consent-body .privacy-p{margin:0 0 10px}
+.consent-body .privacy-p.muted{color:var(--ink-4);font-size:12.5px;margin-top:12px}
+.consent-body .privacy-list{margin:0 0 4px;padding-left:18px}
+.consent-body .privacy-list li{margin:6px 0}
+.consent-body .privacy-list b{color:var(--ink-1)}
+.consent-chk{background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r-md);padding:10px 12px}
+.consent-chk span{font-size:12.5px;color:var(--ink-2);line-height:1.5}
+
+/* ============================================================
+   AI 转写跟进 · 会面转写文档 → 会面纪要
+   设计语言沿用全站卡片体系：同一套 --r / --line / --surface / --sh-1，
+   只在上传区用虚线边框区分"可投放"，其余区块就是普通卡片。
+   ============================================================ */
+
+/* ---- 投放区 ---- */
+.am-drop{
+  border:1.5px dashed var(--line);
+  border-radius:var(--r-lg);
+  background:var(--surface-2);
+  padding:22px 16px;
+  text-align:center;
+  cursor:pointer;
+  transition:border-color .18s ease,background .18s ease;
+}
+.am-drop:hover{border-color:var(--brand-tint-2);background:var(--brand-tint)}
+.am-drop.over{border-color:var(--brand);background:var(--brand-tint)}
+.am-drop svg{
+  width:26px;height:26px;
+  stroke:var(--ink-4);fill:none;stroke-width:1.7;
+  stroke-linecap:round;stroke-linejoin:round;
+  margin-bottom:8px;
+}
+.am-drop.over svg{stroke:var(--brand)}
+.am-dt{font-size:13.5px;font-weight:650;color:var(--ink)}
+.am-ds{font-size:12px;color:var(--ink-4);margin-top:4px;line-height:1.5}
+
+/* ---- 提炼出的纪要 ---- */
+.am-note{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:var(--r-lg);
+  padding:13px 14px;
+  box-shadow:var(--sh-1);
+}
+.am-summary{
+  font-size:14px;font-weight:700;line-height:1.6;
+  color:var(--ink);letter-spacing:-.2px;
+}
+.am-verdict{margin-top:8px}
+.am-block{margin-top:12px}
+.am-block + .am-block{margin-top:11px}
+.am-bt{
+  font-size:11.5px;font-weight:700;color:var(--ink-3);
+  letter-spacing:.3px;margin-bottom:5px;
+}
+.am-list{margin:0;padding:0;list-style:none}
+.am-list li{
+  font-size:13px;line-height:1.65;color:var(--ink-2);
+  padding:4px 0 4px 13px;position:relative;
+}
+.am-list li::before{
+  content:'';position:absolute;left:2px;top:12px;
+  width:4px;height:4px;border-radius:50%;
+  background:var(--brand-tint-2);
+}
+/* 跟进事项：动作 + 时间两栏，时间右对齐，扫一眼知道什么时候做 */
+.am-list li{display:flex;gap:10px;align-items:baseline}
+.am-list li > span:first-child{flex:1;min-width:0}
+.am-when{
+  flex:0 0 auto;font-size:11.5px;font-weight:650;
+  color:var(--brand-2);background:var(--brand-tint);
+  border-radius:6px;padding:2px 7px;white-space:nowrap;
+}
+.am-list li::before{top:11px}
+
+/* ---- 原始返回折叠块 ---- */
+.am-raw{margin-top:10px}
+.am-raw summary{
+  font-size:12.5px;font-weight:650;color:var(--ink-3);
+  cursor:pointer;padding:6px 0;
+}
+.am-raw pre{
+  margin:6px 0 0;padding:10px 11px;
+  background:var(--surface-2);border:1px solid var(--line);
+  border-radius:var(--r-sm);
+  font-family:var(--mono);font-size:11.5px;line-height:1.6;
+  color:var(--ink-2);white-space:pre-wrap;word-break:break-word;
+  max-height:260px;overflow:auto;
+}
+
+/* ---- 支持的文件类型说明 ---- */
+.am-types{display:flex;flex-direction:column;gap:8px}
+.am-type{
+  background:var(--surface);border:1px solid var(--line);
+  border-radius:var(--r);padding:10px 12px;
+}
+.am-type.no{background:var(--surface-2);border-style:dashed}
+.am-th{
+  display:flex;align-items:center;gap:8px;
+  font-size:13px;font-weight:700;color:var(--ink);
+}
+.am-th span{flex:1;min-width:0}
+.am-te{
+  font-family:var(--mono);font-size:11px;color:var(--ink-4);
+  margin-top:5px;line-height:1.55;word-break:break-all;
+}
+.am-ti{font-size:12px;color:var(--ink-3);margin-top:5px;line-height:1.6}
+
+/* ---- 历史 / 归档列表 ---- */
+.am-hist{align-items:flex-start;gap:10px}
+.am-hist .li-body{flex:1;min-width:0}
+.am-hist .btn{flex:0 0 auto}
+.am-hist.is-new{
+  border-color:var(--brand-tint-2);
+  background:var(--brand-tint);
+}
+
+/* ============================================================
+   指挥中心卡片 · 复现 / 降级提示条
+   两条状态互斥，不会同时出现：
+     复现 = 到了约定跟进日或久未跟进，要重新顶上来（暖色，需行动）
+     降级 = 今天已处理，优先级下降一档（中性，仅告知）
+   ============================================================ */
+.cmd-revive{
+  margin-top:8px;padding:7px 10px;
+  border-radius:var(--r-sm);
+  background:var(--warn-tint);
+  border:1px solid var(--warn-tint);
+  color:var(--warn);
+  font-size:12px;font-weight:650;line-height:1.55;
+  display:flex;align-items:flex-start;gap:6px;
+}
+.cmd-revive::before{
+  content:'';flex:0 0 auto;
+  width:6px;height:6px;border-radius:50%;
+  background:var(--warn);margin-top:6px;
+}
+.cmd-demoted{
+  margin-top:8px;padding:6px 10px;
+  border-radius:var(--r-sm);
+  background:var(--surface-2);
+  border:1px solid var(--line);
+  color:var(--ink-4);
+  font-size:11.5px;line-height:1.5;
+}
+
+/* ============================================================
+   星星下拉 · 账号与销售等级大预览
+   面板从"只盖住字标"扩成三层：账号 → 等级大卡 → 分布与指标。
+   高度随之放开，但用 max-height 兜住，滑下来不能盖满整屏。
+   ============================================================ */
+.app-header .hd-panel{
+  flex-direction:column;align-items:stretch;gap:11px;
+  max-height:calc(100vh - 96px);
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+}
+.app-header .hd-row{display:flex;align-items:flex-start;gap:10px}
+
+/* ---- 个人信息 ---- */
+.hd-acc{display:flex;align-items:center;gap:10px}
+.acc-av{
+  width:38px;height:38px;border-radius:999px;flex:0 0 auto;
+  display:grid;place-items:center;
+  background:var(--brand);color:#fff;
+  font-size:15px;font-weight:700;letter-spacing:.02em;
+}
+.acc-info{min-width:0;flex:1}
+.acc-name{
+  display:flex;align-items:center;gap:6px;
+  font-size:14.5px;font-weight:700;color:var(--ink);letter-spacing:-.2px;
+}
+.acc-role{
+  font-size:10.5px;font-weight:650;color:var(--brand-2);
+  background:var(--brand-tint);border-radius:5px;padding:2px 6px;
+}
+.acc-sub{
+  margin-top:2px;font-size:11.5px;color:var(--ink-4);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+
+/* ---- 销售等级大卡。整块可点，点开看评分明细 ---- */
+.hd-grade{
+  display:flex;align-items:center;gap:11px;
+  background:var(--surface);border:1px solid var(--line);
+  border-radius:var(--r-lg);padding:11px 12px;
+  box-shadow:var(--sh-1);cursor:pointer;
+  transition:border-color .16s,box-shadow .16s;
+}
+.hd-grade:hover{border-color:var(--brand-tint-2);box-shadow:var(--sh-2)}
+.hd-grade:active{transform:scale(.995)}
+.hg-badge{
+  width:42px;height:42px;border-radius:12px;flex:0 0 auto;
+  display:grid;place-items:center;
+  color:#fff;font-size:21px;font-weight:800;letter-spacing:-.02em;
+}
+.hg-main{flex:1;min-width:0}
+.hg-top{
+  display:flex;align-items:baseline;justify-content:space-between;gap:8px;
+  font-size:13px;font-weight:700;color:var(--ink);
+}
+.hg-score{font-size:11.5px;font-weight:650;color:var(--ink-3)}
+.hg-bar{
+  margin-top:6px;height:5px;border-radius:999px;
+  background:var(--surface-3);overflow:hidden;
+}
+.hg-bar > i{display:block;height:100%;border-radius:999px;background:var(--brand);transition:width .3s ease} /* impeccable-disable-line layout-transition */
+.hg-sub{margin-top:5px;font-size:11px;color:var(--ink-4);line-height:1.5}
+.hg-chev{
+  width:15px;height:15px;flex:0 0 auto;
+  stroke:var(--ink-4);fill:none;stroke-width:1.9;
+  stroke-linecap:round;stroke-linejoin:round;
+}
+
+/* ---- 等级分布 + 关键指标 ---- */
+.hd-dist{
+  display:flex;gap:12px;align-items:flex-end;
+  background:var(--surface);border:1px solid var(--line);
+  border-radius:var(--r);padding:10px 12px;
+}
+.hdd-bars{display:flex;gap:9px;align-items:flex-end;flex:0 0 auto}
+.hdg-col{display:flex;flex-direction:column;align-items:center;gap:3px;width:26px}
+.hdg-n{font-size:11.5px;font-weight:700;color:var(--ink-3);line-height:1}
+.hdg-b{
+  width:16px;height:34px;border-radius:4px;
+  background:var(--surface-3);
+  display:flex;align-items:flex-end;overflow:hidden;
+}
+.hdg-b > i{display:block;width:100%;border-radius:4px;transition:height .3s ease} /* impeccable-disable-line layout-transition */
+.hdg-l{font-size:10.5px;font-weight:700;color:var(--ink-4);line-height:1}
+.hdg-col.on .hdg-n,.hdg-col.on .hdg-l{color:var(--ink)}
+.hdd-kpi{
+  flex:1;min-width:0;
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px 10px;
+  padding-left:12px;border-left:1px solid var(--line-2);
+}
+.kpi{display:flex;flex-direction:column;gap:1px;min-width:0}
+.kpi-v{font-size:13px;font-weight:700;color:var(--ink);letter-spacing:-.2px;line-height:1.2}
+.kpi-k{font-size:10px;color:var(--ink-4);line-height:1.3}
+
+/* ============================================================
+   销售等级明细抽屉
+   ============================================================ */
+.gr-dim{margin-bottom:10px}
+.gr-dim.miss{opacity:.72}
+.grd-h{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+.grd-k{font-size:12.5px;font-weight:650;color:var(--ink)}
+.grd-v{font-size:12px;font-weight:700;color:var(--brand-2)}
+.gr-dim.miss .grd-v{color:var(--ink-4);font-weight:600}
+.grd-bar{
+  margin-top:5px;height:6px;border-radius:999px;
+  background:var(--surface-3);overflow:hidden;
+}
+.grd-bar > i{display:block;height:100%;border-radius:999px;background:var(--brand)}
+.gr-dim.miss .grd-bar > i{background:var(--line)}
+.grd-f{margin-top:3px;font-size:10.5px;color:var(--ink-4)}
+
+.gr-row{
+  display:flex;align-items:center;gap:9px;
+  padding:9px 0;border-bottom:1px solid var(--line-2);
+}
+.gr-row:last-child{border-bottom:0}
+.grr-main{flex:1;min-width:0}
+.grr-t{font-size:13px;font-weight:650;color:var(--ink)}
+.grr-s{font-size:11px;color:var(--ink-4);margin-top:2px;line-height:1.5}
+.grr-k{
+  flex:0 0 auto;text-align:right;
+  font-size:11px;color:var(--ink-3);line-height:1.6;
+}
+.grr-k b{color:var(--ink);font-weight:700}
+
+.gr-std{
+  background:var(--surface);border:1px solid var(--line);
+  border-radius:var(--r);padding:11px 12px;margin-bottom:9px;
+}
+.grs-h{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.grs-n{font-size:13px;font-weight:700;color:var(--ink);flex:1;min-width:0}
+.grs-c{
+  font-size:10.5px;font-weight:650;color:var(--ink-3);
+  background:var(--surface-2);border-radius:5px;padding:2px 6px;
+}
+.grs-d{font-size:12px;color:var(--ink-3);line-height:1.6;margin-top:6px}
+.grs-sec{
+  font-size:10.5px;font-weight:700;color:var(--ink-4);
+  letter-spacing:.3px;margin:9px 0 4px;
+}
+.grs-ul{margin:0;padding-left:16px}
+.grs-ul li{font-size:12.5px;color:var(--ink-2);line-height:1.65;margin:3px 0}
+
+/* ============================================================
+   桌面端：左侧导航 + 主区两栏
+   ------------------------------------------------------------
+   560px 起就已经是「居中的手机容器」，但那只是把手机放大居中，
+   1024px 以上的横向空间仍然浪费。这一节把它改成真正的两栏外壳：
+   底部导航转成左侧竖排导航，主区拿走剩下的全部宽度。
+   手机（本项目最主要的使用场景）在 1024px 以下的规则一行不动。
+
+   为什么用视口断点、不用容器查询：
+   .app-main 是滚动容器，给它加 container-type 会顺带生成 layout containment，
+   于是它同时变成绝对定位后代的包含块；而 .fab 是 position:absolute、
+   抽屉挂在 body 上，牵一发动全身。外壳宽度本来就只由 .app-shell 决定，
+   1024px 的视口断点在这里与容器查询等价，且没有任何副作用。
+   ============================================================ */
+@media (min-width:1024px){
+  :root{ --pad-x:22px; }
+
+  .app-shell{
+    /* 两件事必须同时做，否则会被基础规则的 max-width:480px 静默钳住：
+       ① 显式给宽度（body 是 place-items:center 的网格，外壳作为网格项会被压成 fit-content）；
+       ② 把 max-width 顶掉。
+       宽度用 calc(100vw - 48px) 而不是 100%：左右也留 24px，
+       和上下的 48px 预算对称，圆角外壳不会贴到屏幕边上。
+       症状参考：只改 width 不改 max-width 时，左栏 232px 已经按桌面规则生效，
+       但整个外壳仍被压在 480px 居中 —— 一眼看像是断点没匹配，其实是这里被钳了。 */
+    width:min(1360px, calc(100vw - 48px));
+    max-width:none;
+    height:min(880px, calc(100dvh - 48px));
+    display:grid;
+    grid-template-columns:232px minmax(0,1fr);
+    grid-template-rows:auto minmax(0,1fr);
+    grid-template-areas:
+      "nav header"
+      "nav main";
+  }
+
+  /* ---- 顶栏：只占主区上方那一行，右上角仍是那颗星。
+         上下内边距仍是 8px，让实际高度恰好等于 --h-header(52px) ——
+         首页通栏 .poster 的负上外边距与内部上内边距都按这个数算，
+         这里改 1px 就会把那条色带对不齐。 ---- */
+  .app-header{grid-area:header;padding:8px var(--pad-x)}
+
+  /* ---- 主区：底栏没了，留给它的那 62px 底部内边距收回来 ---- */
+  .app-main{grid-area:main;padding:14px var(--pad-x) 30px}
+
+  /* ---- 导航：底栏 → 左侧竖排 ----
+     底色取 --bg 而不是 --surface-2：主区底就是 --surface-2，
+     两者用同一个色会让左栏只剩一条边框在撑。--bg 在浅色与深色主题里
+     都比 --surface-2 更靠后退一格，所以无论哪个主题，左栏都是「更靠后」的那一层。 */
+  .tabbar{
+    grid-area:nav;
+    position:static;
+    height:auto;
+    display:flex;flex-direction:column;align-items:stretch;gap:3px;
+    padding:14px 12px 12px;
+    border-top:0;border-right:1px solid var(--line);
+    background:var(--bg);
+    backdrop-filter:none;
+    overflow-y:auto;
+  }
+  .tab{
+    flex:0 0 auto;
+    flex-direction:row;justify-content:flex-start;gap:11px;
+    height:42px;padding:0 12px;border-radius:var(--r-ctl);
+    font-size:13px;font-weight:650;
+  }
+  .tab svg{width:19px;height:19px}
+  .tab.on{background:var(--brand-tint)}
+  /* 选中指示：从「图标上方的横条」转成「整行左侧的竖条」 */
+  .tab.on::before{
+    top:50%;left:0;transform:translateY(-50%);
+    width:3px;height:20px;border-radius:0 2px 2px 0;
+  }
+  /* 徽章：从「压在图标右上角」转成「行内靠右」，不再遮住标签文字 */
+  .tab .badge{
+    position:static;margin-left:auto;
+    min-width:18px;height:18px;line-height:18px;padding:0 5px;
+  }
+
+  /* ---- 左栏品牌 ---- */
+  .nav-brand{
+    display:flex;align-items:center;gap:9px;
+    padding:2px 12px 14px;margin-bottom:9px;
+    border-bottom:1px solid var(--line);
+  }
+  .nav-brand-mark{
+    width:28px;height:28px;border-radius:9px;flex:0 0 auto;
+    background:linear-gradient(145deg,#12A167,#0A6E46);
+    display:grid;place-items:center;color:#fff;font-weight:800;font-size:13px;
+    box-shadow:0 6px 14px -8px rgba(10,110,70,.9);
+  }
+  .nav-brand-name{font-size:15px;font-weight:800;letter-spacing:-.03em}
+
+  /* ---- 没有底栏之后，底部留白重新分配 ---- */
+  .fab{right:28px;bottom:26px}
+  .toast-root{bottom:28px}
+
+  /* ---- 抽屉：桌面有高度预算，按尺寸放开宽度 ---- */
+  .sheet.size-auto{max-width:520px}
+  .sheet.size-tall{max-width:640px;max-height:84dvh}
+  .sheet.size-full{max-width:760px;max-height:88dvh}
+
+  /* ---- 未指定列数的统计网格 ----
+     默认的固定 2 列放到 1000px 宽的主区里会变成两块巨板。
+     只放开「没写列数」的那一种：auto-fit 会先按 170px 铺满可用宽度，
+     再把空轨道收掉，所以条目多的时候真的会用上横向空间。 */
+  .stat-grid:not(.g2):not(.g3):not(.g4){grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
+}

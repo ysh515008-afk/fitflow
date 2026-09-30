@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>FitFlow · 客户管理端预览</title>
+<link rel="stylesheet" href="./styles.css">
+<style>
+  body{margin:0;background:#f4f6f5}
+  .pv-bar{position:sticky;top:0;z-index:5;background:#0E8F5B;color:#fff;padding:10px 16px;font-size:13px;font-weight:600;display:flex;gap:10px;align-items:center}
+  .pv-bar .dot{width:8px;height:8px;border-radius:50%;background:#7CFFC4}
+  .pv-shell{max-width:1500px;margin:0 auto;padding:0 10px}
+</style></head>
+<body>
+<div class="pv-bar"><span class="dot"></span>FitFlow · 客户管理端（只读预览 · 编辑器未启用）· 子集切换：总览 / 维护 / 跟进 / 统计（默认显示「总览」）</div>
+<div class="pv-shell">
+  <div class="page-head">
+    <h2>客户管理</h2>
+    <p>总览 · 维护 · 跟进 · 统计，四块共用同一份数据。默认注册即到店客户（来源 = 到店）。</p>
+  </div>
+  <div class="seg" style="margin-bottom:14px">
+    <button data-mseg="overview" class="on">总览</button><button data-mseg="maintain" class="">维护</button><button data-mseg="follow" class="">跟进</button><button data-mseg="stats" class="">统计</button>
+  </div>
+  
+    <div class="stat-grid g2">
+        <div class="stat">
+    <div class="k">门店总会员池</div>
+    <div class="v num">14<small>人</small></div>
+    
+  </div>
+        <div class="stat">
+    <div class="k">个人会员池</div>
+    <div class="v num">14<small>人</small></div>
+    <div class="d ">归属 陈默</div>
+  </div>
+        <div class="stat">
+    <div class="k">近 30 天新增会员</div>
+    <div class="v num">0<small>人</small></div>
+    
+  </div>
+        <div class="stat">
+    <div class="k">待过期会员</div>
+    <div class="v num">3<small>人</small></div>
+    <div class="d ">30 天内到期</div>
+  </div>
+      </div>
+
+      <div class="search-wrap" style="margin:12px 0">
+        <svg viewBox="0 0 24 24"><use href="#i-search"/></svg>
+        <input class="input" id="mSearch" placeholder="搜姓名 / 手机 / 卡种（搜本地数据包）" value=""/>
+      </div>
+
+      
+        <div class="section-title">待过期名单<span class="count">最近 5 位</span></div>
+        <button class="list-item" data-member="m02">
+            <div class="avatar av-b">吴</div>
+            <div class="li-body">
+              <div class="li-top"><span class="li-name">吴迪</span><span class="badge b-warn">3 天后到期</span></div>
+              <div class="li-meta"><span>年卡 · 私教 36 节</span><span>3 天后</span></div>
+            </div>
+            <svg class="chev" viewBox="0 0 24 24"><use href="#i-chev"/></svg>
+          </button><button class="list-item" data-member="m03">
+            <div class="avatar av-d">赵</div>
+            <div class="li-body">
+              <div class="li-top"><span class="li-name">赵磊</span><span class="badge b-warn">5 天后到期</span></div>
+              <div class="li-meta"><span>月卡</span><span>5 天后</span></div>
+            </div>
+            <svg class="chev" viewBox="0 0 24 24"><use href="#i-chev"/></svg>
+          </button><button class="list-item" data-member="m01">
+            <div class="avatar av-f">林</div>
+            <div class="li-body">
+              <div class="li-top"><span class="li-name">林嘉怡</span><span class="badge b-warn">21 天后到期</span></div>
+              <div class="li-meta"><span>年卡 · 私教 24 节</span><span>21 天后</span></div>
+            </div>
+            <svg class="chev" viewBox="0 0 24 24"><use href="#i-chev"/></svg>
+          </button>
+      
+      <div class="hint" style="margin-top:10px">门店客流 69 人次（近 30 天到店总人次）。搜索只命中 FitFlow 本地数据包，不实时调取三体 / 勤鸟接口。</div>
+  <button class="fab" data-act="new-member" aria-label="新增会员"><svg viewBox="0 0 24 24"><use href="#i-plus"/></svg></button></div>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" data-page-node-id="h9o1FF5gzKicCTSKeIGxod">
+  <defs data-page-node-id="sCMtztfBzm8cJ3pmgiVsc3">
+    <symbol id="i-today" viewBox="0 0 24 24" data-page-node-id="Vqx8ufNv7ibGFAGOVuuhdd"><path d="M12 3v2M4.9 4.9l1.4 1.4M3 12h2M19 12h2M17.7 6.3l1.4-1.4M12 8a4 4 0 100 8 4 4 0 000-8zM5 20h14" data-page-node-id="4Aac3bjJYLyJIlR2GgWdMr"/></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24" data-page-node-id="Ng4uJY3NvsKm04rz4sanG0"><path d="M16 20v-1.5a4 4 0 00-4-4H7a4 4 0 00-4 4V20M9.5 10.5a3.5 3.5 0 100-7 3.5 3.5 0 000 7zM21 20v-1.5a4 4 0 00-3-3.87M16.5 4a3.5 3.5 0 010 6.9" data-page-node-id="2UV6vo1xmD4PecoceyV292"/></symbol>
+    <symbol id="i-ops" viewBox="0 0 24 24" data-page-node-id="KWOLn6FAW8VgEqCzGdLe27"><path d="M3 11l14-6v14L3 13v-2zM17 8a4 4 0 010 8M7 13v5a2 2 0 002 2h1" data-page-node-id="tKTOvpRyy3XEg7RSDdJvmb"/></symbol>
+    <symbol id="i-learn" viewBox="0 0 24 24" data-page-node-id="hYgr5h3L6CIcCyHnjDAGfK"><path d="M4 5.5A2.5 2.5 0 016.5 3H20v15H6.5A2.5 2.5 0 004 20.5v-15zM20 18v3H6.5A2.5 2.5 0 014 18.5" data-page-node-id="sjNTKCq7eBKgidQgdrGvRn"/></symbol>
+    <symbol id="i-data" viewBox="0 0 24 24" data-page-node-id="PP1mLUENa9Wx0Iz4PZ4woj"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2" data-page-node-id="A2GaQohXnebDquA2acO3ex"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24" data-page-node-id="UoL6d48cwmjH7b1sLoK6Zp"><path d="M12 5v14M5 12h14" data-page-node-id="8ujBlCjVJrwTgr5wBXoAXF"/></symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24" data-page-node-id="x9yJDmKtLxs0iuJ70oOpBH"><path d="M4 6.5A2.5 2.5 0 016.5 4h11A2.5 2.5 0 0120 6.5v11A2.5 2.5 0 0117.5 20h-11A2.5 2.5 0 014 17.5v-11zM8 3v3M16 3v3M4 9.5h16" data-page-node-id="AGUnBHwMdRhBlALrOuKE1x"/></symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24" data-page-node-id="cBbZJGIweUh43vcvVlfva6"><path d="M18 15V10a6 6 0 10-12 0v5l-1.5 3h15L18 15zM10 21h4" data-page-node-id="tfeIXiB5osnqeqDmr8sH2i"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24" data-page-node-id="ZZ8oDwpH8yELEc7T3Bw9Se"><path d="M11 19a8 8 0 100-16 8 8 0 000 16zM21 21l-4.3-4.3" data-page-node-id="XWubpHtZaqoJClywI7p5q2"/></symbol>
+    <symbol id="i-sync" viewBox="0 0 24 24" data-page-node-id="yixaijFNHjJbR3nGvRlTsJ"><path d="M20 11a8 8 0 00-14-4.5L4 9M4 13a8 8 0 0014 4.5L20 15M4 4v5h5M20 20v-5h-5" data-page-node-id="IAYEZELLUwRRuQysTSzUcs"/></symbol>
+    <symbol id="i-link" viewBox="0 0 24 24" data-page-node-id="mBrKbbJWLIquZ3PS09pUgR"><path d="M10 13.5a4 4 0 005.7 0l3-3a4 4 0 10-5.7-5.7l-1 1M14 10.5a4 4 0 00-5.7 0l-3 3a4 4 0 105.7 5.7l1-1" data-page-node-id="eAp3wkfDc2XH5GEedjBXw3"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24" data-page-node-id="OrBEdxfFLJXzjgEFAl9hmC"><path d="M12 4v11M7.5 10.5L12 15l4.5-4.5M4 19h16" data-page-node-id="jtCcufk1jkUTkBHBcyzN4c"/></symbol>
+    <symbol id="i-upload" viewBox="0 0 24 24" data-page-node-id="RIJ6JlXVDxBAGpmZ2jXWvD"><path d="M12 16V5M7.5 9.5L12 5l4.5 4.5M4 19h16" data-page-node-id="32B8mblXBxCtn5X6HVaQx6"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24" data-page-node-id="BfE7rv9Z7bi9oGlQIapuqa"><path d="M9 9V6.5A2.5 2.5 0 0111.5 4h6A2.5 2.5 0 0120 6.5v6a2.5 2.5 0 01-2.5 2.5H15M6.5 9h6A2.5 2.5 0 0115 11.5v6A2.5 2.5 0 0112.5 20h-6A2.5 2.5 0 014 17.5v-6A2.5 2.5 0 016.5 9z" data-page-node-id="LWgCGu2SvfV8EWZgTriaGs"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24" data-page-node-id="HgxLB40sFuxC7pPrhNsHGS"><path d="M4 12.5l5 5L20 6.5" data-page-node-id="KEBusuYvBldb6ETrcex0hF"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24" data-page-node-id="KftrgYTHEZvX7QdMGWpbyX"><path d="M6 6l12 12M18 6L6 18" data-page-node-id="vDxPrXhst01zHBM2ks3sox"/></symbol>
+    <symbol id="i-chev" viewBox="0 0 24 24" data-page-node-id="agNfRzT1bg7BHFsfgsFpGQ"><path d="M9 5l7 7-7 7" data-page-node-id="TGvCgw09JRWQ3y6QOQU8dN"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24" data-page-node-id="yYKl2EM3WBETswvbFAbalD"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3zM19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8L19 16z" data-page-node-id="V7sgB85M5Ev4iC2QsbDQJX"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24" data-page-node-id="xyAiOPzqMv3CeCakyyO0TK"><path d="M12 4l9 16H3l9-16zM12 10v4M12 17.5h.01" data-page-node-id="LnZ8Ptu1zMNqkWZcBFkh37"/></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24" data-page-node-id="teNnbIlcVRnJGjsj2DqLNt"><path d="M6 3h3l1.5 4-2 1.5a11 11 0 006 6l1.5-2 4 1.5v3a2 2 0 01-2 2A16 16 0 014 5a2 2 0 012-2z" data-page-node-id="eOuQRBo99MWc4URx9CnCDq"/></symbol>
+    <symbol id="i-chat" viewBox="0 0 24 24" data-page-node-id="iu6tpstGwSZIcIG0BTF7iA"><path d="M21 12a8 8 0 01-11.6 7.1L4 21l1.9-5.4A8 8 0 1121 12z" data-page-node-id="FPFMifJQmQGF0E3Cxudaef"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l7 3v6c0 4.2-2.9 7.6-7 9-4.1-1.4-7-4.8-7-9V6l7-3zM9.2 12.2l2 2 3.6-3.6"/></symbol>
+    <symbol id="i-doc" viewBox="0 0 24 24" data-page-node-id="jxeXq2JBPHWtRgmKzQMc0J"><path d="M7 3h7l5 5v13H7V3zM14 3v5h5M10 13h7M10 17h5" data-page-node-id="vEUE5cT3m46xLet4kiTOHa"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24" data-page-node-id="2nRLAbukUEmIaZvTCNsJ0L"><path d="M12 15a3 3 0 100-6 3 3 0 000 6zM19.4 15a1.6 1.6 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.6 1.6 0 00-2.7 1.1V21a2 2 0 11-4 0v-.2A1.6 1.6 0 007.5 19l-.1.1a2 2 0 11-2.8-2.8l.1-.1A1.6 1.6 0 003 13.6H3a2 2 0 110-4h.2A1.6 1.6 0 004.9 7.5l-.1-.1a2 2 0 112.8-2.8l.1.1A1.6 1.6 0 0010.4 3V3a2 2 0 114 0v.2a1.6 1.6 0 002.7 1.1l.1-.1a2 2 0 112.8 2.8l-.1.1a1.6 1.6 0 001.1 2.7H21a2 2 0 110 4h-.2a1.6 1.6 0 00-1.4 1.2z" data-page-node-id="pmWrodah489PkmDT2CpJkl"/></symbol>
+    <symbol id="i-target" viewBox="0 0 24 24" data-page-node-id="Mxvk70fFDJNytEBYMOASMX"><path d="M12 21a9 9 0 100-18 9 9 0 000 18zM12 17a5 5 0 100-10 5 5 0 000 10zM12 13.5a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" data-page-node-id="QFmS9hXdsrOHM0U5KPEQ7W"/></symbol>
+    <symbol id="i-flame" viewBox="0 0 24 24" data-page-node-id="361DgbEHmrsA303dcd0syB"><path d="M12 22c4 0 6.5-2.6 6.5-6 0-4.5-4.5-6-4.5-10 0 0-3 1.5-3 5-1 0-2-1.5-2-3-1.5 1.5-3 4-3 7.5C6 19.2 8 22 12 22z" data-page-node-id="1GPY24580mJL8g662N0HCF"/></symbol>
+    <symbol id="i-key" viewBox="0 0 24 24" data-page-node-id="uEAcAtH23Dcsgm6GnM2dRl"><path d="M8.5 15.5a4 4 0 100-8 4 4 0 000 8zM11.4 12.6L20 4M17 7l2.2 2.2M14.6 9.4l1.8 1.8" data-page-node-id="YuaF6X9bEOH4EjULwtjzmn"/></symbol>
+    <symbol id="i-plug" viewBox="0 0 24 24" data-page-node-id="NhsTw8Fz4ZcsEKDaZ4bub8"><path d="M9 3v6M15 3v6M6 9h12v3a6 6 0 01-6 6 6 6 0 01-6-6V9zM12 18v3" data-page-node-id="3weiWR3zc0wpeepEzKmds8"/></symbol>
+    <symbol id="i-link-off" viewBox="0 0 24 24" data-page-node-id="v23hvUJBHSLglidkOi5coS"><path d="M10 13.5a4 4 0 005.7 0l3-3a4 4 0 10-5.7-5.7l-1 1M14 10.5a4 4 0 00-5.7 0l-3 3a4 4 0 105.7 5.7l1-1M3 3l18 18" data-page-node-id="Zy8ue854UHPHMmVuVX4qrM"/></symbol>
+    <symbol id="i-douyin" viewBox="0 0 24 24"><path d="M10 17a2 2 0 11-2-2V7l9-1.8v9a2 2 0 11-2-2V6.6L10 7.8V17z"/></symbol>
+    <symbol id="i-xhs" viewBox="0 0 24 24"><path d="M12 6c-2-1.2-4-1.2-6-1v12c2 .2 4 .2 6 1 2-1.2 4-1.2 6-1V5c-2 .2-4 .2-6 1zM12 6v13"/></symbol>
+    <symbol id="i-xianyu" viewBox="0 0 24 24"><path d="M5 12c3-4 9-4 12-1.5 1.5 1.3 2 3 .8 4.2-2 2.3-8 2.3-11-.2L3 17l1-2.5C2.5 13 2.5 13.5 5 12zM14 11h.01"/></symbol>
+    <symbol id="i-other" viewBox="0 0 24 24"><path d="M5.5 12a1.6 1.6 0 11-3.2 0 1.6 1.6 0 013.2 0zM13.6 12a1.6 1.6 0 11-3.2 0 1.6 1.6 0 013.2 0zM21.7 12a1.6 1.6 0 11-3.2 0 1.6 1.6 0 013.2 0z"/></symbol>
+  </defs>
+</svg>
+</body></html>

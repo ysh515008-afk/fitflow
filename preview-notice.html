@@ -1,0 +1,783 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>FitFlow · 今日工作量灰片（溶解吸入星星）</title>
+<link rel="stylesheet" href="./styles.css">
+<style>
+  body{margin:0;background:#f4f6f5}
+  .pv-bar{position:sticky;top:0;z-index:5;background:#0E8F5B;color:#fff;padding:10px 16px;font-size:13px;font-weight:600}
+  .pv-shell{max-width:520px;margin:0 auto;padding:0 10px 60px}
+  .pv-h2{font-size:14px;margin:16px 0 8px;color:#0A6E46}
+  .pv-replay{position:fixed;left:50%;transform:translateX(-50%);bottom:24px;z-index:90}
+  /* 预览页没有真顶栏，这里摆一颗同款星星当吸入目标（真机上是 .bubble[data-hdr="brand"]） */
+  .pv-star{position:fixed;left:16px;top:14px;z-index:95;width:34px;height:34px;border-radius:999px;
+    display:grid;place-items:center;background:#fff;border:1px solid var(--line);box-shadow:var(--sh-1)}
+  .pv-star svg{width:19px;height:19px;fill:none;stroke:var(--brand-2);stroke-width:1.9}
+  .pv-star.hit{animation:starCatch .5s ease}
+  @keyframes starCatch{0%{transform:scale(1)}40%{transform:scale(1.22)}100%{transform:scale(1)}}
+</style></head>
+<body>
+<div class="pv-bar">停留 1400ms → 文字溶解散落 → 光点收进左上角星星（灰片不拦任何操作）</div>
+<div class="pv-star" id="pvStar"><svg viewBox="0 0 24 24"><use href="#i-spark"/></svg></div>
+<div class="pv-shell">
+  <div class="pv-h2">智能体首页（灰片浮在其上，可正常下滑 / 切页）</div>
+  
+  <!-- 首页第一行只有字标本身。日期和问候放在它下面，不挤进海报里 -->
+  <div class="poster"><svg viewBox="0 0 105 17" role="img" aria-label="FitFlow">
+    <defs>
+      <linearGradient id="ffPoster" x1="0" y1="0.1" x2="1" y2="0.9">
+        <stop offset="0" style="stop-color:var(--grad-a)"/>
+        <stop offset="0.38" style="stop-color:var(--grad-b)"/>
+        <stop offset="0.72" style="stop-color:var(--grad-c)"/>
+        <stop offset="1" style="stop-color:var(--grad-d)"/>
+      </linearGradient>
+    </defs>
+    <text x="0" y="14.4" textLength="100" lengthAdjust="spacingAndGlyphs"
+      font-size="20" font-weight="800" font-style="italic"
+      fill="url(#ffPoster)">FitFlow</text>
+  </svg></div>
+
+  <div class="page-head">
+    <h2 style="font-size:17px">早上好</h2>
+    <p>2026年9月30日 周六｜智能体在后台按 15 条规则自动运行</p>
+  </div>
+
+  
+    <div class="demo-banner">
+      <svg viewBox="0 0 24 24"><use href="#i-alert"/></svg>
+      <div style="flex:1">当前是<strong>示例数据</strong>，用来演示这套自动运行逻辑。换成你自己的会员后，规则会照常工作。</div>
+      <button data-act="clear-demo">清空</button>
+    </div>
+
+  <!-- 智能体状态 -->
+  <div class="card" style="border-color:var(--brand-tint-2);background:linear-gradient(150deg,#F4FBF7,#FBFEFC)">
+    <div class="flex" style="gap:14px;align-items:center">
+      <div class="ring-wrap" style="width:104px;height:104px">
+    <svg class="chart" viewBox="0 0 104 104" width="104" height="104">
+      <circle cx="52" cy="52" r="47.5" fill="none" stroke="#E4EBE6" stroke-width="9"/>
+      <circle cx="52" cy="52" r="47.5" fill="none" stroke="#0E8F5B" stroke-width="9"
+        stroke-linecap="round" stroke-dasharray="232.48 65.97"
+        transform="rotate(-90 52 52)"/>
+    </svg>
+    <div class="ring-label"><b>78%</b><span>建议采纳率</span></div>
+  </div>
+      <div style="flex:1;min-width:0">
+        <div class="between" style="margin-bottom:6px">
+          <span class="small" style="font-weight:700">自动运行中</span>
+          <span class="badge b-green"><span class="dot"></span>15/16 条规则</span>
+        </div>
+        <div class="between" style="padding:3px 0"><span class="small muted">上次运行</span><span class="small" style="font-weight:650">2026-09-30 09:00｜今天</span></div>
+        <div class="between" style="padding:3px 0"><span class="small muted">今日命中</span><span class="small" style="font-weight:650">17 条待办</span></div>
+        <div class="between" style="padding:3px 0"><span class="small muted">待接线索</span><span class="small" style="font-weight:650">3 条</span></div>
+        <div class="between" style="padding:3px 0"><span class="small muted">近 30 天</span><span class="small" style="font-weight:650">命中 95 次，采纳 74 次</span></div>
+        <div class="between" style="padding:3px 0"><span class="small muted">进化建议</span><span class="small" style="font-weight:650">11 条待你看</span></div>
+      </div>
+    </div>
+    
+    <div class="btn-row" style="margin-top:12px">
+      <button class="btn primary" data-act="run"><svg viewBox="0 0 24 24"><use href="#i-sync"/></svg>立即运行一次</button>
+      <button class="btn ghost" data-act="rules">规则中心</button>
+      <button class="btn ghost" data-act="evolve">进化建议 11</button>
+    </div>
+  </div>
+
+  <div class="section-title">数据在指挥我动谁<span class="count">最急的 6 人，共 14 人</span></div>
+  <div class="card tight" data-member="m02">
+    <div class="between">
+      <div class="flex" style="min-width:0;gap:10px">
+        <div class="avatar av-b">吴</div>
+        <div style="min-width:0">
+          <div class="li-top">
+            <span class="li-name">吴迪</span>
+            <span class="badge b-warn">续费洽谈</span>
+            <span class="badge b-danger" title="A 级 · 核心资产 · 跟进周期 7 天">A</span>
+            <span class="badge b-danger">P1</span>
+            <span class="badge b-danger">会籍 3 天后到期</span>
+          </div>
+          <div class="li-meta"><span>年卡 · 私教 36 节</span><span>2 张卡</span><span>2 天前到店</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="cmd-revive">约定今天跟进：出两档续费方案，今天内发报价</div>
+    
+    <div style="margin-top:9px;padding:9px 10px;background:var(--surface-2);border-radius:10px">
+      <div style="font-size:13px;font-weight:680">锁定续费方案，约面对面签约<span class="auto-chip">自动</span></div>
+      <div class="small auto-val" style="margin-top:4px;line-height:1.6">距离到期只剩 3 天，这个阶段微信基本无效</div>
+      <div class="tag-row" style="margin-top:6px">
+        <span class="badge b-green" title="每周 2 次上下，节奏稳。适合深化关系，别用催的">运动综合 · 规律</span><span class="src" title="近 30 天到店 9 次，折算每周 2.1 次，最近 2 天前到店">近 30 天 9 次</span>
+        <span class="src">面谈</span>
+        <span class="src">今天 18:30-20:00</span>
+        <span class="src qn">承诺一致性阶梯</span>
+      </div>
+    </div>
+    <div class="note-inline">
+    <input class="input" data-note="m02" value="已口头确认续费，只差方案和付款。别再问&quot;要不要续&quot;，直接给方案。"
+      placeholder="补一句备注，自动保存" aria-label="吴迪的备注" />
+    <div class="note-saved" data-note-saved="m02">已保存</div>
+  </div>
+    <div class="btn-row" style="margin-top:9px">
+      <button class="btn primary sm" data-act="cmd-do" data-mid="m02">去处理</button>
+      <button class="btn ghost sm" data-act="ai-psych" data-mid="m02">AI 话术</button>
+      <button class="btn ghost sm" data-member="m02">看档案</button>
+    </div>
+  </div><div class="card tight" data-member="m03">
+    <div class="between">
+      <div class="flex" style="min-width:0;gap:10px">
+        <div class="avatar av-d">赵</div>
+        <div style="min-width:0">
+          <div class="li-top">
+            <span class="li-name">赵磊</span>
+            <span class="badge b-warn">沉默</span>
+            <span class="badge b-plain" title="D 级 · 休眠观察 · 跟进周期 60 天">D</span>
+            <span class="badge b-danger">P1</span>
+            <span class="badge b-danger">会籍 5 天后到期</span>
+          </div>
+          <div class="li-meta"><span>月卡</span><span>1 张卡</span><span>28 天前到店</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="cmd-revive">约定今天跟进：改约免费体测，不谈续费</div>
+    
+    <div style="margin-top:9px;padding:9px 10px;background:var(--surface-2);border-radius:10px">
+      <div style="font-size:13px;font-weight:680">锁定续费方案，约面对面签约<span class="auto-chip">自动</span></div>
+      <div class="small auto-val" style="margin-top:4px;line-height:1.6">距离到期只剩 5 天，这个阶段微信基本无效</div>
+      <div class="tag-row" style="margin-top:6px">
+        <span class="badge b-warn" title="一个月来不了几次，习惯还没立住，重点在降门槛不在加量">运动综合 · 偏低</span><span class="src" title="近 30 天到店 1 次，折算每周 0.2 次，最近 28 天前到店">近 30 天 1 次</span>
+        <span class="src">面谈</span>
+        <span class="src">今天 18:30-20:00</span>
+        <span class="src qn">互惠</span>
+      </div>
+    </div>
+    <div class="note-inline">
+    <input class="input" data-note="m03" value="月卡客户最能被&quot;习惯&quot;打动，不要推年卡，先约一次免费体测。"
+      placeholder="补一句备注，自动保存" aria-label="赵磊的备注" />
+    <div class="note-saved" data-note-saved="m03">已保存</div>
+  </div>
+    <div class="btn-row" style="margin-top:9px">
+      <button class="btn primary sm" data-act="cmd-do" data-mid="m03">去处理</button>
+      <button class="btn ghost sm" data-act="ai-psych" data-mid="m03">AI 话术</button>
+      <button class="btn ghost sm" data-member="m03">看档案</button>
+    </div>
+  </div><div class="card tight" data-member="m04">
+    <div class="between">
+      <div class="flex" style="min-width:0;gap:10px">
+        <div class="avatar av-e">孙</div>
+        <div style="min-width:0">
+          <div class="li-top">
+            <span class="li-name">孙一鸣</span>
+            <span class="badge b-warn">沉默</span>
+            <span class="badge b-plain" title="D 级 · 休眠观察 · 跟进周期 60 天">D</span>
+            <span class="badge b-danger">P1</span>
+            <span class="badge b-green">正常</span>
+          </div>
+          <div class="li-meta"><span>季卡</span><span>2 张卡</span><span>46 天前到店</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="cmd-revive">约定跟进已逾期 2 天：换社群路径：让同龄会员拉他进打卡群</div>
+    
+    <div style="margin-top:9px;padding:9px 10px;background:var(--surface-2);border-radius:10px">
+      <div style="font-size:13px;font-weight:680">换渠道唤醒：打电话 + 免费体测切入<span class="auto-chip">自动</span></div>
+      <div class="small auto-val" style="margin-top:4px;line-height:1.6">已 46 天未到店，微信触达率已经很低</div>
+      <div class="tag-row" style="margin-top:6px">
+        <span class="badge b-danger" title="近 30 天没有到店记录。微信已经很难拉回来，换电话">运动综合 · 停练</span><span class="src" title="近 30 天到店 0 次，折算每周 0 次，最近 46 天前到店">近 30 天 0 次</span>
+        <span class="src">电话</span>
+        <span class="src">上午 9:30-11:00</span>
+        <span class="src qn">互惠</span>
+      </div>
+    </div>
+    <div class="note-inline">
+    <input class="input" data-note="m04" value="学生党，唤醒用&quot;同学一起练&quot;的社群方式比私信更有效。"
+      placeholder="补一句备注，自动保存" aria-label="孙一鸣的备注" />
+    <div class="note-saved" data-note-saved="m04">已保存</div>
+  </div>
+    <div class="btn-row" style="margin-top:9px">
+      <button class="btn primary sm" data-act="cmd-do" data-mid="m04">去处理</button>
+      <button class="btn ghost sm" data-act="ai-psych" data-mid="m04">AI 话术</button>
+      <button class="btn ghost sm" data-member="m04">看档案</button>
+    </div>
+  </div><div class="card tight" data-member="m05">
+    <div class="between">
+      <div class="flex" style="min-width:0;gap:10px">
+        <div class="avatar av-b">何</div>
+        <div style="min-width:0">
+          <div class="li-top">
+            <span class="li-name">何伟</span>
+            <span class="badge b-danger">已过期</span>
+            <span class="badge b-info" title="C 级 · 低频待激活 · 跟进周期 30 天">C</span>
+            <span class="badge b-danger">P1</span>
+            <span class="badge b-danger">会籍已过期 43 天</span>
+          </div>
+          <div class="li-meta"><span>年卡</span><span>2 张卡</span><span>60 天前到店</span></div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div style="margin-top:9px;padding:9px 10px;background:var(--surface-2);border-radius:10px">
+      <div style="font-size:13px;font-weight:680">按「回流」处理，先关心近况再说月卡<span class="auto-chip">自动</span></div>
+      <div class="small auto-val" style="margin-top:4px;line-height:1.6">年卡 已到期（2026-08-18），用续费话术会适得其反</div>
+      <div class="tag-row" style="margin-top:6px">
+        <span class="badge b-danger" title="近 30 天没有到店记录。微信已经很难拉回来，换电话">运动综合 · 停练</span><span class="src" title="近 30 天到店 0 次，折算每周 0 次，最近 60 天前到店">近 30 天 0 次</span>
+        <span class="src">电话</span>
+        <span class="src">上午 9:30-11:00</span>
+        <span class="src qn">服务恢复悖论</span>
+      </div>
+    </div>
+    <div class="note-inline">
+    <input class="input" data-note="m05" value="已过期。先关心近况，再谈&quot;回来先买月卡&quot;。"
+      placeholder="补一句备注，自动保存" aria-label="何伟的备注" />
+    <div class="note-saved" data-note-saved="m05">已保存</div>
+  </div>
+    <div class="btn-row" style="margin-top:9px">
+      <button class="btn primary sm" data-act="cmd-do" data-mid="m05">去处理</button>
+      <button class="btn ghost sm" data-act="ai-psych" data-mid="m05">AI 话术</button>
+      <button class="btn ghost sm" data-member="m05">看档案</button>
+    </div>
+  </div><div class="card tight" data-member="m07">
+    <div class="between">
+      <div class="flex" style="min-width:0;gap:10px">
+        <div class="avatar av-d">冯</div>
+        <div style="min-width:0">
+          <div class="li-top">
+            <span class="li-name">冯雪</span>
+            <span class="badge b-green">在练</span>
+            <span class="badge b-danger" title="A 级 · 核心资产 · 跟进周期 7 天">A</span>
+            <span class="badge b-danger">P1</span>
+            <span class="badge b-warn">私教 36 节 剩 2节</span>
+          </div>
+          <div class="li-meta"><span>年卡 · 私教 36 节</span><span>2 张卡</span><span>今天到店</span></div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div style="margin-top:9px;padding:9px 10px;background:var(--surface-2);border-radius:10px">
+      <div style="font-size:13px;font-weight:680">谈私教续课包，先排固定时段再谈价格<span class="auto-chip">自动</span></div>
+      <div class="small auto-val" style="margin-top:4px;line-height:1.6">课时只剩 2 节，归零后就从&quot;在练&quot;变成&quot;停练&quot;</div>
+      <div class="tag-row" style="margin-top:6px">
+        <span class="badge b-green" title="每周 3 次以上。习惯已经长在身上，谈续费、请他转介绍都最省力">运动综合 · 高频稳定</span><span class="src" title="近 30 天到店 19 次，折算每周 4.4 次，今天到店">近 30 天 19 次</span>
+        <span class="src">面谈</span>
+        <span class="src">今天训练后</span>
+        <span class="src qn">目标梯度效应</span>
+      </div>
+    </div>
+    <div class="note-inline">
+    <input class="input" data-note="m07" value="课时只剩 2 节，本周内必须谈续课包，不要等到归零。"
+      placeholder="补一句备注，自动保存" aria-label="冯雪的备注" />
+    <div class="note-saved" data-note-saved="m07">已保存</div>
+  </div>
+    <div class="btn-row" style="margin-top:9px">
+      <button class="btn primary sm" data-act="cmd-do" data-mid="m07">去处理</button>
+      <button class="btn ghost sm" data-act="ai-psych" data-mid="m07">AI 话术</button>
+      <button class="btn ghost sm" data-member="m07">看档案</button>
+    </div>
+  </div><div class="card tight" data-member="m08">
+    <div class="between">
+      <div class="flex" style="min-width:0;gap:10px">
+        <div class="avatar av-a">陈</div>
+        <div style="min-width:0">
+          <div class="li-top">
+            <span class="li-name">陈昊</span>
+            <span class="badge b-green">在练</span>
+            <span class="badge b-info" title="C 级 · 低频待激活 · 跟进周期 30 天">C</span>
+            <span class="badge b-danger">P1</span>
+            <span class="badge b-green">正常</span>
+          </div>
+          <div class="li-meta"><span>年卡</span><span>2 张卡</span><span>4 天前到店</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="cmd-revive">久未跟进：还没有任何跟进记录（C 级要求 30 天内触达一次）</div>
+    
+    <div style="margin-top:9px;padding:9px 10px;background:var(--surface-2);border-radius:10px">
+      <div style="font-size:13px;font-weight:680">例行维护：更新进展与体测数据<span class="auto-chip">自动</span></div>
+      <div class="small auto-val" style="margin-top:4px;line-height:1.6">当前没有紧迫风险，保持陪伴即可</div>
+      <div class="tag-row" style="margin-top:6px">
+        <span class="badge b-info" title="每周 1 次上下。还有提升空间，可以聊频次安排">运动综合 · 正常</span><span class="src" title="近 30 天到店 7 次，折算每周 1.6 次，最近 4 天前到店">近 30 天 7 次</span>
+        <span class="src">微信</span>
+        <span class="src">本周内</span>
+        <span class="src qn">目标梯度效应</span>
+      </div>
+    </div>
+    <div class="note-inline">
+    <input class="input" data-note="m08" value=""
+      placeholder="补一句备注，自动保存" aria-label="陈昊的备注" />
+    <div class="note-saved" data-note-saved="m08">已保存</div>
+  </div>
+    <div class="btn-row" style="margin-top:9px">
+      <button class="btn primary sm" data-act="cmd-do" data-mid="m08">去处理</button>
+      <button class="btn ghost sm" data-act="ai-psych" data-mid="m08">AI 话术</button>
+      <button class="btn ghost sm" data-member="m08">看档案</button>
+    </div>
+  </div>
+  <button class="btn ghost block sm" data-act="cmds">查看全部 14 人的动作</button>
+
+
+  <div class="section-title">自动提醒<span class="count">17 条待清</span></div>
+  <div class="chips" style="margin-bottom:10px">
+    <button class="chip on" data-qfilter="all">全部 17</button>
+    <button class="chip" data-qfilter="follow">客户跟进 8</button><button class="chip" data-qfilter="card">会籍卡 5</button><button class="chip" data-qfilter="lead">线索响应 1</button><button class="chip" data-qfilter="time">个人时间 2</button><button class="chip" data-qfilter="data">数据健康 1</button>
+  </div>
+  <div id="hitList"><div class="card tight" data-member="m02">
+    <div class="between">
+      <div style="min-width:0">
+        <div class="li-top">
+          <span class="li-name" style="font-size:13.5px">吴迪</span>
+          <span class="badge b-danger">P1</span>
+          <span class="badge b-danger">会籍 3 天后到期</span>
+          <span class="badge b-plain">客户跟进</span>
+        </div>
+        <div class="small muted" style="margin-top:4px;line-height:1.6">约定跟进逾期：出两档续费方案，今天内发报价（约定 9月30日，今天到期）</div>
+        <div class="tag-row"><span class="badge b-green" title="每周 2 次上下，节奏稳。适合深化关系，别用催的">运动综合 · 规律</span><span class="src" title="近 30 天到店 9 次，折算每周 2.1 次，最近 2 天前到店">近 30 天 9 次</span></div>
+      </div>
+    </div>
+    <div class="btn-row" style="margin-top:8px"><button class="btn primary sm" data-act="cmd-do" data-mid="m02">去处理</button>
+      <button class="btn ghost sm" data-act="ai-psych" data-mid="m02">AI 话术</button>
+      <button class="btn ghost sm" data-member="m02">看档案</button></div>
+  </div><div class="card tight" data-member="m03">
+    <div class="between">
+      <div style="min-width:0">
+        <div class="li-top">
+          <span class="li-name" style="font-size:13.5px">赵磊</span>
+          <span class="badge b-danger">P1</span>
+          <span class="badge b-danger">会籍 5 天后到期</span>
+          <span class="badge b-plain">客户跟进</span>
+        </div>
+        <div class="small muted" style="margin-top:4px;line-height:1.6">约定跟进逾期：改约免费体测，不谈续费（约定 9月30日，今天到期）</div>
+        <div class="tag-row"><span class="badge b-warn" title="一个月来不了几次，习惯还没立住，重点在降门槛不在加量">运动综合 · 偏低</span><span class="src" title="近 30 天到店 1 次，折算每周 0.2 次，最近 28 天前到店">近 30 天 1 次</span></div>
+      </div>
+    </div>
+    <div class="btn-row" style="margin-top:8px"><button class="btn primary sm" data-act="cmd-do" data-mid="m03">去处理</button>
+      <button class="btn ghost sm" data-act="ai-psych" data-mid="m03">AI 话术</button>
+      <button class="btn ghost sm" data-member="m03">看档案</button></div>
+  </div><div class="card tight" data-member="m04">
+    <div class="between">
+      <div style="min-width:0">
+        <div class="li-top">
+          <span class="li-name" style="font-size:13.5px">孙一鸣</span>
+          <span class="badge b-danger">P1</span>
+          
+          <span class="badge b-plain">客户跟进</span>
+        </div>
+        <div class="small muted" style="margin-top:4px;line-height:1.6">约定跟进逾期：换社群路径：让同龄会员拉他进打卡群（约定 9月28日，已逾期 2 天）</div>
+        <div class="tag-row"><span class="badge b-danger" title="近 30 天没有到店记录。微信已经很难拉回来，换电话">运动综合 · 停练</span><span class="src" title="近 30 天到店 0 次，折算每周 0 次，最近 46 天前到店">近 30 天 0 次</span></div>
+      </div>
+    </div>
+    <div class="btn-row" style="margin-top:8px"><button class="btn primary sm" data-act="cmd-do" data-mid="m04">去处理</button>
+      <button class="btn ghost sm" data-act="ai-psych" data-mid="m04">AI 话术</button>
+      <button class="btn ghost sm" data-member="m04">看档案</button></div>
+  </div><div class="card tight" data-member="m10">
+    <div class="between">
+      <div style="min-width:0">
+        <div class="li-top">
+          <span class="li-name" style="font-size:13.5px">王思远</span>
+          <span class="badge b-danger">P1</span>
+          
+          <span class="badge b-plain">客户跟进</span>
+        </div>
+        <div class="small muted" style="margin-top:4px;line-height:1.6">约定跟进逾期：今天 17:00 前再确认一次（约定 9月30日，今天到期）</div>
+        <div class="tag-row"><span class="badge b-plain" title="还没有任何到店数据。三体或勤鸟接通后会自动补上，也可以手工填最近到店日期">运动综合 · 无运动记录</span></div>
+      </div>
+    </div>
+    <div class="btn-row" style="margin-top:8px"><button class="btn primary sm" data-act="cmd-do" data-mid="m10">去处理</button>
+      <button class="btn ghost sm" data-act="ai-psych" data-mid="m10">AI 话术</button>
+      <button class="btn ghost sm" data-member="m10">看档案</button></div>
+  </div><div class="card tight" data-member="m11">
+    <div class="between">
+      <div style="min-width:0">
+        <div class="li-top">
+          <span class="li-name" style="font-size:13.5px">蒋子豪</span>
+          <span class="badge b-danger">P1</span>
+          
+          <span class="badge b-plain">客户跟进</span>
+        </div>
+        <div class="small muted" style="margin-top:4px;line-height:1.6">约定跟进逾期：换角度：发同体型会员 8 周变化案例（约定 9月30日，今天到期）</div>
+        <div class="tag-row"><span class="badge b-plain" title="还没有任何到店数据。三体或勤鸟接通后会自动补上，也可以手工填最近到店日期">运动综合 · 无运动记录</span></div>
+      </div>
+    </div>
+    <div class="btn-row" style="margin-top:8px"><button class="btn primary sm" data-act="cmd-do" data-mid="m11">去处理</button>
+      <button class="btn ghost sm" data-act="ai-psych" data-mid="m11">AI 话术</button>
+      <button class="btn ghost sm" data-member="m11">看档案</button></div>
+  </div><div class="card tight" data-member="m02">
+    <div class="between">
+      <div style="min-width:0">
+        <div class="li-top">
+          <span class="li-name" style="font-size:13.5px">吴迪</span>
+          <span class="badge b-danger">P1</span>
+          <span class="badge b-danger">会籍 3 天后到期</span>
+          <span class="badge b-plain">会籍卡</span>
+        </div>
+        <div class="small muted" style="margin-top:4px;line-height:1.6">会籍 7 天内到期：3 天后到期，方案要已就绪、可当场签</div>
+        <div class="tag-row"><span class="badge b-green" title="每周 2 次上下，节奏稳。适合深化关系，别用催的">运动综合 · 规律</span><span class="src" title="近 30 天到店 9 次，折算每周 2.1 次，最近 2 天前到店">近 30 天 9 次</span></div>
+      </div>
+    </div>
+    <div class="btn-row" style="margin-top:8px"><button class="btn primary sm" data-act="cmd-do" data-mid="m02">去处理</button>
+      <button class="btn ghost sm" data-act="ai-psych" data-mid="m02">AI 话术</button>
+      <button class="btn ghost sm" data-member="m02">看档案</button></div>
+  </div><div class="card tight" data-member="m03">
+    <div class="between">
+      <div style="min-width:0">
+        <div class="li-top">
+          <span class="li-name" style="font-size:13.5px">赵磊</span>
+          <span class="badge b-danger">P1</span>
+          <span class="badge b-danger">会籍 5 天后到期</span>
+          <span class="badge b-plain">会籍卡</span>
+        </div>
+        <div class="small muted" style="margin-top:4px;line-height:1.6">会籍 7 天内到期：5 天后到期，方案要已就绪、可当场签</div>
+        <div class="tag-row"><span class="badge b-warn" title="一个月来不了几次，习惯还没立住，重点在降门槛不在加量">运动综合 · 偏低</span><span class="src" title="近 30 天到店 1 次，折算每周 0.2 次，最近 28 天前到店">近 30 天 1 次</span></div>
+      </div>
+    </div>
+    <div class="btn-row" style="margin-top:8px"><button class="btn primary sm" data-act="cmd-do" data-mid="m03">去处理</button>
+      <button class="btn ghost sm" data-act="ai-psych" data-mid="m03">AI 话术</button>
+      <button class="btn ghost sm" data-member="m03">看档案</button></div>
+  </div><div class="card tight" data-member="m07">
+    <div class="between">
+      <div style="min-width:0">
+        <div class="li-top">
+          <span class="li-name" style="font-size:13.5px">冯雪</span>
+          <span class="badge b-danger">P1</span>
+          <span class="badge b-warn">私教 36 节 剩 2节</span>
+          <span class="badge b-plain">会籍卡</span>
+        </div>
+        <div class="small muted" style="margin-top:4px;line-height:1.6">私教课时 ≤ 3 节：私教 36 节 只剩 2 节，趁没归零谈续课包</div>
+        <div class="tag-row"><span class="badge b-green" title="每周 3 次以上。习惯已经长在身上，谈续费、请他转介绍都最省力">运动综合 · 高频稳定</span><span class="src" title="近 30 天到店 19 次，折算每周 4.4 次，今天到店">近 30 天 19 次</span></div>
+      </div>
+    </div>
+    <div class="btn-row" style="margin-top:8px"><button class="btn primary sm" data-act="cmd-do" data-mid="m07">去处理</button>
+      <button class="btn ghost sm" data-act="ai-psych" data-mid="m07">AI 话术</button>
+      <button class="btn ghost sm" data-member="m07">看档案</button></div>
+  </div><div class="card tight" >
+    <div class="between">
+      <div style="min-width:0">
+        <div class="li-top">
+          <span class="li-name" style="font-size:13.5px">唐悦</span>
+          <span class="badge b-danger">P1</span>
+          
+          <span class="badge b-plain">线索响应</span>
+        </div>
+        <div class="small muted" style="margin-top:4px;line-height:1.6">线索首响超时：还没有首次触达记录</div>
+        
+      </div>
+    </div>
+    <div class="btn-row" style="margin-top:8px"><button class="btn primary sm" data-act="lead-do" data-lid="l_8j9tjklfn29">处理这条线索</button></div>
+  </div><div class="card tight" data-member="m03">
+    <div class="between">
+      <div style="min-width:0">
+        <div class="li-top">
+          <span class="li-name" style="font-size:13.5px">赵磊</span>
+          <span class="badge b-warn">P2</span>
+          <span class="badge b-danger">会籍 5 天后到期</span>
+          <span class="badge b-plain">客户跟进</span>
+        </div>
+        <div class="small muted" style="margin-top:4px;line-height:1.6">14 天以上未到店（轻度沉默）：28 天未到店，习惯正在断裂</div>
+        <div class="tag-row"><span class="badge b-warn" title="一个月来不了几次，习惯还没立住，重点在降门槛不在加量">运动综合 · 偏低</span><span class="src" title="近 30 天到店 1 次，折算每周 0.2 次，最近 28 天前到店">近 30 天 1 次</span></div>
+      </div>
+    </div>
+    <div class="btn-row" style="margin-top:8px"><button class="btn primary sm" data-act="cmd-do" data-mid="m03">去处理</button>
+      <button class="btn ghost sm" data-act="ai-psych" data-mid="m03">AI 话术</button>
+      <button class="btn ghost sm" data-member="m03">看档案</button></div>
+  </div><div class="card tight" data-member="m04">
+    <div class="between">
+      <div style="min-width:0">
+        <div class="li-top">
+          <span class="li-name" style="font-size:13.5px">孙一鸣</span>
+          <span class="badge b-warn">P2</span>
+          
+          <span class="badge b-plain">客户跟进</span>
+        </div>
+        <div class="small muted" style="margin-top:4px;line-height:1.6">30 天以上未到店（深度沉默）：46 天未到店，需要换渠道，微信已经无效了</div>
+        <div class="tag-row"><span class="badge b-danger" title="近 30 天没有到店记录。微信已经很难拉回来，换电话">运动综合 · 停练</span><span class="src" title="近 30 天到店 0 次，折算每周 0 次，最近 46 天前到店">近 30 天 0 次</span></div>
+      </div>
+    </div>
+    <div class="btn-row" style="margin-top:8px"><button class="btn primary sm" data-act="cmd-do" data-mid="m04">去处理</button>
+      <button class="btn ghost sm" data-act="ai-psych" data-mid="m04">AI 话术</button>
+      <button class="btn ghost sm" data-member="m04">看档案</button></div>
+  </div><div class="card tight" data-member="m05">
+    <div class="between">
+      <div style="min-width:0">
+        <div class="li-top">
+          <span class="li-name" style="font-size:13.5px">何伟</span>
+          <span class="badge b-warn">P2</span>
+          <span class="badge b-danger">会籍已过期 43 天</span>
+          <span class="badge b-plain">客户跟进</span>
+        </div>
+        <div class="small muted" style="margin-top:4px;line-height:1.6">30 天以上未到店（深度沉默）：60 天未到店，需要换渠道，微信已经无效了</div>
+        <div class="tag-row"><span class="badge b-danger" title="近 30 天没有到店记录。微信已经很难拉回来，换电话">运动综合 · 停练</span><span class="src" title="近 30 天到店 0 次，折算每周 0 次，最近 60 天前到店">近 30 天 0 次</span></div>
+      </div>
+    </div>
+    <div class="btn-row" style="margin-top:8px"><button class="btn primary sm" data-act="cmd-do" data-mid="m05">去处理</button>
+      <button class="btn ghost sm" data-act="ai-psych" data-mid="m05">AI 话术</button>
+      <button class="btn ghost sm" data-member="m05">看档案</button></div>
+  </div><div class="card tight" data-member="m14">
+    <div class="between">
+      <div style="min-width:0">
+        <div class="li-top">
+          <span class="li-name" style="font-size:13.5px">黄璐</span>
+          <span class="badge b-warn">P2</span>
+          <span class="badge b-warn">体验 3 次 未开卡</span>
+          <span class="badge b-plain">会籍卡</span>
+        </div>
+        <div class="small muted" style="margin-top:4px;line-height:1.6">卡已售出但未激活：体验 3 次（FF-TRIAL-8891）已售未激活，卡在沉默中会直接变成退款</div>
+        <div class="tag-row"><span class="badge b-warn" title="一个月来不了几次，习惯还没立住，重点在降门槛不在加量">运动综合 · 偏低</span><span class="src" title="近 30 天到店 1 次，折算每周 0.2 次，最近 11 天前到店">近 30 天 1 次</span></div>
+      </div>
+    </div>
+    <div class="btn-row" style="margin-top:8px"><button class="btn primary sm" data-act="cmd-do" data-mid="m14">去处理</button>
+      <button class="btn ghost sm" data-act="ai-psych" data-mid="m14">AI 话术</button>
+      <button class="btn ghost sm" data-member="m14">看档案</button></div>
+  </div><div class="card tight" >
+    <div class="between">
+      <div style="min-width:0">
+        <div class="li-top">
+          <span class="li-name" style="font-size:13.5px">智能体</span>
+          <span class="badge b-warn">P2</span>
+          
+          <span class="badge b-plain">个人时间</span>
+        </div>
+        <div class="small muted" style="margin-top:4px;line-height:1.6">每天开工生成今日队列：本次扫描生成 15 条待办</div>
+        
+      </div>
+    </div>
+    <div class="btn-row" style="margin-top:8px"><button class="btn ghost sm" data-act="run">重新扫描一遍</button></div>
+  </div><div class="card tight" data-member="m01">
+    <div class="between">
+      <div style="min-width:0">
+        <div class="li-top">
+          <span class="li-name" style="font-size:13.5px">林嘉怡</span>
+          <span class="badge b-plain">P3</span>
+          <span class="badge b-warn">会籍 21 天后到期</span>
+          <span class="badge b-plain">会籍卡</span>
+        </div>
+        <div class="small muted" style="margin-top:4px;line-height:1.6">会籍 30 天内到期：21 天后到期，进入续费推进窗口</div>
+        <div class="tag-row"><span class="badge b-green" title="每周 2 次上下，节奏稳。适合深化关系，别用催的">运动综合 · 规律</span><span class="src" title="近 30 天到店 11 次，折算每周 2.6 次，最近 3 天前到店">近 30 天 11 次</span></div>
+      </div>
+    </div>
+    <div class="btn-row" style="margin-top:8px"><button class="btn primary sm" data-act="cmd-do" data-mid="m01">去处理</button>
+      <button class="btn ghost sm" data-act="ai-psych" data-mid="m01">AI 话术</button>
+      <button class="btn ghost sm" data-member="m01">看档案</button></div>
+  </div><div class="card tight" >
+    <div class="between">
+      <div style="min-width:0">
+        <div class="li-top">
+          <span class="li-name" style="font-size:13.5px">数据健康</span>
+          <span class="badge b-plain">P3</span>
+          
+          <span class="badge b-plain">数据健康</span>
+        </div>
+        <div class="small muted" style="margin-top:4px;line-height:1.6">每周核对数据同步完整率：核对接口端点进度与最近同步时间，列出仍未获取的字段</div>
+        
+      </div>
+    </div>
+    <div class="btn-row" style="margin-top:8px"><button class="btn primary sm" data-act="go-data">去核对数据来源</button></div>
+  </div><div class="card tight" >
+    <div class="between">
+      <div style="min-width:0">
+        <div class="li-top">
+          <span class="li-name" style="font-size:13.5px">智能体</span>
+          <span class="badge b-plain">P3</span>
+          
+          <span class="badge b-plain">个人时间</span>
+        </div>
+        <div class="small muted" style="margin-top:4px;line-height:1.6">周日复盘提醒：生成周复盘提示词，带本周跟进、预约、线索数据</div>
+        
+      </div>
+    </div>
+    <div class="btn-row" style="margin-top:8px"><button class="btn primary sm" data-act="ai-weekly">生成周复盘提示词</button></div>
+  </div></div>
+
+  
+
+  <div class="section-title">今日预约<span class="count">3 场</span></div>
+  <div class="list"><div class="list-item static">
+      <button class="li-hit" data-member="m02">
+        <div class="avatar av-b">吴</div>
+        <div class="li-body">
+          <div class="li-top"><span class="li-name">18:30 续费面谈</span><span class="badge b-warn">待确认</span></div>
+          <div class="li-meta"><span>吴迪</span><span>两档方案，现场可刷卡</span></div>
+        </div>
+      </button>
+      <button class="btn ghost sm" data-appt="a_p7gvvmzfn29" data-to="confirmed" style="flex:0 0 auto">确认</button>
+    </div><div class="list-item static">
+      <button class="li-hit" data-member="m10">
+        <div class="avatar av-c">王</div>
+        <div class="li-body">
+          <div class="li-top"><span class="li-name">19:00 体验课</span><span class="badge b-green">已确认</span></div>
+          <div class="li-meta"><span>王思远</span><span>第一次到店，带好体测仪</span></div>
+        </div>
+      </button>
+      <button class="btn ghost sm" data-appt="a_ogzafxmfn29" data-to="arrived" style="flex:0 0 auto">到店</button>
+    </div><div class="list-item static">
+      <button class="li-hit" data-member="m07">
+        <div class="avatar av-d">冯</div>
+        <div class="li-body">
+          <div class="li-top"><span class="li-name">20:00 续费面谈</span><span class="badge b-green">已确认</span></div>
+          <div class="li-meta"><span>冯雪</span><span>锁定固定时段，带课包报价单</span></div>
+        </div>
+      </button>
+      <button class="btn ghost sm" data-appt="a_3po29svfn29" data-to="arrived" style="flex:0 0 auto">到店</button>
+    </div></div>
+
+  <div class="section-title">我在跟的规则<span class="count">15 条开启</span></div>
+  <div class="card tight">
+    <div class="between" style="padding:8px 0;border-bottom:1px solid var(--line-2)">
+        <div style="min-width:0">
+          <div class="small" style="font-weight:650">约定跟进逾期</div>
+          <div class="small muted" style="margin-top:2px;line-height:1.55">上次沟通写了「下次跟进日期」，且已到期</div>
+        </div>
+        <div class="btn-row" style="flex:0 0 auto">
+          <button class="btn ghost sm" data-act="ai-tune-rule" data-rid="follow_overdue" title="用 AI 调这条规则的阈值与优先级">AI 修改</button>
+          <span class="badge b-green">已开启</span>
+        </div>
+      </div><div class="between" style="padding:8px 0;border-bottom:1px solid var(--line-2)">
+        <div style="min-width:0">
+          <div class="small" style="font-weight:650">14 天以上未到店（轻度沉默）</div>
+          <div class="small muted" style="margin-top:2px;line-height:1.55">最近到店距今 ≥ 14 天</div>
+        </div>
+        <div class="btn-row" style="flex:0 0 auto">
+          <button class="btn ghost sm" data-act="ai-tune-rule" data-rid="silent14" title="用 AI 调这条规则的阈值与优先级">AI 修改</button>
+          <span class="badge b-green">已开启</span>
+        </div>
+      </div><div class="between" style="padding:8px 0;border-bottom:1px solid var(--line-2)">
+        <div style="min-width:0">
+          <div class="small" style="font-weight:650">30 天以上未到店（深度沉默）</div>
+          <div class="small muted" style="margin-top:2px;line-height:1.55">最近到店距今 ≥ 30 天</div>
+        </div>
+        <div class="btn-row" style="flex:0 0 auto">
+          <button class="btn ghost sm" data-act="ai-tune-rule" data-rid="silent30" title="用 AI 调这条规则的阈值与优先级">AI 修改</button>
+          <span class="badge b-green">已开启</span>
+        </div>
+      </div><div class="between" style="padding:8px 0;border-bottom:1px solid var(--line-2)">
+        <div style="min-width:0">
+          <div class="small" style="font-weight:650">会籍 30 天内到期</div>
+          <div class="small muted" style="margin-top:2px;line-height:1.55">会籍卡到期日距今 ≤ 30 天且没有续费计划</div>
+        </div>
+        <div class="btn-row" style="flex:0 0 auto">
+          <button class="btn ghost sm" data-act="ai-tune-rule" data-rid="expiry30" title="用 AI 调这条规则的阈值与优先级">AI 修改</button>
+          <span class="badge b-green">已开启</span>
+        </div>
+      </div>
+    <button class="btn ghost block sm" style="margin-top:10px" data-act="rules">查看全部 16 条规则</button>
+  </div>
+
+  <div class="section-title">运行日志<span class="count">最近 6 次，共 12 次</span></div>
+  <div class="card tight">
+    
+      <div class="between" style="padding:8px 0;border-bottom:1px solid var(--line-2)">
+        <div style="min-width:0">
+          <div class="small" style="font-weight:650">每天开工生成今日队列</div>
+          <div class="small muted" style="margin-top:2px">2026-09-30 09:00｜命中 9 条｜林嘉怡、吴迪、冯雪</div>
+        </div>
+        <span class="badge b-green">已处理</span>
+      </div>
+      <div class="between" style="padding:8px 0;border-bottom:1px solid var(--line-2)">
+        <div style="min-width:0">
+          <div class="small" style="font-weight:650">会籍 7 天内到期</div>
+          <div class="small muted" style="margin-top:2px">2026-09-29 09:00｜命中 1 条｜吴迪</div>
+        </div>
+        <span class="badge b-green">已处理</span>
+      </div>
+      <div class="between" style="padding:8px 0;border-bottom:1px solid var(--line-2)">
+        <div style="min-width:0">
+          <div class="small" style="font-weight:650">私教课时 ≤ 3 节</div>
+          <div class="small muted" style="margin-top:2px">2026-09-29 20:30｜命中 1 条｜冯雪</div>
+        </div>
+        <span class="badge b-green">已处理</span>
+      </div>
+      <div class="between" style="padding:8px 0;border-bottom:1px solid var(--line-2)">
+        <div style="min-width:0">
+          <div class="small" style="font-weight:650">线索首响超时</div>
+          <div class="small muted" style="margin-top:2px">2026-09-28 10:15｜命中 1 条｜蒋子豪</div>
+        </div>
+        <span class="badge b-green">已处理</span>
+      </div>
+      <div class="between" style="padding:8px 0;border-bottom:1px solid var(--line-2)">
+        <div style="min-width:0">
+          <div class="small" style="font-weight:650">14 天以上未到店（轻度沉默）</div>
+          <div class="small muted" style="margin-top:2px">2026-09-27 09:00｜命中 2 条｜赵磊、孙一鸣</div>
+        </div>
+        <span class="badge b-green">已处理</span>
+      </div>
+      <div class="between" style="padding:8px 0;border-bottom:1px solid var(--line-2)">
+        <div style="min-width:0">
+          <div class="small" style="font-weight:650">约定跟进逾期</div>
+          <div class="small muted" style="margin-top:2px">2026-09-26 09:00｜命中 2 条｜孙一鸣、何伟</div>
+        </div>
+        <span class="badge b-plain">已忽略</span>
+      </div>
+    <button class="btn ghost block sm" style="margin-top:10px" data-act="log">查看全部 12 次运行</button>
+  </div>
+
+  <div class="section-title">AI 辅助工作流<span class="count">12 个任务包</span></div>
+  <div class="card">
+    <div class="small muted" style="line-height:1.65">
+      FitFlow 负责把你的数据和任务说明整理成结构化提示词，你拿到自己的 AI 工具里跑完再粘回来。FitFlow 不生成、也不伪造分析结论。
+    </div>
+    <div class="btn-row" style="margin-top:11px">
+      <button class="btn ghost" data-act="ai-hub"><svg viewBox="0 0 24 24"><use href="#i-spark"/></svg>打开任务包</button>
+      <button class="btn ghost" data-act="ai-reflect">交互复盘</button>
+      <button class="btn ghost" data-act="ai-tune">规则调优</button>
+    </div>
+  </div>
+</div>
+<div class="cn-mask">
+    <div class="cn-slab" role="status" aria-label="今日工作量 操作量 4 · 观察量 3">
+      <div class="cn-title">今日工作量</div>
+      <div class="cn-sub">操作量 4 · 观察量 3</div>
+      <div class="cn-dust" aria-hidden="true"><i style="left:58.9%;top:33.9%;--delay:0.14s;--dur:1.02s"></i><i style="left:65.8%;top:52.3%;--delay:0.23s;--dur:0.99s"></i><i style="left:10.9%;top:89.8%;--delay:0.05s;--dur:0.76s"></i><i style="left:95.3%;top:14.7%;--delay:0.10s;--dur:0.71s"></i><i style="left:10.6%;top:63.9%;--delay:0.24s;--dur:0.96s"></i><i style="left:72.2%;top:15.1%;--delay:0.16s;--dur:0.86s"></i><i style="left:22.8%;top:81.4%;--delay:0.02s;--dur:0.96s"></i><i style="left:17.5%;top:12.2%;--delay:0.19s;--dur:0.94s"></i><i style="left:83.4%;top:75.4%;--delay:0.22s;--dur:0.94s"></i><i style="left:7.3%;top:37.1%;--delay:0.04s;--dur:0.91s"></i><i style="left:39.2%;top:34.0%;--delay:0.21s;--dur:0.80s"></i><i style="left:84.4%;top:54.6%;--delay:0.05s;--dur:0.85s"></i><i style="left:56.8%;top:43.2%;--delay:0.08s;--dur:0.97s"></i><i style="left:59.3%;top:38.3%;--delay:0.19s;--dur:0.89s"></i><i style="left:40.8%;top:55.9%;--delay:0.06s;--dur:0.73s"></i><i style="left:58.4%;top:52.0%;--delay:0.12s;--dur:0.79s"></i><i style="left:45.6%;top:16.4%;--delay:0.20s;--dur:0.76s"></i><i style="left:15.1%;top:78.0%;--delay:0.16s;--dur:0.90s"></i><i style="left:89.8%;top:29.9%;--delay:0.12s;--dur:0.83s"></i><i style="left:62.1%;top:64.4%;--delay:0.06s;--dur:0.76s"></i><i style="left:60.8%;top:10.0%;--delay:0.07s;--dur:0.95s"></i><i style="left:74.5%;top:44.6%;--delay:0.10s;--dur:0.86s"></i></div>
+    </div></div>
+<button class="btn primary pv-replay" onclick="location.reload()">再看一次（刷新重放）</button>
+<script>
+  /* 与线上同一套时间线：停留 → 算光点位移 → 加 .out 触发溶解与吸入。
+     位移在加 .out 前量，量的是每粒光点当前位置到星星中心的差值。 */
+  setTimeout(() => {
+    const m = document.querySelector('.cn-mask');
+    if (!m) return;
+    const star = document.getElementById('pvStar');
+    const r = star.getBoundingClientRect();
+    const tx = r.left + r.width / 2, ty = r.top + r.height / 2;
+    m.querySelectorAll('.cn-dust i').forEach((el) => {
+      const b = el.getBoundingClientRect();
+      el.style.setProperty('--dx', (tx - (b.left + b.width / 2)).toFixed(1) + 'px');
+      el.style.setProperty('--dy', (ty - (b.top + b.height / 2)).toFixed(1) + 'px');
+    });
+    m.classList.add('out');
+    setTimeout(() => star.classList.add('hit'), 620);
+    setTimeout(() => m.remove(), 1400);
+  }, 1400);
+</script>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" data-page-node-id="h9o1FF5gzKicCTSKeIGxod">
+  <defs data-page-node-id="sCMtztfBzm8cJ3pmgiVsc3">
+    <symbol id="i-today" viewBox="0 0 24 24" data-page-node-id="Vqx8ufNv7ibGFAGOVuuhdd"><path d="M12 3v2M4.9 4.9l1.4 1.4M3 12h2M19 12h2M17.7 6.3l1.4-1.4M12 8a4 4 0 100 8 4 4 0 000-8zM5 20h14" data-page-node-id="4Aac3bjJYLyJIlR2GgWdMr"/></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24" data-page-node-id="Ng4uJY3NvsKm04rz4sanG0"><path d="M16 20v-1.5a4 4 0 00-4-4H7a4 4 0 00-4 4V20M9.5 10.5a3.5 3.5 0 100-7 3.5 3.5 0 000 7zM21 20v-1.5a4 4 0 00-3-3.87M16.5 4a3.5 3.5 0 010 6.9" data-page-node-id="2UV6vo1xmD4PecoceyV292"/></symbol>
+    <symbol id="i-ops" viewBox="0 0 24 24" data-page-node-id="KWOLn6FAW8VgEqCzGdLe27"><path d="M3 11l14-6v14L3 13v-2zM17 8a4 4 0 010 8M7 13v5a2 2 0 002 2h1" data-page-node-id="tKTOvpRyy3XEg7RSDdJvmb"/></symbol>
+    <symbol id="i-learn" viewBox="0 0 24 24" data-page-node-id="hYgr5h3L6CIcCyHnjDAGfK"><path d="M4 5.5A2.5 2.5 0 016.5 3H20v15H6.5A2.5 2.5 0 004 20.5v-15zM20 18v3H6.5A2.5 2.5 0 014 18.5" data-page-node-id="sjNTKCq7eBKgidQgdrGvRn"/></symbol>
+    <symbol id="i-data" viewBox="0 0 24 24" data-page-node-id="PP1mLUENa9Wx0Iz4PZ4woj"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2" data-page-node-id="A2GaQohXnebDquA2acO3ex"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24" data-page-node-id="UoL6d48cwmjH7b1sLoK6Zp"><path d="M12 5v14M5 12h14" data-page-node-id="8ujBlCjVJrwTgr5wBXoAXF"/></symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24" data-page-node-id="x9yJDmKtLxs0iuJ70oOpBH"><path d="M4 6.5A2.5 2.5 0 016.5 4h11A2.5 2.5 0 0120 6.5v11A2.5 2.5 0 0117.5 20h-11A2.5 2.5 0 014 17.5v-11zM8 3v3M16 3v3M4 9.5h16" data-page-node-id="AGUnBHwMdRhBlALrOuKE1x"/></symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24" data-page-node-id="cBbZJGIweUh43vcvVlfva6"><path d="M18 15V10a6 6 0 10-12 0v5l-1.5 3h15L18 15zM10 21h4" data-page-node-id="tfeIXiB5osnqeqDmr8sH2i"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24" data-page-node-id="ZZ8oDwpH8yELEc7T3Bw9Se"><path d="M11 19a8 8 0 100-16 8 8 0 000 16zM21 21l-4.3-4.3" data-page-node-id="XWubpHtZaqoJClywI7p5q2"/></symbol>
+    <symbol id="i-sync" viewBox="0 0 24 24" data-page-node-id="yixaijFNHjJbR3nGvRlTsJ"><path d="M20 11a8 8 0 00-14-4.5L4 9M4 13a8 8 0 0014 4.5L20 15M4 4v5h5M20 20v-5h-5" data-page-node-id="IAYEZELLUwRRuQysTSzUcs"/></symbol>
+    <symbol id="i-link" viewBox="0 0 24 24" data-page-node-id="mBrKbbJWLIquZ3PS09pUgR"><path d="M10 13.5a4 4 0 005.7 0l3-3a4 4 0 10-5.7-5.7l-1 1M14 10.5a4 4 0 00-5.7 0l-3 3a4 4 0 105.7 5.7l1-1" data-page-node-id="eAp3wkfDc2XH5GEedjBXw3"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24" data-page-node-id="OrBEdxfFLJXzjgEFAl9hmC"><path d="M12 4v11M7.5 10.5L12 15l4.5-4.5M4 19h16" data-page-node-id="jtCcufk1jkUTkBHBcyzN4c"/></symbol>
+    <symbol id="i-upload" viewBox="0 0 24 24" data-page-node-id="RIJ6JlXVDxBAGpmZ2jXWvD"><path d="M12 16V5M7.5 9.5L12 5l4.5 4.5M4 19h16" data-page-node-id="32B8mblXBxCtn5X6HVaQx6"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24" data-page-node-id="BfE7rv9Z7bi9oGlQIapuqa"><path d="M9 9V6.5A2.5 2.5 0 0111.5 4h6A2.5 2.5 0 0120 6.5v6a2.5 2.5 0 01-2.5 2.5H15M6.5 9h6A2.5 2.5 0 0115 11.5v6A2.5 2.5 0 0112.5 20h-6A2.5 2.5 0 014 17.5v-6A2.5 2.5 0 016.5 9z" data-page-node-id="LWgCGu2SvfV8EWZgTriaGs"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24" data-page-node-id="HgxLB40sFuxC7pPrhNsHGS"><path d="M4 12.5l5 5L20 6.5" data-page-node-id="KEBusuYvBldb6ETrcex0hF"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24" data-page-node-id="KftrgYTHEZvX7QdMGWpbyX"><path d="M6 6l12 12M18 6L6 18" data-page-node-id="vDxPrXhst01zHBM2ks3sox"/></symbol>
+    <symbol id="i-chev" viewBox="0 0 24 24" data-page-node-id="agNfRzT1bg7BHFsfgsFpGQ"><path d="M9 5l7 7-7 7" data-page-node-id="TGvCgw09JRWQ3y6QOQU8dN"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24" data-page-node-id="yYKl2EM3WBETswvbFAbalD"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3zM19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8L19 16z" data-page-node-id="V7sgB85M5Ev4iC2QsbDQJX"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24" data-page-node-id="xyAiOPzqMv3CeCakyyO0TK"><path d="M12 4l9 16H3l9-16zM12 10v4M12 17.5h.01" data-page-node-id="LnZ8Ptu1zMNqkWZcBFkh37"/></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24" data-page-node-id="teNnbIlcVRnJGjsj2DqLNt"><path d="M6 3h3l1.5 4-2 1.5a11 11 0 006 6l1.5-2 4 1.5v3a2 2 0 01-2 2A16 16 0 014 5a2 2 0 012-2z" data-page-node-id="eOuQRBo99MWc4URx9CnCDq"/></symbol>
+    <symbol id="i-chat" viewBox="0 0 24 24" data-page-node-id="iu6tpstGwSZIcIG0BTF7iA"><path d="M21 12a8 8 0 01-11.6 7.1L4 21l1.9-5.4A8 8 0 1121 12z" data-page-node-id="FPFMifJQmQGF0E3Cxudaef"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l7 3v6c0 4.2-2.9 7.6-7 9-4.1-1.4-7-4.8-7-9V6l7-3zM9.2 12.2l2 2 3.6-3.6"/></symbol>
+    <symbol id="i-doc" viewBox="0 0 24 24" data-page-node-id="jxeXq2JBPHWtRgmKzQMc0J"><path d="M7 3h7l5 5v13H7V3zM14 3v5h5M10 13h7M10 17h5" data-page-node-id="vEUE5cT3m46xLet4kiTOHa"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24" data-page-node-id="2nRLAbukUEmIaZvTCNsJ0L"><path d="M12 15a3 3 0 100-6 3 3 0 000 6zM19.4 15a1.6 1.6 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.6 1.6 0 00-2.7 1.1V21a2 2 0 11-4 0v-.2A1.6 1.6 0 007.5 19l-.1.1a2 2 0 11-2.8-2.8l.1-.1A1.6 1.6 0 003 13.6H3a2 2 0 110-4h.2A1.6 1.6 0 004.9 7.5l-.1-.1a2 2 0 112.8-2.8l.1.1A1.6 1.6 0 0010.4 3V3a2 2 0 114 0v.2a1.6 1.6 0 002.7 1.1l.1-.1a2 2 0 112.8 2.8l-.1.1a1.6 1.6 0 001.1 2.7H21a2 2 0 110 4h-.2a1.6 1.6 0 00-1.4 1.2z" data-page-node-id="pmWrodah489PkmDT2CpJkl"/></symbol>
+    <symbol id="i-target" viewBox="0 0 24 24" data-page-node-id="Mxvk70fFDJNytEBYMOASMX"><path d="M12 21a9 9 0 100-18 9 9 0 000 18zM12 17a5 5 0 100-10 5 5 0 000 10zM12 13.5a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" data-page-node-id="QFmS9hXdsrOHM0U5KPEQ7W"/></symbol>
+    <symbol id="i-flame" viewBox="0 0 24 24" data-page-node-id="361DgbEHmrsA303dcd0syB"><path d="M12 22c4 0 6.5-2.6 6.5-6 0-4.5-4.5-6-4.5-10 0 0-3 1.5-3 5-1 0-2-1.5-2-3-1.5 1.5-3 4-3 7.5C6 19.2 8 22 12 22z" data-page-node-id="1GPY24580mJL8g662N0HCF"/></symbol>
+    <symbol id="i-key" viewBox="0 0 24 24" data-page-node-id="uEAcAtH23Dcsgm6GnM2dRl"><path d="M8.5 15.5a4 4 0 100-8 4 4 0 000 8zM11.4 12.6L20 4M17 7l2.2 2.2M14.6 9.4l1.8 1.8" data-page-node-id="YuaF6X9bEOH4EjULwtjzmn"/></symbol>
+    <symbol id="i-plug" viewBox="0 0 24 24" data-page-node-id="NhsTw8Fz4ZcsEKDaZ4bub8"><path d="M9 3v6M15 3v6M6 9h12v3a6 6 0 01-6 6 6 6 0 01-6-6V9zM12 18v3" data-page-node-id="3weiWR3zc0wpeepEzKmds8"/></symbol>
+    <symbol id="i-link-off" viewBox="0 0 24 24" data-page-node-id="v23hvUJBHSLglidkOi5coS"><path d="M10 13.5a4 4 0 005.7 0l3-3a4 4 0 10-5.7-5.7l-1 1M14 10.5a4 4 0 00-5.7 0l-3 3a4 4 0 105.7 5.7l1-1M3 3l18 18" data-page-node-id="Zy8ue854UHPHMmVuVX4qrM"/></symbol>
+    <symbol id="i-douyin" viewBox="0 0 24 24"><path d="M10 17a2 2 0 11-2-2V7l9-1.8v9a2 2 0 11-2-2V6.6L10 7.8V17z"/></symbol>
+    <symbol id="i-xhs" viewBox="0 0 24 24"><path d="M12 6c-2-1.2-4-1.2-6-1v12c2 .2 4 .2 6 1 2-1.2 4-1.2 6-1V5c-2 .2-4 .2-6 1zM12 6v13"/></symbol>
+    <symbol id="i-xianyu" viewBox="0 0 24 24"><path d="M5 12c3-4 9-4 12-1.5 1.5 1.3 2 3 .8 4.2-2 2.3-8 2.3-11-.2L3 17l1-2.5C2.5 13 2.5 13.5 5 12zM14 11h.01"/></symbol>
+    <symbol id="i-other" viewBox="0 0 24 24"><path d="M5.5 12a1.6 1.6 0 11-3.2 0 1.6 1.6 0 013.2 0zM13.6 12a1.6 1.6 0 11-3.2 0 1.6 1.6 0 013.2 0zM21.7 12a1.6 1.6 0 11-3.2 0 1.6 1.6 0 013.2 0z"/></symbol>
+  </defs>
+</svg>
+</body></html>

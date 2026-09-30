@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<!-- 内容安全策略（外向防火墙）：默认只允许同源加载资源；
+     脚本只允许同源外部文件（页面内不再有任何内联脚本）；
+     connect-src 放行 AI 模型接口（用户自配，走 https）、红狐 API（https://redfox.hk）与本地代理（localhost:8787）。
+     说明：frame-ancestors 只能由 HTTP 响应头下发，写在 meta 里会被浏览器忽略，故此处不列。 -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https: http://localhost:8787 http://127.0.0.1:8787; object-src 'none'; base-uri 'self'; form-action 'none'" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#0E8F5B" />
+<meta name="description" content="FitFlow 智能体首页 · 试用入口" />
+<title>FitFlow 智能体 · 试用首页</title>
+
+<!-- PWA：可安装、可离线打开（数据本来就在本机）。
+     manifest 走 default-src 'self'，能被加载；
+     sw.js 注册逻辑在 js/app.js 里（本页面不允许任何内联脚本，见上方 CSP 注释）。 -->
+<link rel="manifest" href="./manifest.webmanifest" />
+<link rel="icon" href="./favicon.ico" sizes="32x32" />
+<link rel="apple-touch-icon" href="./icons/pwa/icon-180.png" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content="FitFlow" />
+<link rel="stylesheet" href="./styles.css" />
+<style>
+  /* 试用版框：不侵入业务样式，仅作入口标识 */
+  .trial-badge{
+    position:fixed;top:8px;right:8px;z-index:1200;
+    display:inline-flex;align-items:center;gap:6px;
+    font-size:11px;font-weight:700;letter-spacing:.3px;
+    padding:5px 10px;border-radius:20px;
+    background:var(--brand-tint);color:var(--brand-2);
+    border:1px solid var(--brand);box-shadow:0 2px 8px rgba(14,143,91,.18);
+  }
+  .trial-intro{
+    position:fixed;inset:0;z-index:1500;display:flex;align-items:center;justify-content:center;
+    background:rgba(8,18,14,.55);backdrop-filter:blur(3px);padding:20px;
+  }
+  .trial-intro .card{
+    width:min(440px,92vw);background:var(--surface);border-radius:16px;padding:22px 22px 18px;
+    box-shadow:0 18px 50px rgba(0,0,0,.28);border:1px solid var(--line);
+  }
+  .trial-intro h2{margin:0 0 4px;font-size:18px}
+  .trial-intro .sub{color:var(--ink-3);font-size:12.5px;margin:0 0 14px}
+  .trial-intro ul{margin:0 0 16px;padding-left:18px;font-size:13px;line-height:1.85;color:var(--ink-2)}
+  .trial-intro ul b{color:var(--ink-1)}
+  .trial-intro .note{
+    font-size:11.5px;color:var(--ink-3);background:var(--surface-2);
+    border-radius:10px;padding:9px 11px;margin-bottom:14px;line-height:1.6;
+  }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-today" viewBox="0 0 24 24"><path d="M12 3v2M4.9 4.9l1.4 1.4M3 12h2M19 12h2M17.7 6.3l1.4-1.4M12 8a4 4 0 100 8 4 4 0 000-8zM5 20h14"/></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24"><path d="M16 20v-1.5a4 4 0 00-4-4H7a4 4 0 00-4 4V20M9.5 10.5a3.5 3.5 0 100-7 3.5 3.5 0 000 7zM21 20v-1.5a4 4 0 00-3-3.87M16.5 4a3.5 3.5 0 010 6.9"/></symbol>
+    <symbol id="i-ops" viewBox="0 0 24 24"><path d="M3 11l14-6v14L3 13v-2zM17 8a4 4 0 010 8M7 13v5a2 2 0 002 2h1"/></symbol>
+    <symbol id="i-learn" viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 016.5 3H20v15H6.5A2.5 2.5 0 014 20.5v-15zM20 18v3H6.5A2.5 2.5 0 014 18.5"/></symbol>
+    <symbol id="i-data" viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24"><path d="M4 6.5A2.5 2.5 0 016.5 4h11A2.5 2.5 0 0120 6.5v11A2.5 2.5 0 0117.5 20h-11A2.5 2.5 0 014 17.5v-11zM8 3v3M16 3v3M4 9.5h16"/></symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24"><path d="M18 15V10a6 6 0 10-12 0v5l-1.5 3h15L18 15zM10 21h4"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><path d="M11 19a8 8 0 100-16 8 8 0 000 16zM21 21l-4.3-4.3"/></symbol>
+    <symbol id="i-sync" viewBox="0 0 24 24"><path d="M20 11a8 8 0 00-14-4.5L4 9M4 13a8 8 0 0014 4.5L20 15M4 4v5h5M20 20v-5h-5"/></symbol>
+    <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 13.5a4 4 0 005.7 0l3-3a4 4 0 10-5.7-5.7l-1 1M14 10.5a4 4 0 00-5.7 0l-3 3a4 4 0 105.7 5.7l1-1"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11M7.5 10.5L12 15l4.5-4.5M4 19h16"/></symbol>
+    <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 16V5M7.5 9.5L12 5l4.5 4.5M4 19h16"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><path d="M9 9V6.5A2.5 2.5 0 0111.5 4h6A2.5 2.5 0 0120 6.5v6a2.5 2.5 0 01-2.5 2.5H15M6.5 9h6A2.5 2.5 0 0115 11.5v6A2.5 2.5 0 0112.5 20h-6A2.5 2.5 0 014 17.5v-6A2.5 2.5 0 016.5 9z"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 6.5"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+    <symbol id="i-chev" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3zM19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8L19 16z"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 4l9 16H3l9-16zM12 10v4M12 17.5h.01"/></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24"><path d="M6 3h3l1.5 4-2 1.5a11 11 0 006 6l1.5-2 4 1.5v3a2 2 0 01-2 2A16 16 0 014 5a2 2 0 012-2z"/></symbol>
+    <symbol id="i-chat" viewBox="0 0 24 24"><path d="M21 12a8 8 0 01-11.6 7.1L4 21l1.9-5.4A8 8 0 1121 12z"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l7 3v6c0 4.2-2.9 7.6-7 9-4.1-1.4-7-4.8-7-9V6l7-3zM9.2 12.2l2 2 3.6-3.6"/></symbol>
+    <symbol id="i-doc" viewBox="0 0 24 24"><path d="M7 3h7l5 5v13H7V3zM14 3v5h5M10 13h7M10 17h5"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24"><path d="M12 15a3 3 0 100-6 3 3 0 000 6zM19.4 15a1.6 1.6 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.6 1.6 0 00-2.7 1.1V21a2 2 0 11-4 0v-.2A1.6 1.6 0 007.5 19l-.1.1a2 2 0 11-2.8-2.8l.1-.1A1.6 1.6 0 003 13.6H3a2 2 0 110-4h.2A1.6 1.6 0 004.9 7.5l-.1-.1a2 2 0 112.8-2.8l.1.1A1.6 1.6 0 0010.4 3V3a2 2 0 114 0v.2a1.6 1.6 0 002.7 1.1l.1-.1a2 2 0 112.8 2.8l-.1.1a1.6 1.6 0 001.1 2.7H21a2 2 0 110 4h-.2a1.6 1.6 0 00-1.4 1.2z"/></symbol>
+    <symbol id="i-target" viewBox="0 0 24 24"><path d="M12 21a9 9 0 100-18 9 9 0 000 18zM12 17a5 5 0 100-10 5 5 0 000 10zM12 13.5a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"/></symbol>
+    <symbol id="i-flame" viewBox="0 0 24 24"><path d="M12 22c4 0 6.5-2.6 6.5-6 0-4.5-4.5-6-4.5-10 0 0-3 1.5-3 5-1 0-2-1.5-2-3-1.5 1.5-3 4-3 7.5C6 19.2 8 22 12 22z"/></symbol>
+    <symbol id="i-key" viewBox="0 0 24 24"><path d="M8.5 15.5a4 4 0 100-8 4 4 0 000 8zM11.4 12.6L20 4M17 7l2.2 2.2M14.6 9.4l1.8 1.8"/></symbol>
+    <symbol id="i-plug" viewBox="0 0 24 24"><path d="M9 3v6M15 3v6M6 9h12v3a6 6 0 01-6 6 6 6 0 01-6-6V9zM12 18v3"/></symbol>
+    <symbol id="i-link-off" viewBox="0 0 24 24"><path d="M10 13.5a4 4 0 005.7 0l3-3a4 4 0 10-5.7-5.7l-1 1M14 10.5a4 4 0 00-5.7 0l-3 3a4 4 0 105.7 5.7l1-1M3 3l18 18"/></symbol>
+  </defs>
+</svg>
+
+<div class="trial-badge">试用版 · 智能体首页</div>
+
+<div class="app-shell">
+  <header id="appHeader" class="app-header"></header>
+  <main id="view" class="app-main"></main>
+  <nav id="tabbar" class="tabbar"></nav>
+</div>
+
+<div id="modalRoot"></div>
+<div id="toastRoot" class="toast-root"></div>
+
+<!-- 试用入口引导卡：仅首次进入展示，可关闭；不侵入业务样式 -->
+<div class="trial-intro" id="trialIntro">
+  <div class="card">
+    <h2>FitFlow 智能体 · 首页试用</h2>
+    <p class="sub">这是智能体运行台首页，综合调用会员管理、线上营销、成长、数据等所有能力。</p>
+    <ul>
+      <li><b>今日自动优先级队列</b>：规则引擎实时排出该先动谁</li>
+      <li><b>时间块安排</b>：日程 + 提醒方式 + 关联手机系统设置</li>
+      <li><b>沉默客户 / 临期预警</b>：自动识别风险会员</li>
+      <li><b>客户卡</b>：自动 vs 手动备注用颜色区分，可一键报错</li>
+      <li><b>AI 工作流</b>：含「可调用模型」市场与调用代价 / 难易说明</li>
+    </ul>
+    <div class="note">说明：AI 话术等「主动调用 AI」的<b>接口已就绪</b>（选模型 → 填 Key → 调用），但<b>真实通路（代理 / 自训端点 / 日志→训练后端）待定</b>，暂不连后端。所有数据默认只存在本机浏览器。</div>
+    <button class="btn primary" id="trialStart" style="width:100%">开始试用</button>
+  </div>
+</div>
+
+<script type="module" src="./js/app.js"></script>
+</body>
+</html>

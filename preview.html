@@ -1,0 +1,860 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>FitFlow 会员详情 · 改动预览</title>
+<link rel="stylesheet" href="./styles.css">
+<style>
+  body{background:#f4f6f5;margin:0;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif}
+  .wrap{max-width:1080px;margin:0 auto;padding:22px 18px 80px}
+  .pv-h1{font-size:20px;margin:0 0 4px;color:#0A6E46}
+  .pv-sub{color:#6B7B74;font-size:13px;margin:0 0 18px}
+  .pv-sec{background:#fff;border:1px solid #e4eae7;border-radius:14px;padding:16px;margin:14px 0;box-shadow:0 1px 3px rgba(16,40,30,.05)}
+  .pv-h2{font-size:15px;margin:0 0 4px}
+  .pv-p{color:#6B7B74;font-size:12.5px;margin:0 0 12px;line-height:1.6}
+  .pv-tip{font-size:12px;color:#0A6E46;background:#E6F4EC;border:1px solid #CFE9DB;border-radius:8px;padding:8px 10px;margin-bottom:12px;line-height:1.6}
+  .sheet-frame{background:#fff;border:1px solid #e4eae7;border-radius:14px;overflow:hidden;box-shadow:0 1px 3px rgba(16,40,30,.05)}
+  .tabpane{padding:16px}
+</style></head>
+<body><div class="wrap">
+  <h1 class="pv-h1">FitFlow · 会员卡详情页改动预览</h1>
+  <p class="pv-sub">演示会员：林嘉怡（m01）· 含完整 p1→p6 跟进轨迹、报价桥接、打卡明细</p>
+
+  <div class="pv-sec">
+    <h2 class="pv-h2">① 沟通渠道 · 一次点击气泡</h2>
+    <p class="pv-p">记录跟进时渠道选择改为 7 个气泡，点一下即选中（红框为选中态）：</p>
+    <div class="chips channel-bubbles"><button type="button" class="chip ch-bubble " data-val="phone"><svg viewBox="0 0 24 24" class="bi"><use href="#i-phone"/></svg>电话</button><button type="button" class="chip ch-bubble " data-val="wechat"><svg viewBox="0 0 24 24" class="bi"><use href="#i-chat"/></svg>微信</button><button type="button" class="chip ch-bubble " data-val="xhs"><svg viewBox="0 0 24 24" class="bi"><use href="#i-xhs"/></svg>小红书</button><button type="button" class="chip ch-bubble " data-val="douyin"><svg viewBox="0 0 24 24" class="bi"><use href="#i-douyin"/></svg>抖音</button><button type="button" class="chip ch-bubble " data-val="xianyu"><svg viewBox="0 0 24 24" class="bi"><use href="#i-xianyu"/></svg>闲鱼</button><button type="button" class="chip ch-bubble on" data-val="visit"><svg viewBox="0 0 24 24" class="bi"><use href="#i-users"/></svg>当面</button><button type="button" class="chip ch-bubble " data-val="other"><svg viewBox="0 0 24 24" class="bi"><use href="#i-other"/></svg>其他</button></div>
+  </div>
+
+  <div class="pv-sec">
+    <h2 class="pv-h2">② 关系推进阶段图（跟进 tab 内，抽成纯函数）</h2>
+    <p class="pv-p">替代原来的"交互阶段轨迹"：横向铺开 6 个阶段，走过的点亮、当前高亮，并给出"下一步该聊什么"的具体建议。</p>
+    
+    <div class="card tight journey">
+      <div class="between">
+        <div class="small" style="font-weight:650">关系推进阶段</div>
+        <span class="badge b-plain">当前：促成与启动</span>
+      </div>
+      <div class="hint" style="margin:5px 0 12px">这条轴帮你看清"现在该聊什么"：先定位客户处在哪个阶段，再决定用哪套话术、下一步说什么。轴下方给出针对最新一次沟通的具体建议。</div>
+      <div class="journey-track">
+        <div class="j-node">
+            <div class="j-dot"></div>
+            <div class="j-name">建立安全感</div>
+            <div class="j-goal">让对方觉得你在帮他，不是在卖他</div>
+          </div><div class="j-node">
+            <div class="j-dot"></div>
+            <div class="j-name">探索真实需求</div>
+            <div class="j-goal">问出他自己都说不清的真实动机</div>
+          </div><div class="j-node">
+            <div class="j-dot"></div>
+            <div class="j-name">呈现方案</div>
+            <div class="j-goal">让客户自己得出结论，而不是被说服</div>
+          </div><div class="j-node">
+            <div class="j-dot"></div>
+            <div class="j-name">处理犹豫</div>
+            <div class="j-goal">区分&quot;没想清楚&quot;和&quot;不方便说出口的顾虑&quot;</div>
+          </div><div class="j-node reached current">
+            <div class="j-dot">●</div>
+            <div class="j-name">促成与启动</div>
+            <div class="j-goal">把同意变成今天可执行的第一个动作</div>
+          </div><div class="j-node">
+            <div class="j-dot"></div>
+            <div class="j-name">巩固与陪伴</div>
+            <div class="j-goal">让第一次到店成为习惯的起点</div>
+          </div>
+      </div>
+      <div class="divider"></div>
+      <div class="small" style="line-height:1.8">
+        <span class="muted">已走过</span> <b>1</b>/6 个阶段
+        · <span class="muted">有效交互</span> <b>1</b>/7
+        · <span class="muted">拿到微承诺</span> <b>1</b> 次
+      </div>
+      <div class="card tight" style="margin-top:9px;background:var(--brand-tint)">
+        <div class="small" style="font-weight:650;color:var(--brand-2)">对这次跟进的帮助</div>
+        <div class="small" style="margin-top:4px;line-height:1.75;color:var(--brand-2)">
+          客户现在停在「促成与启动」，下一步建议：可以给承诺阶梯 + 明确下一步时间。
+          可以试试 <b>损失厌恶</b>：人怕失去比想得到更强烈。把&quot;你将获得&quot;翻译成&quot;你正在放弃什么&quot;。
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pv-sec">
+    <h2 class="pv-h2">③ 会员详情：客户信息卡置顶 + 单栏 tab 切换</h2>
+    <div class="pv-tip">运动日历模块更名为<b>出勤</b>，并作为详情端第一个<b>子集（tab）</b>，不再独立成左栏。子集顺序：<b>出勤 → 档案（含系统数据）→ 会籍 → 跟进（AI 转写跟进作为可选方式嵌入）→ 预约 → 续费</b>。点击下方 tab 切换：<b>出勤</b>看打卡月历 · <b>档案</b>含系统数据 · <b>跟进</b>看阶段轨迹 + AI 转写可选方式 · <b>续费</b>看自动提取的报价（¥2,980，标"自动提取"，可改）。</div>
+    <div class="sheet-frame"><div class="tabpane" data-tab="checkin" style="display:block">
+    <div class="member-detail">
+      
+  <div class="detail-hero">
+    <div class="avatar av-f">林</div>
+    <div style="flex:1;min-width:0">
+      <h3>林嘉怡</h3>
+      <div class="m">
+        <span>女 · 29 岁</span>
+        <span>13800132211</span>
+      </div>
+      <div class="tag-row">
+        <span class="badge b-warn">续费洽谈</span>
+        <span class="badge b-info">三体同步</span>
+        <span class="badge b-green">年卡</span>
+        <span class="badge b-plain">21 天后到期</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card tight" style="margin-top:12px;border-color:var(--brand-tint-2);background:var(--brand-tint)">
+    <div class="between">
+      <div class="small" style="font-weight:700;color:var(--brand-2)">现在最该做的动作<span class="auto-chip">自动</span></div>
+      <span class="badge b-plain">优先级 3</span>
+    </div>
+    <div style="font-size:13.5px;font-weight:680;margin-top:6px;color:var(--brand-2)">深化关系：复盘进展 + 邀请转介绍</div>
+    <div class="small" style="margin-top:4px;line-height:1.6;color:var(--brand-2)">为什么：近 30 天到店 11 次，是门店里最稳的那批人</div>
+    <div class="tag-row" style="margin-top:7px">
+      <span class="src">建议渠道 面谈</span>
+      <span class="src">建议窗口 训练结束后</span>
+      <span class="src qn">心理学切入 社会认同（同型对照）</span>
+      
+    </div>
+  </div>
+
+  
+
+  
+    <div class="btn-row" style="margin-top:12px">
+      <button class="btn ghost" data-act="dial:13800132211"><svg viewBox="0 0 24 24"><use href="#i-phone"/></svg>拨打 13800132211</button>
+      <button class="btn ghost" data-act="contact"><svg viewBox="0 0 24 24"><use href="#i-chat"/></svg>客户触达台</button>
+    </div>
+
+  <div class="btn-row" style="margin-top:10px">
+    <button class="btn primary narrow" data-act="follow" title="记录一次跟进"><svg viewBox="0 0 24 24"><use href="#i-plus"/></svg>跟进</button>
+    <button class="btn ghost" data-act="appt"><svg viewBox="0 0 24 24"><use href="#i-calendar"/></svg>加预约</button>
+    <button class="btn ghost" data-act="ai"><svg viewBox="0 0 24 24"><use href="#i-spark"/></svg>AI 话术</button>
+    <button class="btn ghost" data-act="aimat-open"><svg viewBox="0 0 24 24"><use href="#i-upload"/></svg>AI 转写跟进</button>
+  </div>
+      <div class="tabs-mini"><button data-mtab="checkin" class="on">出勤</button><button data-mtab="profile" class="">档案</button><button data-mtab="card" class="">会籍<span class="cnt">2</span></button><button data-mtab="follow" class="">跟进<span class="cnt">7</span></button><button data-mtab="appt" class="">预约<span class="cnt">0</span></button><button data-mtab="renew" class="">续费</button></div>
+      
+    <div class="cal-wrap">
+      <div class="cal-meta">
+        <span>三体建档 2025-09-22</span><span class="sep">·</span><span>建档至今 372 天</span><span class="sep">·</span><span>累计打卡 11 次</span>
+      </div>
+      <div class="cal-head between">
+        <button class="btn ghost sm" data-cal="prev">‹ 上月</button>
+        <div class="cal-title">2026 年 9 月</div>
+        <button class="btn ghost sm" data-cal="next">下月 ›</button>
+      </div>
+      <div class="cal-weekdays">
+        <span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span><span>日</span>
+      </div>
+      <div class="cal-grid"><div class="cal-cell empty"></div><div class="cal-cell on" title="2026-09-01">1</div><div class="cal-cell" title="2026-09-02">2</div><div class="cal-cell on" title="2026-09-03">3</div><div class="cal-cell" title="2026-09-04">4</div><div class="cal-cell" title="2026-09-05">5</div><div class="cal-cell" title="2026-09-06">6</div><div class="cal-cell" title="2026-09-07">7</div><div class="cal-cell" title="2026-09-08">8</div><div class="cal-cell on" title="2026-09-09">9</div><div class="cal-cell on" title="2026-09-10">10</div><div class="cal-cell on" title="2026-09-11">11</div><div class="cal-cell" title="2026-09-12">12</div><div class="cal-cell on" title="2026-09-13">13</div><div class="cal-cell" title="2026-09-14">14</div><div class="cal-cell" title="2026-09-15">15</div><div class="cal-cell" title="2026-09-16">16</div><div class="cal-cell on" title="2026-09-17">17</div><div class="cal-cell" title="2026-09-18">18</div><div class="cal-cell" title="2026-09-19">19</div><div class="cal-cell" title="2026-09-20">20</div><div class="cal-cell" title="2026-09-21">21</div><div class="cal-cell on" title="2026-09-22">22</div><div class="cal-cell" title="2026-09-23">23</div><div class="cal-cell on" title="2026-09-24">24</div><div class="cal-cell" title="2026-09-25">25</div><div class="cal-cell on" title="2026-09-26">26</div><div class="cal-cell" title="2026-09-27">27</div><div class="cal-cell" title="2026-09-28">28</div><div class="cal-cell today" title="2026-09-29">29</div><div class="cal-cell future" title="2026-09-30">30</div><div class="cal-cell empty"></div><div class="cal-cell empty"></div><div class="cal-cell empty"></div><div class="cal-cell empty"></div></div>
+      <div class="cal-legend">
+        <span><i class="dot on"></i>已打卡</span>
+        <span><i class="dot today"></i>今天</span>
+        <span class="muted">上月 / 下月用顶部按钮切换</span>
+      </div>
+      <div class="cal-caption">打卡即到店运动记录，来自三体 / 勤鸟建档，与名下是否持会籍卡无关。</div>
+
+      <div class="stat-grid g4" style="margin-top:14px">
+        <div class="stat">
+    <div class="k">本周打卡</div>
+    <div class="v num">0<small>次</small></div>
+    
+  </div>
+        <div class="stat">
+    <div class="k">本月打卡</div>
+    <div class="v num">10<small>次</small></div>
+    
+  </div>
+        <div class="stat">
+    <div class="k">连续打卡</div>
+    <div class="v num">0<small>天</small></div>
+    
+  </div>
+        <div class="stat">
+    <div class="k">周均打卡</div>
+    <div class="v num">2.6<small>次</small></div>
+    
+  </div>
+      </div>
+
+      <div class="section-title" style="margin-top:14px">近 6 个月打卡</div>
+      <div class="cal-bars"><div class="cal-bar-col">
+      <div class="cal-bar-track"><div class="cal-bar " style="height:0%"></div></div>
+      <div class="cal-bar-num">0</div>
+      <div class="cal-bar-label">4月</div>
+    </div><div class="cal-bar-col">
+      <div class="cal-bar-track"><div class="cal-bar " style="height:0%"></div></div>
+      <div class="cal-bar-num">0</div>
+      <div class="cal-bar-label">5月</div>
+    </div><div class="cal-bar-col">
+      <div class="cal-bar-track"><div class="cal-bar " style="height:0%"></div></div>
+      <div class="cal-bar-num">0</div>
+      <div class="cal-bar-label">6月</div>
+    </div><div class="cal-bar-col">
+      <div class="cal-bar-track"><div class="cal-bar " style="height:0%"></div></div>
+      <div class="cal-bar-num">0</div>
+      <div class="cal-bar-label">7月</div>
+    </div><div class="cal-bar-col">
+      <div class="cal-bar-track"><div class="cal-bar on" style="height:10%"></div></div>
+      <div class="cal-bar-num">1</div>
+      <div class="cal-bar-label">8月</div>
+    </div><div class="cal-bar-col">
+      <div class="cal-bar-track"><div class="cal-bar on" style="height:100%"></div></div>
+      <div class="cal-bar-num">10</div>
+      <div class="cal-bar-label">9月</div>
+    </div></div>
+    </div>
+    </div></div><div class="tabpane" data-tab="profile" style="display:none">
+    <div class="member-detail">
+      
+  <div class="detail-hero">
+    <div class="avatar av-f">林</div>
+    <div style="flex:1;min-width:0">
+      <h3>林嘉怡</h3>
+      <div class="m">
+        <span>女 · 29 岁</span>
+        <span>13800132211</span>
+      </div>
+      <div class="tag-row">
+        <span class="badge b-warn">续费洽谈</span>
+        <span class="badge b-info">三体同步</span>
+        <span class="badge b-green">年卡</span>
+        <span class="badge b-plain">21 天后到期</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card tight" style="margin-top:12px;border-color:var(--brand-tint-2);background:var(--brand-tint)">
+    <div class="between">
+      <div class="small" style="font-weight:700;color:var(--brand-2)">现在最该做的动作<span class="auto-chip">自动</span></div>
+      <span class="badge b-plain">优先级 3</span>
+    </div>
+    <div style="font-size:13.5px;font-weight:680;margin-top:6px;color:var(--brand-2)">深化关系：复盘进展 + 邀请转介绍</div>
+    <div class="small" style="margin-top:4px;line-height:1.6;color:var(--brand-2)">为什么：近 30 天到店 11 次，是门店里最稳的那批人</div>
+    <div class="tag-row" style="margin-top:7px">
+      <span class="src">建议渠道 面谈</span>
+      <span class="src">建议窗口 训练结束后</span>
+      <span class="src qn">心理学切入 社会认同（同型对照）</span>
+      
+    </div>
+  </div>
+
+  
+
+  
+    <div class="btn-row" style="margin-top:12px">
+      <button class="btn ghost" data-act="dial:13800132211"><svg viewBox="0 0 24 24"><use href="#i-phone"/></svg>拨打 13800132211</button>
+      <button class="btn ghost" data-act="contact"><svg viewBox="0 0 24 24"><use href="#i-chat"/></svg>客户触达台</button>
+    </div>
+
+  <div class="btn-row" style="margin-top:10px">
+    <button class="btn primary narrow" data-act="follow" title="记录一次跟进"><svg viewBox="0 0 24 24"><use href="#i-plus"/></svg>跟进</button>
+    <button class="btn ghost" data-act="appt"><svg viewBox="0 0 24 24"><use href="#i-calendar"/></svg>加预约</button>
+    <button class="btn ghost" data-act="ai"><svg viewBox="0 0 24 24"><use href="#i-spark"/></svg>AI 话术</button>
+    <button class="btn ghost" data-act="aimat-open"><svg viewBox="0 0 24 24"><use href="#i-upload"/></svg>AI 转写跟进</button>
+  </div>
+      <div class="tabs-mini"><button data-mtab="checkin" class="">出勤</button><button data-mtab="profile" class="on">档案</button><button data-mtab="card" class="">会籍<span class="cnt">2</span></button><button data-mtab="follow" class="">跟进<span class="cnt">7</span></button><button data-mtab="appt" class="">预约<span class="cnt">0</span></button><button data-mtab="renew" class="">续费</button></div>
+      
+      <div class="notice info" style="margin-bottom:12px">
+        <svg viewBox="0 0 24 24"><use href="#i-alert"/></svg>
+        <div>
+          <span class="auto-val">蓝色字段是自动的</span>：三体 / 勤鸟同步回来，或 FitFlow 按到店记录算出来；
+          <span style="color:var(--ink)">带「手动」角标的是你自己登记的</span>。
+          空值分两种，不能混为一谈：<strong>「未获取」= 来源系统没返回这一项</strong>；<strong>「未登记」= 需要你手动填</strong>。
+          两种空都不会被填成推测值。发现同步信息不对？每张卡右下角可以<a href="javascript:void(0)" style="color:var(--info);font-weight:650" data-act="go-report">报错</a>。
+        </div>
+      </div>
+
+      <div class="section-title">系统同步（自动）</div>
+      <div class="kv"><div class="k">累计消费</div><div class="v "><span class="auto-val">¥18,800</span><span class="auto-chip">自动</span></div></div>
+      <div class="kv"><div class="k">私教 / 课时</div><div class="v "><span class="auto-val">剩余 12 / 24 节</span><span class="auto-chip">自动</span></div></div>
+      <div class="kv"><div class="k">近 30 天到店</div><div class="v "><span class="auto-val">11 次</span><span class="auto-chip">自动</span></div></div>
+      <div class="kv"><div class="k">最近到店</div><div class="v "><span class="auto-val">2026-09-26（3 天前到店）</span><span class="auto-chip">自动</span></div></div>
+      <div class="kv"><div class="k">入会日期</div><div class="v "><span class="auto-val">2025-10-20</span><span class="auto-chip">自动</span></div></div>
+      <div class="kv"><div class="k">会籍到期</div><div class="v "><span class="auto-val">2026-10-20（21 天后到期）</span><span class="auto-chip">自动</span></div></div>
+      <div class="small muted" style="margin:-2px 0 10px;line-height:1.5">「会籍到期」指会员资格（这张卡的会籍）到期，与下面「会籍卡」页里每张卡的<strong>课程 / 课时有效期</strong>不是一回事：会籍管"能不能进"，课时管"还剩几节"。</div>
+      <div class="kv"><div class="k">标签</div><div class="v "><span class="auto-val"><span class="badge b-plain">高价值</span> <span class="badge b-plain">续费意向高</span></span><span class="auto-chip">自动</span></div></div>
+
+      <div class="section-title">手动登记</div>
+      <div class="small muted" style="margin:-2px 0 8px;line-height:1.5">训练目标、主要需求、顾虑 / 阻碍这三项，<strong>三体与勤鸟都不返回</strong>（两家系统的会员档案里没有"训练目标"这类字段），只能在本机登记，不会从来源系统同步。</div>
+      <div class="kv"><div class="k">训练目标</div><div class="v ">体脂率从 29% 降到 24%<br/>年底拍婚纱照<span class="manual-chip">手动</span></div></div>
+      <div class="kv"><div class="k">主要需求</div><div class="v ">减脂 · 体态改善<span class="manual-chip">手动</span></div></div>
+      <div class="kv"><div class="k">顾虑 / 阻碍</div><div class="v ">膝盖旧伤，深蹲会疼<br/>担心续费后教练更换<span class="manual-chip">手动</span></div></div>
+      <div class="kv"><div class="k">我的备注</div><div class="v ">对教练更换非常敏感，续费方案里必须写清教练安排。<span class="manual-chip">手动</span></div></div>
+
+      
+    <div class="section-title">同事备注 </div>
+    <div class="small muted" style="margin:-2px 0 8px;line-height:1.5">别人留在这位客户名下的备注。同步来的条目只读，改与删都要回来源系统；本地补录的可以删。</div>
+    <div class="empty"><svg viewBox="0 0 24 24"><use href="#i-chat"/></svg><p>还没有同事备注。三体 / 勤鸟同步回来后自动出现，也可以自己补一条。</p></div>
+    <button class="btn ghost block" style="margin-top:8px" data-act="cn-add"><svg viewBox="0 0 24 24"><use href="#i-plus"/></svg>补一条同事备注</button>
+
+      <div class="section-title">阶段流转</div>
+      <div class="chips">
+        <button class="chip " data-act="stage:lead">线索</button><button class="chip " data-act="stage:trial">体验中</button><button class="chip " data-act="stage:active">在练</button><button class="chip on" data-act="stage:renewing">续费洽谈</button><button class="chip " data-act="stage:silent">沉默</button><button class="chip " data-act="stage:expired">已过期</button>
+      </div>
+
+      <div class="section-title">档案操作</div>
+      <div class="btn-row">
+        <button class="btn ghost" data-act="edit">编辑会员资料</button>
+        <button class="btn danger" data-act="lost">永久流失</button>
+      </div>
+      
+      
+      
+        <div class="notice green"><svg viewBox="0 0 24 24"><use href="#i-sync"/></svg><div>档案来源：<strong>三体云动</strong>｜最近同步：2026-09-29 08:13｜同步范围：本人负责会员</div></div>
+        <div class="notice warn"><svg viewBox="0 0 24 24"><use href="#i-alert"/></svg><div>当前授权状态：<strong>待授权</strong>。上面这些资料来自「导出表格导入」的兜底通道，不是实时接口返回值。授权接通后会改写为接口数据并更新同步时间。</div></div>
+        <div class="section-title">三体云动 字段</div>
+        
+          <div class="kv">
+            <div class="k">会员 ID</div>
+            <div class="v ">T3-88201</div>
+          </div>
+          
+        
+          <div class="kv">
+            <div class="k">姓名</div>
+            <div class="v ">林嘉怡</div>
+          </div>
+          
+        
+          <div class="kv">
+            <div class="k">手机号</div>
+            <div class="v ">13800132211</div>
+          </div>
+          
+        
+          <div class="kv">
+            <div class="k">会籍 / 卡种</div>
+            <div class="v ">年卡 · 私教 24 节</div>
+          </div>
+          
+        
+          <div class="kv">
+            <div class="k">会籍到期日</div>
+            <div class="v ">2026-10-20</div>
+          </div>
+          
+        
+          <div class="kv">
+            <div class="k">建档日期</div>
+            <div class="v ">2025-09-22</div>
+          </div>
+          
+        
+          <div class="kv">
+            <div class="k">剩余课时</div>
+            <div class="v ">12 / 24</div>
+          </div>
+          
+        
+          <div class="kv">
+            <div class="k">入场 / 到店记录</div>
+            <div class="v ">2026-09-26（近 30 天 11 次）</div>
+          </div>
+          
+        
+          <div class="kv">
+            <div class="k">订单 / 收款流水</div>
+            <div class="v muted">未获取</div>
+          </div>
+          <div class="hint" style="margin:-4px 0 8px 102px">接口路径待核对（当前状态：待授权）</div>
+        
+          <div class="kv">
+            <div class="k">预约记录</div>
+            <div class="v muted">未获取</div>
+          </div>
+          <div class="hint" style="margin:-4px 0 8px 102px">官方说明可查预约，但要等网关授权；现用FitFlow 内自建预约</div>
+        
+          <div class="kv">
+            <div class="k">退款记录</div>
+            <div class="v muted">未获取</div>
+          </div>
+          <div class="hint" style="margin:-4px 0 8px 102px">本工作台不纳入退款口径</div>
+        
+          <div class="kv">
+            <div class="k">体测数据</div>
+            <div class="v muted">未获取</div>
+          </div>
+          <div class="hint" style="margin:-4px 0 8px 102px">不在官方说明的查询范围内</div>
+        
+      
+
+      <div class="section-title">本地记录（不来自对方系统）</div>
+      <div class="kv"><div class="k">跟进记录</div><div class="v ">7 条</div></div>
+      <div class="kv"><div class="k">我的备注</div><div class="v ">对教练更换非常敏感，续费方案里必须写清教练安排。</div></div>
+      <div class="kv"><div class="k">标签</div><div class="v "><span class="badge b-plain">高价值</span> <span class="badge b-plain">续费意向高</span></div></div>
+      <div class="hint" style="margin-top:8px">原则：对方系统能给的就读，给不了的就写「未获取」，绝不用推测值补空。</div>
+      <button class="btn ghost block" style="margin-top:10px" data-act="go-data">前往数据连接</button>
+    </div></div><div class="tabpane" data-tab="card" style="display:none">
+    <div class="member-detail">
+      
+  <div class="detail-hero">
+    <div class="avatar av-f">林</div>
+    <div style="flex:1;min-width:0">
+      <h3>林嘉怡</h3>
+      <div class="m">
+        <span>女 · 29 岁</span>
+        <span>13800132211</span>
+      </div>
+      <div class="tag-row">
+        <span class="badge b-warn">续费洽谈</span>
+        <span class="badge b-info">三体同步</span>
+        <span class="badge b-green">年卡</span>
+        <span class="badge b-plain">21 天后到期</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card tight" style="margin-top:12px;border-color:var(--brand-tint-2);background:var(--brand-tint)">
+    <div class="between">
+      <div class="small" style="font-weight:700;color:var(--brand-2)">现在最该做的动作<span class="auto-chip">自动</span></div>
+      <span class="badge b-plain">优先级 3</span>
+    </div>
+    <div style="font-size:13.5px;font-weight:680;margin-top:6px;color:var(--brand-2)">深化关系：复盘进展 + 邀请转介绍</div>
+    <div class="small" style="margin-top:4px;line-height:1.6;color:var(--brand-2)">为什么：近 30 天到店 11 次，是门店里最稳的那批人</div>
+    <div class="tag-row" style="margin-top:7px">
+      <span class="src">建议渠道 面谈</span>
+      <span class="src">建议窗口 训练结束后</span>
+      <span class="src qn">心理学切入 社会认同（同型对照）</span>
+      
+    </div>
+  </div>
+
+  
+
+  
+    <div class="btn-row" style="margin-top:12px">
+      <button class="btn ghost" data-act="dial:13800132211"><svg viewBox="0 0 24 24"><use href="#i-phone"/></svg>拨打 13800132211</button>
+      <button class="btn ghost" data-act="contact"><svg viewBox="0 0 24 24"><use href="#i-chat"/></svg>客户触达台</button>
+    </div>
+
+  <div class="btn-row" style="margin-top:10px">
+    <button class="btn primary narrow" data-act="follow" title="记录一次跟进"><svg viewBox="0 0 24 24"><use href="#i-plus"/></svg>跟进</button>
+    <button class="btn ghost" data-act="appt"><svg viewBox="0 0 24 24"><use href="#i-calendar"/></svg>加预约</button>
+    <button class="btn ghost" data-act="ai"><svg viewBox="0 0 24 24"><use href="#i-spark"/></svg>AI 话术</button>
+    <button class="btn ghost" data-act="aimat-open"><svg viewBox="0 0 24 24"><use href="#i-upload"/></svg>AI 转写跟进</button>
+  </div>
+      <div class="tabs-mini"><button data-mtab="checkin" class="">出勤</button><button data-mtab="profile" class="">档案</button><button data-mtab="card" class="on">会籍<span class="cnt">2</span></button><button data-mtab="follow" class="">跟进<span class="cnt">7</span></button><button data-mtab="appt" class="">预约<span class="cnt">0</span></button><button data-mtab="renew" class="">续费</button></div>
+      
+      <div class="stat-grid g3" style="margin-bottom:12px">
+        <div class="stat">
+    <div class="k">持卡数</div>
+    <div class="v num">2<small>张</small></div>
+    
+  </div>
+        <div class="stat">
+    <div class="k">剩余课时/次数</div>
+    <div class="v num">12<small>节</small></div>
+    
+  </div>
+        <div class="stat">
+    <div class="k">累计实付</div>
+    <div class="v num">¥26,960</div>
+    
+  </div>
+      </div>
+
+      <div class="card tight">
+          <div class="between">
+            <div style="min-width:0">
+              <div class="li-top"><span class="li-name">年卡</span><span class="badge b-green">生效中</span></div>
+              <div class="li-meta"><span class="mono">T3-109335</span><span>期限卡</span><span class="src tri">三体同步</span></div>
+            </div>
+          </div>
+          <div class="divider" style="margin:10px 0"></div>
+          <div class="between"><span class="small muted">进度</span><span class="small num auto-val">94%<span class="auto-chip">自动</span></span></div>
+          <div class="bar warn" style="margin-top:5px"><i style="width:94.2%"></i></div>
+          <div class="kv" style="margin-top:8px"><div class="k">紧迫度</div><div class="v auto-val" style="color:var(--warn)">21 天后到期<span class="auto-chip">自动</span></div></div>
+          
+          <div class="kv"><div class="k">课程 / 课时有效期</div><div class="v "><span class="auto-val">2025-10-20 至 2026-10-20</span><span class="auto-chip">自动</span></div></div>
+          <div class="kv"><div class="k">实付 / 标价</div><div class="v "><span class="auto-val">¥18,800 / ¥18,800</span><span class="auto-chip">自动</span></div></div>
+          
+          
+          <div class="between" style="margin-top:10px">
+            <span class="small muted" style="line-height:1.5">信息有出入？来源系统同步的错漏在这里反馈</span>
+            <button class="btn ghost sm" data-act="card-err:card_m01_m"><svg viewBox="0 0 24 24"><use href="#i-alert"/></svg>报错</button>
+          </div>
+        </div><div class="card tight">
+          <div class="between">
+            <div style="min-width:0">
+              <div class="li-top"><span class="li-name">私教 24 节</span><span class="badge b-green">生效中</span></div>
+              <div class="li-meta"><span class="mono">T3-206713</span><span>私教课包</span><span class="src tri">三体同步</span></div>
+            </div>
+          </div>
+          <div class="divider" style="margin:10px 0"></div>
+          <div class="between"><span class="small muted">进度</span><span class="small num auto-val">50%<span class="auto-chip">自动</span></span></div>
+          <div class="bar warn" style="margin-top:5px"><i style="width:50.0%"></i></div>
+          <div class="kv" style="margin-top:8px"><div class="k">紧迫度</div><div class="v auto-val" style="color:var(--warn)">21 天后到期<span class="auto-chip">自动</span></div></div>
+          <div class="kv"><div class="k">剩余 / 总数</div><div class="v "><span class="auto-val">12 / 24节</span><span class="auto-chip">自动</span></div></div>
+          <div class="kv"><div class="k">课程 / 课时有效期</div><div class="v "><span class="auto-val">2025-10-20 至 2026-10-20</span><span class="auto-chip">自动</span></div></div>
+          <div class="kv"><div class="k">实付 / 标价</div><div class="v "><span class="auto-val">¥8,160 / ¥9,120</span><span class="auto-chip">自动</span></div></div>
+          
+          
+          <div class="between" style="margin-top:10px">
+            <span class="small muted" style="line-height:1.5">信息有出入？来源系统同步的错漏在这里反馈</span>
+            <button class="btn ghost sm" data-act="card-err:card_m01_pt"><svg viewBox="0 0 24 24"><use href="#i-alert"/></svg>报错</button>
+          </div>
+        </div>
+
+      <div class="notice info"><svg viewBox="0 0 24 24"><use href="#i-sync"/></svg><div>卡种信息以来源系统的实时记录为准，本页<b>只读展示</b>，不提供修改、删除、冻结等写操作。变更请到对应系统端处理。</div></div>
+    </div></div><div class="tabpane" data-tab="follow" style="display:none">
+    <div class="member-detail">
+      
+  <div class="detail-hero">
+    <div class="avatar av-f">林</div>
+    <div style="flex:1;min-width:0">
+      <h3>林嘉怡</h3>
+      <div class="m">
+        <span>女 · 29 岁</span>
+        <span>13800132211</span>
+      </div>
+      <div class="tag-row">
+        <span class="badge b-warn">续费洽谈</span>
+        <span class="badge b-info">三体同步</span>
+        <span class="badge b-green">年卡</span>
+        <span class="badge b-plain">21 天后到期</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card tight" style="margin-top:12px;border-color:var(--brand-tint-2);background:var(--brand-tint)">
+    <div class="between">
+      <div class="small" style="font-weight:700;color:var(--brand-2)">现在最该做的动作<span class="auto-chip">自动</span></div>
+      <span class="badge b-plain">优先级 3</span>
+    </div>
+    <div style="font-size:13.5px;font-weight:680;margin-top:6px;color:var(--brand-2)">深化关系：复盘进展 + 邀请转介绍</div>
+    <div class="small" style="margin-top:4px;line-height:1.6;color:var(--brand-2)">为什么：近 30 天到店 11 次，是门店里最稳的那批人</div>
+    <div class="tag-row" style="margin-top:7px">
+      <span class="src">建议渠道 面谈</span>
+      <span class="src">建议窗口 训练结束后</span>
+      <span class="src qn">心理学切入 社会认同（同型对照）</span>
+      
+    </div>
+  </div>
+
+  
+
+  
+    <div class="btn-row" style="margin-top:12px">
+      <button class="btn ghost" data-act="dial:13800132211"><svg viewBox="0 0 24 24"><use href="#i-phone"/></svg>拨打 13800132211</button>
+      <button class="btn ghost" data-act="contact"><svg viewBox="0 0 24 24"><use href="#i-chat"/></svg>客户触达台</button>
+    </div>
+
+  <div class="btn-row" style="margin-top:10px">
+    <button class="btn primary narrow" data-act="follow" title="记录一次跟进"><svg viewBox="0 0 24 24"><use href="#i-plus"/></svg>跟进</button>
+    <button class="btn ghost" data-act="appt"><svg viewBox="0 0 24 24"><use href="#i-calendar"/></svg>加预约</button>
+    <button class="btn ghost" data-act="ai"><svg viewBox="0 0 24 24"><use href="#i-spark"/></svg>AI 话术</button>
+    <button class="btn ghost" data-act="aimat-open"><svg viewBox="0 0 24 24"><use href="#i-upload"/></svg>AI 转写跟进</button>
+  </div>
+      <div class="tabs-mini"><button data-mtab="checkin" class="">出勤</button><button data-mtab="profile" class="">档案</button><button data-mtab="card" class="">会籍<span class="cnt">2</span></button><button data-mtab="follow" class="on">跟进<span class="cnt">7</span></button><button data-mtab="appt" class="">预约<span class="cnt">0</span></button><button data-mtab="renew" class="">续费</button></div>
+      
+      
+    <div class="card tight journey">
+      <div class="between">
+        <div class="small" style="font-weight:650">关系推进阶段</div>
+        <span class="badge b-plain">当前：促成与启动</span>
+      </div>
+      <div class="hint" style="margin:5px 0 12px">这条轴帮你看清"现在该聊什么"：先定位客户处在哪个阶段，再决定用哪套话术、下一步说什么。轴下方给出针对最新一次沟通的具体建议。</div>
+      <div class="journey-track">
+        <div class="j-node">
+            <div class="j-dot"></div>
+            <div class="j-name">建立安全感</div>
+            <div class="j-goal">让对方觉得你在帮他，不是在卖他</div>
+          </div><div class="j-node">
+            <div class="j-dot"></div>
+            <div class="j-name">探索真实需求</div>
+            <div class="j-goal">问出他自己都说不清的真实动机</div>
+          </div><div class="j-node">
+            <div class="j-dot"></div>
+            <div class="j-name">呈现方案</div>
+            <div class="j-goal">让客户自己得出结论，而不是被说服</div>
+          </div><div class="j-node">
+            <div class="j-dot"></div>
+            <div class="j-name">处理犹豫</div>
+            <div class="j-goal">区分&quot;没想清楚&quot;和&quot;不方便说出口的顾虑&quot;</div>
+          </div><div class="j-node reached current">
+            <div class="j-dot">●</div>
+            <div class="j-name">促成与启动</div>
+            <div class="j-goal">把同意变成今天可执行的第一个动作</div>
+          </div><div class="j-node">
+            <div class="j-dot"></div>
+            <div class="j-name">巩固与陪伴</div>
+            <div class="j-goal">让第一次到店成为习惯的起点</div>
+          </div>
+      </div>
+      <div class="divider"></div>
+      <div class="small" style="line-height:1.8">
+        <span class="muted">已走过</span> <b>1</b>/6 个阶段
+        · <span class="muted">有效交互</span> <b>1</b>/7
+        · <span class="muted">拿到微承诺</span> <b>1</b> 次
+      </div>
+      <div class="card tight" style="margin-top:9px;background:var(--brand-tint)">
+        <div class="small" style="font-weight:650;color:var(--brand-2)">对这次跟进的帮助</div>
+        <div class="small" style="margin-top:4px;line-height:1.75;color:var(--brand-2)">
+          客户现在停在「促成与启动」，下一步建议：可以给承诺阶梯 + 明确下一步时间。
+          可以试试 <b>损失厌恶</b>：人怕失去比想得到更强烈。把&quot;你将获得&quot;翻译成&quot;你正在放弃什么&quot;。
+        </div>
+      </div>
+    </div>
+
+      <div class="timeline">
+      <div class="tl-item on">
+        <div class="tl-date">2026-09-28 · 微信</div>
+        <div class="tl-title">客户已打卡 3 次，主动分享了训练感受，进入陪伴期</div>
+        <div class="tl-body">客户反馈：状态很好</div>
+        <div class="tl-body" style="color:var(--ink-3)">下一步：继续推进（约定 9月30日）</div>
+        
+        <button class="btn ghost sm" style="margin-top:7px" data-act="psych-edit:f_sg1x3l9fyiz">补上心理存档</button>
+      </div>
+      <div class="tl-item on">
+        <div class="tl-date">2026-09-27 · 当面</div>
+        <div class="tl-title">当面给续费方案，报价 2980 元，客户答应周六来交</div>
+        <div class="tl-body">客户反馈：没再犹豫</div>
+        <div class="tl-body" style="color:var(--ink-3)">下一步：继续推进（约定 9月30日）</div>
+        
+        <button class="btn ghost sm" style="margin-top:7px" data-act="psych-edit:f_2g4drxefyiy">补上心理存档</button>
+      </div>
+      <div class="tl-item on">
+        <div class="tl-date">2026-09-27 · 微信 · 促成与启动</div>
+        <div class="tl-title">发了本月体测对比与训练记录</div>
+        <div class="tl-body">客户反馈：很满意，主动问&quot;续费有没有老会员价&quot;</div>
+        <div class="tl-body" style="color:var(--ink-3)">下一步：当面给续费方案（含教练安排说明）（约定 9月29日）</div>
+        
+        
+          <div class="tag-row" style="margin-top:6px">
+            <span class="badge b-info">状态 期待</span>
+            <span class="badge b-teal">目标梯度效应</span><span class="badge b-teal">承诺一致性阶梯</span>
+          </div>
+          <div class="small" style="margin-top:5px">微承诺：答应周六下午到店看方案</div>
+          <div class="small muted" style="margin-top:4px;line-height:1.6">我的复盘：她自己说出了续费意向，不要打断，顺着接</div>
+          <button class="btn ghost sm" style="margin-top:7px" data-act="psych-edit:f_xgu2do5fyit">编辑心理存档</button>
+        
+      </div>
+      <div class="tl-item ">
+        <div class="tl-date">2026-09-26 · 微信</div>
+        <div class="tl-title">客户说再想想，担心教练换人；我做了情绪标注，给了两个真实选项</div>
+        <div class="tl-body">客户反馈：语气软了</div>
+        <div class="tl-body" style="color:var(--ink-3)">下一步：继续推进（约定 9月30日）</div>
+        
+        <button class="btn ghost sm" style="margin-top:7px" data-act="psych-edit:f_tv8ijvafyiy">补上心理存档</button>
+      </div>
+      <div class="tl-item on">
+        <div class="tl-date">2026-09-25 · 当面</div>
+        <div class="tl-title">到店做了体态评估，呈现了 12 周计划，客户开始问周期和效果</div>
+        <div class="tl-body">客户反馈：问了训练频率</div>
+        <div class="tl-body" style="color:var(--ink-3)">下一步：继续推进（约定 9月30日）</div>
+        
+        <button class="btn ghost sm" style="margin-top:7px" data-act="psych-edit:f_2f03u84fyiy">补上心理存档</button>
+      </div>
+      <div class="tl-item on">
+        <div class="tl-date">2026-09-24 · 电话</div>
+        <div class="tl-title">电话聊了 20 分钟，客户说其实主要是想改善圆肩和睡眠</div>
+        <div class="tl-body">客户反馈：愿意多聊</div>
+        <div class="tl-body" style="color:var(--ink-3)">下一步：继续推进（约定 9月30日）</div>
+        
+        <button class="btn ghost sm" style="margin-top:7px" data-act="psych-edit:f_z03zu3dfyiy">补上心理存档</button>
+      </div>
+      <div class="tl-item on">
+        <div class="tl-date">2026-09-23 · 微信</div>
+        <div class="tl-title">微信发了健身避坑清单，没提钱，先建立信任</div>
+        <div class="tl-body">客户反馈：说最近肩颈很僵</div>
+        <div class="tl-body" style="color:var(--ink-3)">下一步：继续推进（约定 9月30日）</div>
+        
+        <button class="btn ghost sm" style="margin-top:7px" data-act="psych-edit:f_q9sdgi7fyix">补上心理存档</button>
+      </div></div>
+      <button class="btn ghost block" style="margin-top:8px" data-act="writeback"><svg viewBox="0 0 24 24"><use href="#i-sync"/></svg>回写到三体 / 勤鸟</button>
+      <button class="btn primary block" style="margin-top:12px" data-act="follow"><svg viewBox="0 0 24 24"><use href="#i-plus"/></svg>新增跟进记录</button>
+      <div class="section-title" style="margin-top:16px">AI 转写跟进（可选方式）</div>
+      
+    <div class="notice info"><svg viewBox="0 0 24 24"><use href="#i-shield"/></svg><div>把面谈谈话的转写文档上传到这位会员名下，由 AI 提炼成「会面过程 / 结果 / 异议 / 跟进事项」四段纪要，核对后一键存为跟进记录。<strong>文档只在本机解析，只有点提炼并确认后才会外发，外发前姓名与手机号自动脱敏。</strong></div></div>
+
+    <div class="stat-grid g3" style="margin:12px 0">
+      <div class="stat">
+    <div class="k">已归档资料</div>
+    <div class="v num">0<small>份</small></div>
+    
+  </div>
+      <div class="stat">
+    <div class="k">已提炼纪要</div>
+    <div class="v num">0<small>份</small></div>
+    
+  </div>
+      <div class="stat">
+    <div class="k">仅存档待提炼</div>
+    <div class="v num">0<small>份</small></div>
+    
+  </div>
+    </div>
+
+    <button class="btn primary block" data-act="aimat-open"><svg viewBox="0 0 24 24"><use href="#i-upload"/></svg>上传会面转写文档</button>
+
+    <div class="section-title">归档记录</div>
+    <div class="empty"><svg viewBox="0 0 24 24"><use href="#i-doc"/></svg><p>还没有上传过会面转写文档。面谈时用录音转写工具录全程，导出文档后传上来。</p></div>
+    </div></div><div class="tabpane" data-tab="appt" style="display:none">
+    <div class="member-detail">
+      
+  <div class="detail-hero">
+    <div class="avatar av-f">林</div>
+    <div style="flex:1;min-width:0">
+      <h3>林嘉怡</h3>
+      <div class="m">
+        <span>女 · 29 岁</span>
+        <span>13800132211</span>
+      </div>
+      <div class="tag-row">
+        <span class="badge b-warn">续费洽谈</span>
+        <span class="badge b-info">三体同步</span>
+        <span class="badge b-green">年卡</span>
+        <span class="badge b-plain">21 天后到期</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card tight" style="margin-top:12px;border-color:var(--brand-tint-2);background:var(--brand-tint)">
+    <div class="between">
+      <div class="small" style="font-weight:700;color:var(--brand-2)">现在最该做的动作<span class="auto-chip">自动</span></div>
+      <span class="badge b-plain">优先级 3</span>
+    </div>
+    <div style="font-size:13.5px;font-weight:680;margin-top:6px;color:var(--brand-2)">深化关系：复盘进展 + 邀请转介绍</div>
+    <div class="small" style="margin-top:4px;line-height:1.6;color:var(--brand-2)">为什么：近 30 天到店 11 次，是门店里最稳的那批人</div>
+    <div class="tag-row" style="margin-top:7px">
+      <span class="src">建议渠道 面谈</span>
+      <span class="src">建议窗口 训练结束后</span>
+      <span class="src qn">心理学切入 社会认同（同型对照）</span>
+      
+    </div>
+  </div>
+
+  
+
+  
+    <div class="btn-row" style="margin-top:12px">
+      <button class="btn ghost" data-act="dial:13800132211"><svg viewBox="0 0 24 24"><use href="#i-phone"/></svg>拨打 13800132211</button>
+      <button class="btn ghost" data-act="contact"><svg viewBox="0 0 24 24"><use href="#i-chat"/></svg>客户触达台</button>
+    </div>
+
+  <div class="btn-row" style="margin-top:10px">
+    <button class="btn primary narrow" data-act="follow" title="记录一次跟进"><svg viewBox="0 0 24 24"><use href="#i-plus"/></svg>跟进</button>
+    <button class="btn ghost" data-act="appt"><svg viewBox="0 0 24 24"><use href="#i-calendar"/></svg>加预约</button>
+    <button class="btn ghost" data-act="ai"><svg viewBox="0 0 24 24"><use href="#i-spark"/></svg>AI 话术</button>
+    <button class="btn ghost" data-act="aimat-open"><svg viewBox="0 0 24 24"><use href="#i-upload"/></svg>AI 转写跟进</button>
+  </div>
+      <div class="tabs-mini"><button data-mtab="checkin" class="">出勤</button><button data-mtab="profile" class="">档案</button><button data-mtab="card" class="">会籍<span class="cnt">2</span></button><button data-mtab="follow" class="">跟进<span class="cnt">7</span></button><button data-mtab="appt" class="on">预约<span class="cnt">0</span></button><button data-mtab="renew" class="">续费</button></div>
+      <div class="list"><div class="list-item" style="opacity:0.62">
+        <div class="li-body">
+          <div class="li-top"><span class="li-name">私教课</span><span class="badge b-green">已到店</span></div>
+          <div class="li-meta"><span>9月25日 19:00（4天前）</span><span>李教练</span></div>
+          <div class="li-meta" style="color:var(--ink-2)">训练记录已上传</div>
+          
+        </div></div></div>
+      <button class="btn primary block" style="margin-top:12px" data-act="appt"><svg viewBox="0 0 24 24"><use href="#i-plus"/></svg>新建预约</button>
+    </div></div><div class="tabpane" data-tab="renew" style="display:none">
+    <div class="member-detail">
+      
+  <div class="detail-hero">
+    <div class="avatar av-f">林</div>
+    <div style="flex:1;min-width:0">
+      <h3>林嘉怡</h3>
+      <div class="m">
+        <span>女 · 29 岁</span>
+        <span>13800132211</span>
+      </div>
+      <div class="tag-row">
+        <span class="badge b-warn">续费洽谈</span>
+        <span class="badge b-info">三体同步</span>
+        <span class="badge b-green">年卡</span>
+        <span class="badge b-plain">21 天后到期</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card tight" style="margin-top:12px;border-color:var(--brand-tint-2);background:var(--brand-tint)">
+    <div class="between">
+      <div class="small" style="font-weight:700;color:var(--brand-2)">现在最该做的动作<span class="auto-chip">自动</span></div>
+      <span class="badge b-plain">优先级 3</span>
+    </div>
+    <div style="font-size:13.5px;font-weight:680;margin-top:6px;color:var(--brand-2)">深化关系：复盘进展 + 邀请转介绍</div>
+    <div class="small" style="margin-top:4px;line-height:1.6;color:var(--brand-2)">为什么：近 30 天到店 11 次，是门店里最稳的那批人</div>
+    <div class="tag-row" style="margin-top:7px">
+      <span class="src">建议渠道 面谈</span>
+      <span class="src">建议窗口 训练结束后</span>
+      <span class="src qn">心理学切入 社会认同（同型对照）</span>
+      
+    </div>
+  </div>
+
+  
+
+  
+    <div class="btn-row" style="margin-top:12px">
+      <button class="btn ghost" data-act="dial:13800132211"><svg viewBox="0 0 24 24"><use href="#i-phone"/></svg>拨打 13800132211</button>
+      <button class="btn ghost" data-act="contact"><svg viewBox="0 0 24 24"><use href="#i-chat"/></svg>客户触达台</button>
+    </div>
+
+  <div class="btn-row" style="margin-top:10px">
+    <button class="btn primary narrow" data-act="follow" title="记录一次跟进"><svg viewBox="0 0 24 24"><use href="#i-plus"/></svg>跟进</button>
+    <button class="btn ghost" data-act="appt"><svg viewBox="0 0 24 24"><use href="#i-calendar"/></svg>加预约</button>
+    <button class="btn ghost" data-act="ai"><svg viewBox="0 0 24 24"><use href="#i-spark"/></svg>AI 话术</button>
+    <button class="btn ghost" data-act="aimat-open"><svg viewBox="0 0 24 24"><use href="#i-upload"/></svg>AI 转写跟进</button>
+  </div>
+      <div class="tabs-mini"><button data-mtab="checkin" class="">出勤</button><button data-mtab="profile" class="">档案</button><button data-mtab="card" class="">会籍<span class="cnt">2</span></button><button data-mtab="follow" class="">跟进<span class="cnt">7</span></button><button data-mtab="appt" class="">预约<span class="cnt">0</span></button><button data-mtab="renew" class="on">续费</button></div>
+      
+      <div class="notice warn"><svg viewBox="0 0 24 24"><use href="#i-alert"/></svg><div>距离到期还有 <strong>21 天</strong>，属于可推进续费窗口。</div></div>
+      
+      
+        <div class="section-title">当前续费计划</div>
+        <div class="kv"><div class="k">阶段</div><div class="v ">方案沟通</div></div>
+        <div class="kv"><div class="k">报价</div><div class="v num">¥2,980<span class="auto-chip">自动提取</span></div></div><div class="hint" style="margin:-4px 0 8px 102px">从最近一次提及报价的跟进自动提取，点「更新续费计划」可直接改为最终报价</div>
+        <div class="kv"><div class="k">预期成交</div><div class="v ">¥16,800</div></div>
+        <div class="kv"><div class="k">卡点</div><div class="v ">担心续费后换教练</div></div>
+        <div class="kv"><div class="k">更新于</div><div class="v ">2026-09-29</div></div>
+      
+      <button class="btn primary block" style="margin-top:12px" data-act="renew">更新续费计划</button>
+      <button class="btn ghost block" style="margin-top:8px" data-act="ai-renew"><svg viewBox="0 0 24 24"><use href="#i-spark"/></svg>生成续费方案提示词
+      </button>
+    </div></div></div>
+  </div>
+</div>
+<script>
+document.addEventListener('click', function(e){
+  var b = e.target.closest('[data-mtab]');
+  if(b){ var t=b.dataset.mtab;
+    document.querySelectorAll('.tabpane').forEach(function(p){p.style.display = p.dataset.tab===t ? 'block' : 'none';});
+    document.querySelectorAll('[data-mtab]').forEach(function(x){x.classList.toggle('on', x.dataset.mtab===t);});
+  }
+});
+</script>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" data-page-node-id="h9o1FF5gzKicCTSKeIGxod">
+  <defs data-page-node-id="sCMtztfBzm8cJ3pmgiVsc3">
+    <symbol id="i-today" viewBox="0 0 24 24" data-page-node-id="Vqx8ufNv7ibGFAGOVuuhdd"><path d="M12 3v2M4.9 4.9l1.4 1.4M3 12h2M19 12h2M17.7 6.3l1.4-1.4M12 8a4 4 0 100 8 4 4 0 000-8zM5 20h14" data-page-node-id="4Aac3bjJYLyJIlR2GgWdMr"/></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24" data-page-node-id="Ng4uJY3NvsKm04rz4sanG0"><path d="M16 20v-1.5a4 4 0 00-4-4H7a4 4 0 00-4 4V20M9.5 10.5a3.5 3.5 0 100-7 3.5 3.5 0 000 7zM21 20v-1.5a4 4 0 00-3-3.87M16.5 4a3.5 3.5 0 010 6.9" data-page-node-id="2UV6vo1xmD4PecoceyV292"/></symbol>
+    <symbol id="i-ops" viewBox="0 0 24 24" data-page-node-id="KWOLn6FAW8VgEqCzGdLe27"><path d="M3 11l14-6v14L3 13v-2zM17 8a4 4 0 010 8M7 13v5a2 2 0 002 2h1" data-page-node-id="tKTOvpRyy3XEg7RSDdJvmb"/></symbol>
+    <symbol id="i-learn" viewBox="0 0 24 24" data-page-node-id="hYgr5h3L6CIcCyHnjDAGfK"><path d="M4 5.5A2.5 2.5 0 016.5 3H20v15H6.5A2.5 2.5 0 004 20.5v-15zM20 18v3H6.5A2.5 2.5 0 014 18.5" data-page-node-id="sjNTKCq7eBKgidQgdrGvRn"/></symbol>
+    <symbol id="i-data" viewBox="0 0 24 24" data-page-node-id="PP1mLUENa9Wx0Iz4PZ4woj"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2" data-page-node-id="A2GaQohXnebDquA2acO3ex"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24" data-page-node-id="UoL6d48cwmjH7b1sLoK6Zp"><path d="M12 5v14M5 12h14" data-page-node-id="8ujBlCjVJrwTgr5wBXoAXF"/></symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24" data-page-node-id="x9yJDmKtLxs0iuJ70oOpBH"><path d="M4 6.5A2.5 2.5 0 016.5 4h11A2.5 2.5 0 0120 6.5v11A2.5 2.5 0 0117.5 20h-11A2.5 2.5 0 014 17.5v-11zM8 3v3M16 3v3M4 9.5h16" data-page-node-id="AGUnBHwMdRhBlALrOuKE1x"/></symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24" data-page-node-id="cBbZJGIweUh43vcvVlfva6"><path d="M18 15V10a6 6 0 10-12 0v5l-1.5 3h15L18 15zM10 21h4" data-page-node-id="tfeIXiB5osnqeqDmr8sH2i"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24" data-page-node-id="ZZ8oDwpH8yELEc7T3Bw9Se"><path d="M11 19a8 8 0 100-16 8 8 0 000 16zM21 21l-4.3-4.3" data-page-node-id="XWubpHtZaqoJClywI7p5q2"/></symbol>
+    <symbol id="i-sync" viewBox="0 0 24 24" data-page-node-id="yixaijFNHjJbR3nGvRlTsJ"><path d="M20 11a8 8 0 00-14-4.5L4 9M4 13a8 8 0 0014 4.5L20 15M4 4v5h5M20 20v-5h-5" data-page-node-id="IAYEZELLUwRRuQysTSzUcs"/></symbol>
+    <symbol id="i-link" viewBox="0 0 24 24" data-page-node-id="mBrKbbJWLIquZ3PS09pUgR"><path d="M10 13.5a4 4 0 005.7 0l3-3a4 4 0 10-5.7-5.7l-1 1M14 10.5a4 4 0 00-5.7 0l-3 3a4 4 0 105.7 5.7l1-1" data-page-node-id="eAp3wkfDc2XH5GEedjBXw3"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24" data-page-node-id="OrBEdxfFLJXzjgEFAl9hmC"><path d="M12 4v11M7.5 10.5L12 15l4.5-4.5M4 19h16" data-page-node-id="jtCcufk1jkUTkBHBcyzN4c"/></symbol>
+    <symbol id="i-upload" viewBox="0 0 24 24" data-page-node-id="RIJ6JlXVDxBAGpmZ2jXWvD"><path d="M12 16V5M7.5 9.5L12 5l4.5 4.5M4 19h16" data-page-node-id="32B8mblXBxCtn5X6HVaQx6"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24" data-page-node-id="BfE7rv9Z7bi9oGlQIapuqa"><path d="M9 9V6.5A2.5 2.5 0 0111.5 4h6A2.5 2.5 0 0120 6.5v6a2.5 2.5 0 01-2.5 2.5H15M6.5 9h6A2.5 2.5 0 0115 11.5v6A2.5 2.5 0 0112.5 20h-6A2.5 2.5 0 014 17.5v-6A2.5 2.5 0 016.5 9z" data-page-node-id="LWgCGu2SvfV8EWZgTriaGs"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24" data-page-node-id="HgxLB40sFuxC7pPrhNsHGS"><path d="M4 12.5l5 5L20 6.5" data-page-node-id="KEBusuYvBldb6ETrcex0hF"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24" data-page-node-id="KftrgYTHEZvX7QdMGWpbyX"><path d="M6 6l12 12M18 6L6 18" data-page-node-id="vDxPrXhst01zHBM2ks3sox"/></symbol>
+    <symbol id="i-chev" viewBox="0 0 24 24" data-page-node-id="agNfRzT1bg7BHFsfgsFpGQ"><path d="M9 5l7 7-7 7" data-page-node-id="TGvCgw09JRWQ3y6QOQU8dN"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24" data-page-node-id="yYKl2EM3WBETswvbFAbalD"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3zM19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8L19 16z" data-page-node-id="V7sgB85M5Ev4iC2QsbDQJX"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24" data-page-node-id="xyAiOPzqMv3CeCakyyO0TK"><path d="M12 4l9 16H3l9-16zM12 10v4M12 17.5h.01" data-page-node-id="LnZ8Ptu1zMNqkWZcBFkh37"/></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24" data-page-node-id="teNnbIlcVRnJGjsj2DqLNt"><path d="M6 3h3l1.5 4-2 1.5a11 11 0 006 6l1.5-2 4 1.5v3a2 2 0 01-2 2A16 16 0 014 5a2 2 0 012-2z" data-page-node-id="eOuQRBo99MWc4URx9CnCDq"/></symbol>
+    <symbol id="i-chat" viewBox="0 0 24 24" data-page-node-id="iu6tpstGwSZIcIG0BTF7iA"><path d="M21 12a8 8 0 01-11.6 7.1L4 21l1.9-5.4A8 8 0 1121 12z" data-page-node-id="FPFMifJQmQGF0E3Cxudaef"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l7 3v6c0 4.2-2.9 7.6-7 9-4.1-1.4-7-4.8-7-9V6l7-3zM9.2 12.2l2 2 3.6-3.6"/></symbol>
+    <symbol id="i-doc" viewBox="0 0 24 24" data-page-node-id="jxeXq2JBPHWtRgmKzQMc0J"><path d="M7 3h7l5 5v13H7V3zM14 3v5h5M10 13h7M10 17h5" data-page-node-id="vEUE5cT3m46xLet4kiTOHa"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24" data-page-node-id="2nRLAbukUEmIaZvTCNsJ0L"><path d="M12 15a3 3 0 100-6 3 3 0 000 6zM19.4 15a1.6 1.6 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.6 1.6 0 00-2.7 1.1V21a2 2 0 11-4 0v-.2A1.6 1.6 0 007.5 19l-.1.1a2 2 0 11-2.8-2.8l.1-.1A1.6 1.6 0 003 13.6H3a2 2 0 110-4h.2A1.6 1.6 0 004.9 7.5l-.1-.1a2 2 0 112.8-2.8l.1.1A1.6 1.6 0 0010.4 3V3a2 2 0 114 0v.2a1.6 1.6 0 002.7 1.1l.1-.1a2 2 0 112.8 2.8l-.1.1a1.6 1.6 0 001.1 2.7H21a2 2 0 110 4h-.2a1.6 1.6 0 00-1.4 1.2z" data-page-node-id="pmWrodah489PkmDT2CpJkl"/></symbol>
+    <symbol id="i-target" viewBox="0 0 24 24" data-page-node-id="Mxvk70fFDJNytEBYMOASMX"><path d="M12 21a9 9 0 100-18 9 9 0 000 18zM12 17a5 5 0 100-10 5 5 0 000 10zM12 13.5a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" data-page-node-id="QFmS9hXdsrOHM0U5KPEQ7W"/></symbol>
+    <symbol id="i-flame" viewBox="0 0 24 24" data-page-node-id="361DgbEHmrsA303dcd0syB"><path d="M12 22c4 0 6.5-2.6 6.5-6 0-4.5-4.5-6-4.5-10 0 0-3 1.5-3 5-1 0-2-1.5-2-3-1.5 1.5-3 4-3 7.5C6 19.2 8 22 12 22z" data-page-node-id="1GPY24580mJL8g662N0HCF"/></symbol>
+    <symbol id="i-key" viewBox="0 0 24 24" data-page-node-id="uEAcAtH23Dcsgm6GnM2dRl"><path d="M8.5 15.5a4 4 0 100-8 4 4 0 000 8zM11.4 12.6L20 4M17 7l2.2 2.2M14.6 9.4l1.8 1.8" data-page-node-id="YuaF6X9bEOH4EjULwtjzmn"/></symbol>
+    <symbol id="i-plug" viewBox="0 0 24 24" data-page-node-id="NhsTw8Fz4ZcsEKDaZ4bub8"><path d="M9 3v6M15 3v6M6 9h12v3a6 6 0 01-6 6 6 6 0 01-6-6V9zM12 18v3" data-page-node-id="3weiWR3zc0wpeepEzKmds8"/></symbol>
+    <symbol id="i-link-off" viewBox="0 0 24 24" data-page-node-id="v23hvUJBHSLglidkOi5coS"><path d="M10 13.5a4 4 0 005.7 0l3-3a4 4 0 10-5.7-5.7l-1 1M14 10.5a4 4 0 00-5.7 0l-3 3a4 4 0 105.7 5.7l1-1M3 3l18 18" data-page-node-id="Zy8ue854UHPHMmVuVX4qrM"/></symbol>
+    <symbol id="i-douyin" viewBox="0 0 24 24"><path d="M10 17a2 2 0 11-2-2V7l9-1.8v9a2 2 0 11-2-2V6.6L10 7.8V17z"/></symbol>
+    <symbol id="i-xhs" viewBox="0 0 24 24"><path d="M12 6c-2-1.2-4-1.2-6-1v12c2 .2 4 .2 6 1 2-1.2 4-1.2 6-1V5c-2 .2-4 .2-6 1zM12 6v13"/></symbol>
+    <symbol id="i-xianyu" viewBox="0 0 24 24"><path d="M5 12c3-4 9-4 12-1.5 1.5 1.3 2 3 .8 4.2-2 2.3-8 2.3-11-.2L3 17l1-2.5C2.5 13 2.5 13.5 5 12zM14 11h.01"/></symbol>
+    <symbol id="i-other" viewBox="0 0 24 24"><path d="M5.5 12a1.6 1.6 0 11-3.2 0 1.6 1.6 0 013.2 0zM13.6 12a1.6 1.6 0 11-3.2 0 1.6 1.6 0 013.2 0zM21.7 12a1.6 1.6 0 11-3.2 0 1.6 1.6 0 013.2 0z"/></symbol>
+  </defs>
+</svg>
+</body></html>

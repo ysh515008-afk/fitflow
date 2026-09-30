@@ -1,0 +1,667 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>FitFlow · 抖音账号栏（演示数据）</title>
+<link rel="stylesheet" href="./styles.css">
+<style>
+  body{margin:0;background:#f4f6f5}
+  .pv-bar{position:sticky;top:0;z-index:5;background:#0E8F5B;color:#fff;padding:10px 16px;font-size:13px;font-weight:600}
+  .pv-shell{max-width:560px;margin:0 auto;padding:14px 12px 60px}
+</style></head>
+<body>
+<div class="pv-bar">抖音账号 · 演示数据（界面顶部会标明这是示例快照，不是真实同步结果）</div>
+<div class="pv-shell">
+  <div class="page-head">
+    <h2>运营中心</h2>
+    <p>公域内容带线索，私域社群接线索，最后都落到客户档案里</p>
+  </div>
+  
+  <div class="brief unread" data-brief>
+    <div class="brief-tag">
+      <span class="brief-pulse" aria-hidden="true"></span>
+      <b>4 条未读</b>
+    </div>
+    <div class="brief-view">
+      <div class="brief-track" data-brief-track>
+        
+          <div class="brief-line">
+            <i class="brief-lv" style="background:var(--brand)"></i>
+            <span class="brief-text">今天发了 1 条内容，合计播放 5,200，带来 4 条线索。</span>
+            <span class="brief-src">内容台账</span>
+          </div>
+          <div class="brief-line">
+            <i class="brief-lv" style="background:var(--info)"></i>
+            <span class="brief-text">抖音账号最近一次同步（2026-09-30 09:24）：粉丝 8,420，周更约 1.4 条，互动率 6.2%。</span>
+            <span class="brief-src">抖音账号</span>
+          </div>
+          <div class="brief-line">
+            <i class="brief-lv" style="background:var(--warn)"></i>
+            <span class="brief-text">今天进来 1 条线索，已成交 0 条，还有 1 条没有首响记录。</span>
+            <span class="brief-src">线索池</span>
+          </div>
+          <div class="brief-line">
+            <i class="brief-lv" style="background:var(--warn)"></i>
+            <span class="brief-text">更新频率低于每周 2 条</span>
+            <span class="brief-src">抖音账号</span>
+          </div>
+      </div>
+    </div>
+    <div class="brief-acts">
+      <button class="brief-btn" data-brief-read-all>全部已读</button>
+      <button class="brief-btn ghost" data-brief-open>逐条看</button>
+    </div>
+  </div>
+  <div class="seg" style="margin-bottom:14px">
+    <button data-oseg="content" class="on">线上营销</button><button data-oseg="leads" class="">线索池</button>
+    <button class="seg-add" data-features aria-label="添加功能" title="功能库">
+      <svg viewBox="0 0 24 24"><use href="#i-plus"/></svg>添加功能
+    </button>
+  </div>
+  
+  <div class="seg sub" style="margin-bottom:14px">
+    <button data-csub="douyin" class="on">抖音账号</button><button data-csub="xhs" class="">小红书</button><button data-csub="store" class="">门店热度</button><button data-csub="ledger" class="">内容台账</button>
+  </div>
+  
+  
+  <div class="card">
+    
+  <div class="card-hd">
+    <div><h3>力健健身·金融城店</h3><div class="sub">抖音号 lijian_jrc｜绑定于 2026-09-30 09:24</div></div>
+    <span class="badge b-green">已同步</span>
+  </div>
+    <div class="acct-head">
+      <div class="avatar av-a" style="width:46px;height:46px;font-size:19px">力</div>
+      <div style="min-width:0;flex:1">
+        <div class="acct-meta">
+          <span>重庆</span>
+          <span>近 20 条作品</span>
+          <span>上次同步 2026-09-30 09:24</span>
+        </div>
+        <div class="small muted" style="margin-top:4px;line-height:1.5">重庆金融城｜私教 / 团课 / 体测 · 每天一条训练干货</div>
+      </div>
+    </div>
+    
+      <div class="stat-grid" style="margin-top:11px">
+        <div class="stat">
+    <div class="k">粉丝</div>
+    <div class="v num">8,420</div>
+    
+  </div>
+        <div class="stat">
+    <div class="k">作品</div>
+    <div class="v num">216<small>条</small></div>
+    
+  </div>
+        <div class="stat">
+    <div class="k">累计获赞</div>
+    <div class="v num">9.6万</div>
+    
+  </div>
+        <div class="stat">
+    <div class="k">红狐指数</div>
+    <div class="v num">612</div>
+    
+  </div>
+      </div>
+    <div class="btn-row" style="margin-top:12px">
+      <button class="btn primary sm" data-sync-douyin>
+        <svg viewBox="0 0 24 24"><use href="#i-sync"/></svg>立即同步</button>
+      <button class="btn ghost sm" data-bind-douyin>监控设置</button>
+    </div>
+  </div>
+  <div class="notice warn"><svg viewBox="0 0 24 24"><use href="#i-alert"/></svg><div>下面这份是<b>示例快照</b>，只用来预览绑定之后的界面。绑定真实账号并同步一次，它会被真实数据替换，示例数据也会一起消失。</div></div>
+  
+  <div class="section-title">智能体在盯的指标<span class="count">12 项 · 来自红狐账号维度与作品列表</span></div>
+  <div class="card tight">
+    <div class="metric-grid">
+      <div class="metric-cell">
+          <div class="mc-k">粉丝数</div>
+          <div class="mc-v num ">8,420<small>人</small></div>
+          <div class="mc-d neutral">持平 环比</div>
+        </div><div class="metric-cell">
+          <div class="mc-k">作品总数</div>
+          <div class="mc-v num ">216<small>条</small></div>
+          <div class="mc-d neutral">持平 环比</div>
+        </div><div class="metric-cell">
+          <div class="mc-k">累计获赞</div>
+          <div class="mc-v num ">9.6万</div>
+          <div class="mc-d neutral">持平 环比</div>
+        </div><div class="metric-cell">
+          <div class="mc-k">红狐指数</div>
+          <div class="mc-v num ">612</div>
+          <div class="mc-d neutral">持平 环比</div>
+        </div><div class="metric-cell">
+          <div class="mc-k">平均播放</div>
+          <div class="mc-v num ">1.2万</div>
+          <div class="mc-d bad">-3003.3 环比</div>
+        </div><div class="metric-cell">
+          <div class="mc-k">平均点赞</div>
+          <div class="mc-v num ">579</div>
+          <div class="mc-d bad">-139.8 环比</div>
+        </div><div class="metric-cell">
+          <div class="mc-k">平均评论</div>
+          <div class="mc-v num ">57</div>
+          <div class="mc-d bad">-11.8 环比</div>
+        </div><div class="metric-cell">
+          <div class="mc-k">互动率</div>
+          <div class="mc-v num ">6.2%</div>
+          <div class="mc-d neutral">-0% 环比</div>
+        </div><div class="metric-cell">
+          <div class="mc-k">评论意愿</div>
+          <div class="mc-v num ">9.8%</div>
+          <div class="mc-d neutral">+3% 环比</div>
+        </div><div class="metric-cell">
+          <div class="mc-k">爆款率</div>
+          <div class="mc-v num ">10.0%</div>
+          <div class="mc-d neutral">+20% 环比</div>
+        </div><div class="metric-cell">
+          <div class="mc-k">周更条数</div>
+          <div class="mc-v num ">1.4<small>条</small></div>
+          <div class="mc-d neutral">持平 环比</div>
+        </div><div class="metric-cell">
+          <div class="mc-k">平均发布间隔</div>
+          <div class="mc-v num ">4.9<small>天</small></div>
+          <div class="mc-d good">-0.1 环比</div>
+        </div>
+    </div>
+    <div class="divider"></div>
+    <div class="small muted" style="line-height:1.7">
+      标「未获取」的是红狐这次没返回的字段。播放量平台常常不给，缺了就按缺处理，不补 0 也不拿点赞顶替。
+    </div>
+  </div>
+  
+  <div class="section-title">作品明细<span class="count">最近 8 条 · 抖音原始数据</span></div>
+  <div class="card tight">
+    
+      <div class="work-row">
+        <div class="wr-top">
+          <div class="wr-title">会员案例：硬拉 120kg 的第 200 天</div>
+          
+        </div>
+        <div class="wr-meta"><span>播放 <b class="num">5,200</b></span><span>赞 <b class="num">210</b></span><span>评 <b class="num">18</b></span><span>分享 <b class="num">24</b></span><span>收藏 <b class="num">30</b></span></div>
+        <div class="wr-time">2026-09-30 07:30</div>
+      </div>
+      <div class="work-row">
+        <div class="wr-top">
+          <div class="wr-title">练完腿第二天疼，到底该不该继续练</div>
+          
+        </div>
+        <div class="wr-meta"><span>播放 <b class="num">1.3万</b></span><span>赞 <b class="num">640</b></span><span>评 <b class="num">72</b></span><span>分享 <b class="num">138</b></span><span>收藏 <b class="num">210</b></span></div>
+        <div class="wr-time">2026-09-28 12:10</div>
+      </div>
+      <div class="work-row">
+        <div class="wr-top">
+          <div class="wr-title">膝盖疼还能练腿吗（3 个替代动作）</div>
+          <span class="badge b-green">爆款</span>
+        </div>
+        <div class="wr-meta"><span>播放 <b class="num">4.1万</b></span><span>赞 <b class="num">1,860</b></span><span>评 <b class="num">214</b></span><span>分享 <b class="num">486</b></span><span>收藏 <b class="num">720</b></span></div>
+        <div class="wr-time">2026-09-23 18:40</div>
+      </div>
+      <div class="work-row">
+        <div class="wr-top">
+          <div class="wr-title">体脂 29% → 24%，她的 12 周训练表</div>
+          <span class="badge b-green">爆款</span>
+        </div>
+        <div class="wr-meta"><span>播放 <b class="num">8.7万</b></span><span>赞 <b class="num">4,320</b></span><span>评 <b class="num">386</b></span><span>分享 <b class="num">1,120</b></span><span>收藏 <b class="num">1,860</b></span></div>
+        <div class="wr-time">2026-09-18 20:00</div>
+      </div>
+      <div class="work-row">
+        <div class="wr-top">
+          <div class="wr-title">上班族 30 分钟高效训练（无器械）</div>
+          
+        </div>
+        <div class="wr-meta"><span>播放 <b class="num">9,800</b></span><span>赞 <b class="num">420</b></span><span>评 <b class="num">42</b></span><span>分享 <b class="num">86</b></span><span>收藏 <b class="num">140</b></span></div>
+        <div class="wr-time">2026-09-13 21:20</div>
+      </div>
+      <div class="work-row">
+        <div class="wr-top">
+          <div class="wr-title">私教课到底贵在哪（成本拆解）</div>
+          
+        </div>
+        <div class="wr-meta"><span>播放 <b class="num">7,600</b></span><span>赞 <b class="num">330</b></span><span>评 <b class="num">31</b></span><span>分享 <b class="num">64</b></span><span>收藏 <b class="num">108</b></span></div>
+        <div class="wr-time">2026-09-08 07:30</div>
+      </div>
+      <div class="work-row">
+        <div class="wr-top">
+          <div class="wr-title">体测报告的 5 个数字怎么看</div>
+          
+        </div>
+        <div class="wr-meta"><span>播放 <b class="num">6,400</b></span><span>赞 <b class="num">280</b></span><span>评 <b class="num">26</b></span><span>分享 <b class="num">52</b></span><span>收藏 <b class="num">88</b></span></div>
+        <div class="wr-time">2026-09-03 12:10</div>
+      </div>
+      <div class="work-row">
+        <div class="wr-top">
+          <div class="wr-title">女生怕练出肌肉？先看这组数据</div>
+          
+        </div>
+        <div class="wr-meta"><span>播放 <b class="num">5,900</b></span><span>赞 <b class="num">260</b></span><span>评 <b class="num">24</b></span><span>分享 <b class="num">48</b></span><span>收藏 <b class="num">82</b></span></div>
+        <div class="wr-time">2026-08-29 18:40</div>
+      </div>
+    <div class="small muted" style="margin-top:9px;line-height:1.65">
+      爆款线是自身平均播放的 3 倍（当前 3.7万），和指标板里的爆款率用的是同一条线。
+      缺的字段标「未获取」，不补 0。
+    </div>
+  </div>
+  
+  <div class="section-title">智能体的判断<span class="count">1 条可执行建议</span></div>
+  <div class="advice-list">
+    <div class="advice" style="border-left-color:var(--warn)">
+        <div class="between" style="align-items:flex-start;margin-bottom:6px">
+          <div style="font-size:13.5px;font-weight:650;line-height:1.45">更新频率低于每周 2 条</div>
+          <span class="badge b-warn">要处理</span>
+        </div>
+        <div class="small" style="line-height:1.65;color:var(--ink-2)"><span class="muted">依据</span> 按最近 20 条作品的中位间隔 4.9 天算，现在周更约 1.4 条。</div>
+        <div class="small" style="line-height:1.65;color:var(--ink-2);margin-top:5px"><span class="muted">动作</span> 先把节拍拉到每周 2 条，再谈选题优化。推荐权重对断更的敏感度高于单条质量。</div>
+      </div>
+  </div>
+  
+  <div class="section-title">官方赛道榜<span class="count">身体锻炼 · 日榜 · 2026-09-29</span></div>
+  <div class="notice warn"><svg viewBox="0 0 24 24"><use href="#i-alert"/></svg><div>这一期是<b>示例榜单</b>，用来预览取到榜之后的样子。真实榜单要走接口，一次一处调用。</div></div>
+
+  <div class="card tight">
+    <div class="board-head">
+      <div style="min-width:0">
+        <div class="small" style="font-weight:650">身体锻炼 日榜</div>
+        <div class="small muted" style="margin-top:2px">共 8 条 · 取于 2026-09-30 09:24</div>
+      </div>
+      <button class="btn ghost sm" data-board>换一期</button>
+    </div>
+    <div class="divider"></div>
+    
+      <div class="board-row top">
+        <div class="br-rank">1</div>
+        <div class="br-body">
+          <div class="br-name">练得狠</div>
+          <div class="br-meta">
+            <span>粉丝 <b>268.4万</b></span>
+            <span class="up">涨粉 3.2万</span>
+          </div>
+          <div class="br-meta">
+            <span>赞 42.1万</span>
+            <span>评 1.9万</span>
+            <span>分享 5.4万</span>
+          </div>
+        </div>
+        <div class="br-score num">89.2<small>分</small></div>
+      </div>
+      <div class="board-row top">
+        <div class="br-rank">2</div>
+        <div class="br-body">
+          <div class="br-name">体态研究所</div>
+          <div class="br-meta">
+            <span>粉丝 <b>154.7万</b></span>
+            <span class="up">涨粉 2.1万</span>
+          </div>
+          <div class="br-meta">
+            <span>赞 31.4万</span>
+            <span>评 1.3万</span>
+            <span>分享 4.1万</span>
+          </div>
+        </div>
+        <div class="br-score num">85.6<small>分</small></div>
+      </div>
+      <div class="board-row top">
+        <div class="br-rank">3</div>
+        <div class="br-body">
+          <div class="br-name">硬拉日记</div>
+          <div class="br-meta">
+            <span>粉丝 <b>98.6万</b></span>
+            <span class="up">涨粉 1.7万</span>
+          </div>
+          <div class="br-meta">
+            <span>赞 26.8万</span>
+            <span>评 9,200</span>
+            <span>分享 2.6万</span>
+          </div>
+        </div>
+        <div class="br-score num">82.2<small>分</small></div>
+      </div>
+      <div class="board-row ">
+        <div class="br-rank">4</div>
+        <div class="br-body">
+          <div class="br-name">一平米健身房</div>
+          <div class="br-meta">
+            <span>粉丝 <b>64.2万</b></span>
+            <span class="up">涨粉 1.3万</span>
+          </div>
+          <div class="br-meta">
+            <span>赞 19.5万</span>
+            <span>评 7,100</span>
+            <span>分享 1.9万</span>
+          </div>
+        </div>
+        <div class="br-score num">78.8<small>分</small></div>
+      </div>
+      <div class="board-row ">
+        <div class="br-rank">5</div>
+        <div class="br-body">
+          <div class="br-name">跑者笔记</div>
+          <div class="br-meta">
+            <span>粉丝 <b>52.9万</b></span>
+            <span class="up">涨粉 9,600</span>
+          </div>
+          <div class="br-meta">
+            <span>赞 14.3万</span>
+            <span>评 5,400</span>
+            <span>分享 1.4万</span>
+          </div>
+        </div>
+        <div class="br-score num">76.5<small>分</small></div>
+      </div>
+      <div class="board-row ">
+        <div class="br-rank">6</div>
+        <div class="br-body">
+          <div class="br-name">拉伸十分钟</div>
+          <div class="br-meta">
+            <span>粉丝 <b>41.8万</b></span>
+            <span class="up">涨粉 1.1万</span>
+          </div>
+          <div class="br-meta">
+            <span>赞 12.1万</span>
+            <span>评 4,800</span>
+            <span>分享 1.2万</span>
+          </div>
+        </div>
+        <div class="br-score num">74.1<small>分</small></div>
+      </div>
+      <div class="board-row ">
+        <div class="br-rank">7</div>
+        <div class="br-body">
+          <div class="br-name">器械说明书</div>
+          <div class="br-meta">
+            <span>粉丝 <b>38.6万</b></span>
+            <span class="up">涨粉 8,400</span>
+          </div>
+          <div class="br-meta">
+            <span>赞 10.8万</span>
+            <span>评 4,100</span>
+            <span>分享 1万</span>
+          </div>
+        </div>
+        <div class="br-score num">71.9<small>分</small></div>
+      </div>
+      <div class="board-row ">
+        <div class="br-rank">8</div>
+        <div class="br-body">
+          <div class="br-name">减脂厨房</div>
+          <div class="br-meta">
+            <span>粉丝 <b>30.2万</b></span>
+            <span class="up">涨粉 7,600</span>
+          </div>
+          <div class="br-meta">
+            <span>赞 9.6万</span>
+            <span>评 3,600</span>
+            <span>分享 8,800</span>
+          </div>
+        </div>
+        <div class="br-score num">69.4<small>分</small></div>
+      </div>
+  </div>
+
+  <div class="card tight">
+    <div class="small" style="line-height:1.7;color:var(--ink-2)">
+           <b>本店账号不在这一期榜上。</b>榜上共 8 条，入榜的是百万粉级账号：门店账号 8 千粉进不了赛道 TOP50。
+           所以这个榜回答不了「我排第几」，它回答的是「赛道头部在做什么」。
+         </div>
+    <div class="small muted" style="margin-top:6px;line-height:1.65">这一期涨粉最快：<b style="color:var(--ink-2)">练得狠</b>（+3.2万）</div>
+  </div>
+
+  
+  <div class="card tight">
+    <div class="small" style="font-weight:650;margin-bottom:8px">这个榜的边界（界面上必须写清，否则会被当成本地经营排名）</div>
+    
+      <div class="kv">
+        <div class="k">没有城市筛选</div>
+        <div class="v" style="font-weight:500;font-size:12px;line-height:1.6">type 参数只接受赛道名，没有地区参数，所以拿不到「重庆榜」。这个榜是全国赛道榜，不是本地榜。</div>
+      </div>
+      <div class="kv">
+        <div class="k">口径是内容维度</div>
+        <div class="v" style="font-weight:500;font-size:12px;line-height:1.6">综合评分 = 总粉丝数 + 新增粉丝 + 新增点赞/分享/评论 加权，满分 100。不含曝光、转化、开口。</div>
+      </div>
+      <div class="kv">
+        <div class="k">本店账号不在池子里</div>
+        <div class="v" style="font-weight:500;font-size:12px;line-height:1.6">每赛道只有 TOP50，入榜的是百万粉级账号。门店 8 千粉的账号进不去，所以这个榜看不到「我排第几」，只能用来看赛道头部在做什么。</div>
+      </div>
+  </div>
+  
+  <div class="section-title">对标账号<span class="count">4 个 · 关键词「重庆 健身」</span></div>
+  <div class="notice warn"><svg viewBox="0 0 24 24"><use href="#i-alert"/></svg><div>这几个对标账号是<b>示例</b>，不是搜出来的。真实候选要走关键词搜账号接口。</div></div>
+  <div class="list">
+    
+      <div class="list-item static">
+        <div class="avatar av-e">重</div>
+        <div class="li-body">
+          <div class="li-top">
+            <span class="li-name">重庆钢铁健身</span>
+            <span class="badge b-plain">体量更大</span>
+          </div>
+          <div class="li-meta">
+            <span>粉丝 21,400</span>
+            <span>指数 738</span>
+            <span>重庆</span>
+          </div>
+          <div class="reason"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg>体量同档（本店账号的 2.5 倍），做法可复制</div><div class="reason"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg>红狐指数 738，高于本店账号的 612</div><div class="reason"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg>同地区（重庆），选题更贴近本地客群</div>
+        </div>
+      </div>
+      <div class="list-item static">
+        <div class="avatar av-d">练</div>
+        <div class="li-body">
+          <div class="li-top">
+            <span class="li-name">练有所记</span>
+            <span class="badge b-plain">体量更大</span>
+          </div>
+          <div class="li-meta">
+            <span>粉丝 19,800</span>
+            <span>指数 802</span>
+            <span>重庆</span>
+          </div>
+          <div class="reason"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg>体量同档（本店账号的 2.4 倍），做法可复制</div><div class="reason"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg>红狐指数 802，高于本店账号的 612</div><div class="reason"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg>同地区（重庆），选题更贴近本地客群</div>
+        </div>
+      </div>
+      <div class="list-item static">
+        <div class="avatar av-e">山</div>
+        <div class="li-body">
+          <div class="li-top">
+            <span class="li-name">山城家练</span>
+            <span class="badge b-plain">体量更大</span>
+          </div>
+          <div class="li-meta">
+            <span>粉丝 12,600</span>
+            <span>指数 690</span>
+            <span>重庆</span>
+          </div>
+          <div class="reason"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg>体量同档（本店账号的 1.5 倍），做法可复制</div><div class="reason"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg>红狐指数 690，高于本店账号的 612</div><div class="reason"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg>同地区（重庆），选题更贴近本地客群</div>
+        </div>
+      </div>
+      <div class="list-item static">
+        <div class="avatar av-b">金</div>
+        <div class="li-body">
+          <div class="li-top">
+            <span class="li-name">金融城私教工作室</span>
+            <span class="badge b-plain">体量相近</span>
+          </div>
+          <div class="li-meta">
+            <span>粉丝 6,800</span>
+            <span>指数 655</span>
+            <span>重庆</span>
+          </div>
+          <div class="reason"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg>体量同档（本店账号的 0.8 倍），做法可复制</div><div class="reason"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg>红狐指数 655，高于本店账号的 612</div><div class="reason"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg>同地区（重庆），选题更贴近本地客群</div>
+        </div>
+      </div>
+  </div>
+  
+  <div class="section-title">自有账号池排名<span class="count">本地口径 · 粉丝数 · 6 个账号</span></div>
+  <div class="card tight">
+    
+      <div class="between rank-row">
+        <div class="flex" style="min-width:0">
+          <span class="rank-no top">1</span>
+          <span style="font-size:13px;font-weight:500;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">全国健身大榜</span>
+        </div>
+        <span class="num small">3,280,000</span>
+      </div>
+      <div class="between rank-row">
+        <div class="flex" style="min-width:0">
+          <span class="rank-no top">2</span>
+          <span style="font-size:13px;font-weight:500;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">重庆钢铁健身</span>
+        </div>
+        <span class="num small">21,400</span>
+      </div>
+      <div class="between rank-row">
+        <div class="flex" style="min-width:0">
+          <span class="rank-no top">3</span>
+          <span style="font-size:13px;font-weight:500;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">练有所记</span>
+        </div>
+        <span class="num small">19,800</span>
+      </div>
+      <div class="between rank-row">
+        <div class="flex" style="min-width:0">
+          <span class="rank-no ">4</span>
+          <span style="font-size:13px;font-weight:500;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">山城家练</span>
+        </div>
+        <span class="num small">12,600</span>
+      </div>
+      <div class="between rank-row">
+        <div class="flex" style="min-width:0">
+          <span class="rank-no ">5</span>
+          <span style="font-size:13px;font-weight:700;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">力健健身·金融城店（本店）</span>
+        </div>
+        <span class="num small">8,420</span>
+      </div>
+      <div class="between rank-row">
+        <div class="flex" style="min-width:0">
+          <span class="rank-no ">6</span>
+          <span style="font-size:13px;font-weight:500;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">金融城私教工作室</span>
+        </div>
+        <span class="num small">6,800</span>
+      </div>
+    <div class="small muted" style="margin-top:9px;line-height:1.65">
+      这个榜是我们自己排的，不是抖音官方榜位。范围只含已纳入监控的账号，口径是粉丝数，换成互动中位数排名就会变。
+      要看官方榜位，用上面的赛道榜。
+    </div>
+  </div>
+  
+  <div class="section-title">同步记录<span class="count">最近 5 次</span></div>
+  <div class="card tight">
+    
+      <div class="between log-row">
+        <div class="flex" style="min-width:0;align-items:flex-start">
+          <span class="dot bad"></span>
+          <div style="min-width:0">
+            <div class="small" style="line-height:1.55">作品列表取数失败：网关 Key 未配置，接口调用被拒绝（401）</div>
+            <div class="small muted" style="margin-top:2px">2026-09-30 09:24</div>
+          </div>
+        </div>
+      </div>
+      <div class="between log-row">
+        <div class="flex" style="min-width:0;align-items:flex-start">
+          <span class="dot ok"></span>
+          <div style="min-width:0">
+            <div class="small" style="line-height:1.55">取到「身体锻炼」日榜 8 条（2026-09-29）</div>
+            <div class="small muted" style="margin-top:2px">2026-09-30 09:24</div>
+          </div>
+        </div>
+      </div>
+      <div class="between log-row">
+        <div class="flex" style="min-width:0;align-items:flex-start">
+          <span class="dot ok"></span>
+          <div style="min-width:0">
+            <div class="small" style="line-height:1.55">同步抖音号 lijian_jrc，取到 20 条作品</div>
+            <div class="small muted" style="margin-top:2px">2026-09-30 09:24</div>
+          </div>
+        </div>
+      </div>
+      <div class="between log-row">
+        <div class="flex" style="min-width:0;align-items:flex-start">
+          <span class="dot ok"></span>
+          <div style="min-width:0">
+            <div class="small" style="line-height:1.55">同步抖音号 lijian_jrc，取到 12 条作品</div>
+            <div class="small muted" style="margin-top:2px">2026-09-30 08:40</div>
+          </div>
+        </div>
+      </div>
+      <div class="between log-row">
+        <div class="flex" style="min-width:0;align-items:flex-start">
+          <span class="dot ok"></span>
+          <div style="min-width:0">
+            <div class="small" style="line-height:1.55">取到「身体锻炼」日榜 5 条</div>
+            <div class="small muted" style="margin-top:2px">2026-09-29 20:10</div>
+          </div>
+        </div>
+      </div>
+  </div>
+  
+  <div class="section-title">取数成本<span class="count">红狐按次计价</span></div>
+  <div class="card tight">
+    
+      <div class="between cost-row">
+        <div style="min-width:0">
+          <div style="font-size:12.5px;font-weight:600">账号维度</div>
+          <div class="small muted" style="margin-top:2px;line-height:1.5">粉丝 / 作品数 / 累计获赞 / 红狐指数 / 地区</div>
+        </div>
+        <div class="num small" style="flex:0 0 auto;text-align:right">0.6 积分</div>
+      </div>
+      <div class="between cost-row">
+        <div style="min-width:0">
+          <div style="font-size:12.5px;font-weight:600">作品列表</div>
+          <div class="small muted" style="margin-top:2px;line-height:1.5">单页最多 50 条，用于算平均播放与发布间隔</div>
+        </div>
+        <div class="num small" style="flex:0 0 auto;text-align:right">0.4 积分</div>
+      </div>
+      <div class="between cost-row">
+        <div style="min-width:0">
+          <div style="font-size:12.5px;font-weight:600">关键词搜账号</div>
+          <div class="small muted" style="margin-top:2px;line-height:1.5">找对标账号，一次一个关键词</div>
+        </div>
+        <div class="num small" style="flex:0 0 auto;text-align:right">0.6 积分</div>
+      </div>
+      <div class="between cost-row">
+        <div style="min-width:0">
+          <div style="font-size:12.5px;font-weight:600">关键词搜作品</div>
+          <div class="small muted" style="margin-top:2px;line-height:1.5">门店热度近似召回，一次一个关键词</div>
+        </div>
+        <div class="num small" style="flex:0 0 auto;text-align:right">0.6 积分</div>
+      </div>
+    <div class="divider"></div>
+    <div class="small" style="line-height:1.75">
+      只同步账号与作品：<b class="num">2 次 / 1 积分</b>，按官网下限价约 <b class="num">¥0.04</b>。<br>
+      四项全开：<b class="num">4 次 / 2.2 积分</b>，约 <b class="num">¥0.08</b>。
+    </div>
+    <div class="hint" style="margin-top:8px;line-height:1.65">红狐按次计价，官网写明最低 ¥0.02/次，量大走阶梯折扣。积分与人民币的换算比例官方未公开，下面两项分开列。</div>
+  </div></div>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" data-page-node-id="h9o1FF5gzKicCTSKeIGxod">
+  <defs data-page-node-id="sCMtztfBzm8cJ3pmgiVsc3">
+    <symbol id="i-today" viewBox="0 0 24 24" data-page-node-id="Vqx8ufNv7ibGFAGOVuuhdd"><path d="M12 3v2M4.9 4.9l1.4 1.4M3 12h2M19 12h2M17.7 6.3l1.4-1.4M12 8a4 4 0 100 8 4 4 0 000-8zM5 20h14" data-page-node-id="4Aac3bjJYLyJIlR2GgWdMr"/></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24" data-page-node-id="Ng4uJY3NvsKm04rz4sanG0"><path d="M16 20v-1.5a4 4 0 00-4-4H7a4 4 0 00-4 4V20M9.5 10.5a3.5 3.5 0 100-7 3.5 3.5 0 000 7zM21 20v-1.5a4 4 0 00-3-3.87M16.5 4a3.5 3.5 0 010 6.9" data-page-node-id="2UV6vo1xmD4PecoceyV292"/></symbol>
+    <symbol id="i-ops" viewBox="0 0 24 24" data-page-node-id="KWOLn6FAW8VgEqCzGdLe27"><path d="M3 11l14-6v14L3 13v-2zM17 8a4 4 0 010 8M7 13v5a2 2 0 002 2h1" data-page-node-id="tKTOvpRyy3XEg7RSDdJvmb"/></symbol>
+    <symbol id="i-learn" viewBox="0 0 24 24" data-page-node-id="hYgr5h3L6CIcCyHnjDAGfK"><path d="M4 5.5A2.5 2.5 0 016.5 3H20v15H6.5A2.5 2.5 0 004 20.5v-15zM20 18v3H6.5A2.5 2.5 0 014 18.5" data-page-node-id="sjNTKCq7eBKgidQgdrGvRn"/></symbol>
+    <symbol id="i-data" viewBox="0 0 24 24" data-page-node-id="PP1mLUENa9Wx0Iz4PZ4woj"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2" data-page-node-id="A2GaQohXnebDquA2acO3ex"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24" data-page-node-id="UoL6d48cwmjH7b1sLoK6Zp"><path d="M12 5v14M5 12h14" data-page-node-id="8ujBlCjVJrwTgr5wBXoAXF"/></symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24" data-page-node-id="x9yJDmKtLxs0iuJ70oOpBH"><path d="M4 6.5A2.5 2.5 0 016.5 4h11A2.5 2.5 0 0120 6.5v11A2.5 2.5 0 0117.5 20h-11A2.5 2.5 0 014 17.5v-11zM8 3v3M16 3v3M4 9.5h16" data-page-node-id="AGUnBHwMdRhBlALrOuKE1x"/></symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24" data-page-node-id="cBbZJGIweUh43vcvVlfva6"><path d="M18 15V10a6 6 0 10-12 0v5l-1.5 3h15L18 15zM10 21h4" data-page-node-id="tfeIXiB5osnqeqDmr8sH2i"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24" data-page-node-id="ZZ8oDwpH8yELEc7T3Bw9Se"><path d="M11 19a8 8 0 100-16 8 8 0 000 16zM21 21l-4.3-4.3" data-page-node-id="XWubpHtZaqoJClywI7p5q2"/></symbol>
+    <symbol id="i-sync" viewBox="0 0 24 24" data-page-node-id="yixaijFNHjJbR3nGvRlTsJ"><path d="M20 11a8 8 0 00-14-4.5L4 9M4 13a8 8 0 0014 4.5L20 15M4 4v5h5M20 20v-5h-5" data-page-node-id="IAYEZELLUwRRuQysTSzUcs"/></symbol>
+    <symbol id="i-link" viewBox="0 0 24 24" data-page-node-id="mBrKbbJWLIquZ3PS09pUgR"><path d="M10 13.5a4 4 0 005.7 0l3-3a4 4 0 10-5.7-5.7l-1 1M14 10.5a4 4 0 00-5.7 0l-3 3a4 4 0 105.7 5.7l1-1" data-page-node-id="eAp3wkfDc2XH5GEedjBXw3"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24" data-page-node-id="OrBEdxfFLJXzjgEFAl9hmC"><path d="M12 4v11M7.5 10.5L12 15l4.5-4.5M4 19h16" data-page-node-id="jtCcufk1jkUTkBHBcyzN4c"/></symbol>
+    <symbol id="i-upload" viewBox="0 0 24 24" data-page-node-id="RIJ6JlXVDxBAGpmZ2jXWvD"><path d="M12 16V5M7.5 9.5L12 5l4.5 4.5M4 19h16" data-page-node-id="32B8mblXBxCtn5X6HVaQx6"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24" data-page-node-id="BfE7rv9Z7bi9oGlQIapuqa"><path d="M9 9V6.5A2.5 2.5 0 0111.5 4h6A2.5 2.5 0 0120 6.5v6a2.5 2.5 0 01-2.5 2.5H15M6.5 9h6A2.5 2.5 0 0115 11.5v6A2.5 2.5 0 0112.5 20h-6A2.5 2.5 0 014 17.5v-6A2.5 2.5 0 016.5 9z" data-page-node-id="LWgCGu2SvfV8EWZgTriaGs"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24" data-page-node-id="HgxLB40sFuxC7pPrhNsHGS"><path d="M4 12.5l5 5L20 6.5" data-page-node-id="KEBusuYvBldb6ETrcex0hF"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24" data-page-node-id="KftrgYTHEZvX7QdMGWpbyX"><path d="M6 6l12 12M18 6L6 18" data-page-node-id="vDxPrXhst01zHBM2ks3sox"/></symbol>
+    <symbol id="i-chev" viewBox="0 0 24 24" data-page-node-id="agNfRzT1bg7BHFsfgsFpGQ"><path d="M9 5l7 7-7 7" data-page-node-id="TGvCgw09JRWQ3y6QOQU8dN"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24" data-page-node-id="yYKl2EM3WBETswvbFAbalD"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3zM19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8L19 16z" data-page-node-id="V7sgB85M5Ev4iC2QsbDQJX"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24" data-page-node-id="xyAiOPzqMv3CeCakyyO0TK"><path d="M12 4l9 16H3l9-16zM12 10v4M12 17.5h.01" data-page-node-id="LnZ8Ptu1zMNqkWZcBFkh37"/></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24" data-page-node-id="teNnbIlcVRnJGjsj2DqLNt"><path d="M6 3h3l1.5 4-2 1.5a11 11 0 006 6l1.5-2 4 1.5v3a2 2 0 01-2 2A16 16 0 014 5a2 2 0 012-2z" data-page-node-id="eOuQRBo99MWc4URx9CnCDq"/></symbol>
+    <symbol id="i-chat" viewBox="0 0 24 24" data-page-node-id="iu6tpstGwSZIcIG0BTF7iA"><path d="M21 12a8 8 0 01-11.6 7.1L4 21l1.9-5.4A8 8 0 1121 12z" data-page-node-id="FPFMifJQmQGF0E3Cxudaef"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l7 3v6c0 4.2-2.9 7.6-7 9-4.1-1.4-7-4.8-7-9V6l7-3zM9.2 12.2l2 2 3.6-3.6"/></symbol>
+    <symbol id="i-doc" viewBox="0 0 24 24" data-page-node-id="jxeXq2JBPHWtRgmKzQMc0J"><path d="M7 3h7l5 5v13H7V3zM14 3v5h5M10 13h7M10 17h5" data-page-node-id="vEUE5cT3m46xLet4kiTOHa"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24" data-page-node-id="2nRLAbukUEmIaZvTCNsJ0L"><path d="M12 15a3 3 0 100-6 3 3 0 000 6zM19.4 15a1.6 1.6 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.6 1.6 0 00-2.7 1.1V21a2 2 0 11-4 0v-.2A1.6 1.6 0 007.5 19l-.1.1a2 2 0 11-2.8-2.8l.1-.1A1.6 1.6 0 003 13.6H3a2 2 0 110-4h.2A1.6 1.6 0 004.9 7.5l-.1-.1a2 2 0 112.8-2.8l.1.1A1.6 1.6 0 0010.4 3V3a2 2 0 114 0v.2a1.6 1.6 0 002.7 1.1l.1-.1a2 2 0 112.8 2.8l-.1.1a1.6 1.6 0 001.1 2.7H21a2 2 0 110 4h-.2a1.6 1.6 0 00-1.4 1.2z" data-page-node-id="pmWrodah489PkmDT2CpJkl"/></symbol>
+    <symbol id="i-target" viewBox="0 0 24 24" data-page-node-id="Mxvk70fFDJNytEBYMOASMX"><path d="M12 21a9 9 0 100-18 9 9 0 000 18zM12 17a5 5 0 100-10 5 5 0 000 10zM12 13.5a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" data-page-node-id="QFmS9hXdsrOHM0U5KPEQ7W"/></symbol>
+    <symbol id="i-flame" viewBox="0 0 24 24" data-page-node-id="361DgbEHmrsA303dcd0syB"><path d="M12 22c4 0 6.5-2.6 6.5-6 0-4.5-4.5-6-4.5-10 0 0-3 1.5-3 5-1 0-2-1.5-2-3-1.5 1.5-3 4-3 7.5C6 19.2 8 22 12 22z" data-page-node-id="1GPY24580mJL8g662N0HCF"/></symbol>
+    <symbol id="i-key" viewBox="0 0 24 24" data-page-node-id="uEAcAtH23Dcsgm6GnM2dRl"><path d="M8.5 15.5a4 4 0 100-8 4 4 0 000 8zM11.4 12.6L20 4M17 7l2.2 2.2M14.6 9.4l1.8 1.8" data-page-node-id="YuaF6X9bEOH4EjULwtjzmn"/></symbol>
+    <symbol id="i-plug" viewBox="0 0 24 24" data-page-node-id="NhsTw8Fz4ZcsEKDaZ4bub8"><path d="M9 3v6M15 3v6M6 9h12v3a6 6 0 01-6 6 6 6 0 01-6-6V9zM12 18v3" data-page-node-id="3weiWR3zc0wpeepEzKmds8"/></symbol>
+    <symbol id="i-link-off" viewBox="0 0 24 24" data-page-node-id="v23hvUJBHSLglidkOi5coS"><path d="M10 13.5a4 4 0 005.7 0l3-3a4 4 0 10-5.7-5.7l-1 1M14 10.5a4 4 0 00-5.7 0l-3 3a4 4 0 105.7 5.7l1-1M3 3l18 18" data-page-node-id="Zy8ue854UHPHMmVuVX4qrM"/></symbol>
+    <symbol id="i-douyin" viewBox="0 0 24 24"><path d="M10 17a2 2 0 11-2-2V7l9-1.8v9a2 2 0 11-2-2V6.6L10 7.8V17z"/></symbol>
+    <symbol id="i-xhs" viewBox="0 0 24 24"><path d="M12 6c-2-1.2-4-1.2-6-1v12c2 .2 4 .2 6 1 2-1.2 4-1.2 6-1V5c-2 .2-4 .2-6 1zM12 6v13"/></symbol>
+    <symbol id="i-xianyu" viewBox="0 0 24 24"><path d="M5 12c3-4 9-4 12-1.5 1.5 1.3 2 3 .8 4.2-2 2.3-8 2.3-11-.2L3 17l1-2.5C2.5 13 2.5 13.5 5 12zM14 11h.01"/></symbol>
+    <symbol id="i-other" viewBox="0 0 24 24"><path d="M5.5 12a1.6 1.6 0 11-3.2 0 1.6 1.6 0 013.2 0zM13.6 12a1.6 1.6 0 11-3.2 0 1.6 1.6 0 013.2 0zM21.7 12a1.6 1.6 0 11-3.2 0 1.6 1.6 0 013.2 0z"/></symbol>
+  </defs>
+</svg>
+</body></html>

@@ -1,0 +1,34 @@
+# ---- 依赖 / 构建产物 ----
+node_modules/
+
+# ---- 构建产物（由 _build_standalone.mjs 每次生成，不进仓库）----
+fitflow-standalone.html
+
+# ---- 截图与预览产物（回归/调试用，不进仓库）----
+out/
+_shots/
+.preview/
+*.png
+*.jpg
+*.jpeg
+*.webp
+
+# ---- PWA 图标例外（保留 1024 大图用于 manifest）----
+!icons/
+!icons/pwa/
+!icons/pwa/icon-*.png
+!icons/favicon.ico
+
+# ---- dev-only 临时文件 ----
+_shot_live.html
+_shot_sheet.html
+/ff_srv.log
+
+# ---- 系统文件 ----
+.DS_Store
+
+# ---- 敏感 / 本地数据（数据只存本机，绝不上传）----
+*.key
+*.pem
+.env
+.env.local

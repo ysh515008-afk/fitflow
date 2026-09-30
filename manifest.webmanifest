@@ -1,0 +1,35 @@
+{
+  "name": "FitFlow 智能体 · 练客运行台",
+  "short_name": "FitFlow",
+  "description": "健身会籍顾问的智能体运行台：客户跟进、续费预警、触达话术、经营数据，数据只存本机。",
+  "id": "/try.html",
+  "start_url": "/try.html",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#EDF1EE",
+  "theme_color": "#0E8F5B",
+  "lang": "zh-CN",
+  "dir": "ltr",
+  "categories": ["business", "productivity", "health"],
+  "icons": [
+    {
+      "src": "/icons/pwa/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/pwa/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/pwa/icon-1024.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

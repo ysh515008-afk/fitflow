@@ -1,0 +1,7 @@
+{
+  "name": "FitFlow → Figma 导入器",
+  "id": "fitflow-figma-importer",
+  "api": "1.0.0",
+  "main": "code.js",
+  "editorType": ["figma"]
+}

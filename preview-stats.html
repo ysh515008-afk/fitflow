@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>FitFlow · 门店大盘统计预览</title>
+<link rel="stylesheet" href="./styles.css">
+<style>
+  body{margin:0;background:#f4f6f5}
+  .pv-bar{position:sticky;top:0;z-index:5;background:#0E8F5B;color:#fff;padding:10px 16px;font-size:13px;font-weight:600}
+  .pv-shell{max-width:1500px;margin:0 auto;padding:0 10px}
+</style></head>
+<body>
+<div class="pv-bar">FitFlow · 客户管理端「统计」栏 · 门店大盘（只读预览）</div>
+<div class="pv-shell">
+  <div class="page-head">
+    <h2>客户管理</h2>
+    <p>总览 · 维护 · 跟进 · 统计，四块共用同一份数据。默认注册即到店客户（来源 = 到店）。</p>
+  </div>
+  <div class="seg" style="margin-bottom:14px">
+    <button data-mseg="overview" class="">总览</button><button data-mseg="maintain" class="">维护</button><button data-mseg="follow" class="">跟进</button><button data-mseg="stats" class="on">统计</button>
+  </div>
+  
+    <div class="section-title">门店大盘 · 关键指标</div>
+    <div class="stat-grid g2">
+      <div class="stat">
+    <div class="k">门店客流</div>
+    <div class="v num">69<small>人次</small></div>
+    <div class="d ">近 30 天到店总人次</div>
+  </div>
+      <div class="stat">
+    <div class="k">会员数量</div>
+    <div class="v num">9<small>人</small></div>
+    <div class="d ">已成交会员</div>
+  </div>
+      <div class="stat">
+    <div class="k">注册客户量</div>
+    <div class="v num">14<small>人</small></div>
+    <div class="d ">全部在册客户</div>
+  </div>
+      <div class="stat">
+    <div class="k">活跃会员</div>
+    <div class="v num">10<small>人</small></div>
+    <div class="d ">近 30 天到店大于 0</div>
+  </div>
+      <div class="stat">
+    <div class="k">本月新增会员</div>
+    <div class="v num">4<small>人</small></div>
+    <div class="d ">本月建档客户</div>
+  </div>
+      <div class="stat">
+    <div class="k">本月到店</div>
+    <div class="v num">69<small>人次</small></div>
+    <div class="d ">本月打卡明细合计</div>
+  </div>
+      <div class="stat">
+    <div class="k">累计成交额</div>
+    <div class="v num">¥95,000</div>
+    <div class="d ">9 位已成交会员合计</div>
+  </div>
+      <div class="stat">
+    <div class="k">平均客单价</div>
+    <div class="v num">¥10,556</div>
+    <div class="d ">累计成交额 ÷ 已成交会员数</div>
+  </div>
+    </div>
+
+    <div class="section-title">趋势 · 近 6 个月（门店线 vs 个人线）</div>
+    
+      <div class="card tight" style="margin-bottom:10px">
+        <div class="between" style="margin-bottom:6px">
+          <div style="font-weight:650">到店人次</div>
+          <div class="small muted" style="display:flex;gap:10px">
+            <span><i style="display:inline-block;width:9px;height:9px;border-radius:2px;background:#0A6E46;margin-right:3px"></i>门店</span>
+            <span><i style="display:inline-block;width:9px;height:9px;border-radius:2px;background:#E0892B;margin-right:3px"></i>个人</span>
+          </div>
+        </div>
+        <svg viewBox="0 0 600 190" class="lc-svg" style="width:100%;height:auto;display:block"><line x1="38" y1="164.0" x2="586" y2="164.0" stroke="rgba(128,128,128,.22)" stroke-width="1"/><text x="32" y="168.0" text-anchor="end" font-size="10" fill="currentColor" opacity=".62">0</text><line x1="38" y1="126.0" x2="586" y2="126.0" stroke="rgba(128,128,128,.22)" stroke-width="1"/><text x="32" y="130.0" text-anchor="end" font-size="10" fill="currentColor" opacity=".62">18</text><line x1="38" y1="88.0" x2="586" y2="88.0" stroke="rgba(128,128,128,.22)" stroke-width="1"/><text x="32" y="92.0" text-anchor="end" font-size="10" fill="currentColor" opacity=".62">35</text><line x1="38" y1="50.0" x2="586" y2="50.0" stroke="rgba(128,128,128,.22)" stroke-width="1"/><text x="32" y="54.0" text-anchor="end" font-size="10" fill="currentColor" opacity=".62">53</text><line x1="38" y1="12.0" x2="586" y2="12.0" stroke="rgba(128,128,128,.22)" stroke-width="1"/><text x="32" y="16.0" text-anchor="end" font-size="10" fill="currentColor" opacity=".62">70</text><polyline points="38.0,164.0 147.6,164.0 257.2,164.0 366.8,164.0 476.4,164.0 586.0,14.2" fill="none" stroke="#0A6E46" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="38.0" cy="164.0" r="3" fill="#0A6E46"/><circle cx="147.6" cy="164.0" r="3" fill="#0A6E46"/><circle cx="257.2" cy="164.0" r="3" fill="#0A6E46"/><circle cx="366.8" cy="164.0" r="3" fill="#0A6E46"/><circle cx="476.4" cy="164.0" r="3" fill="#0A6E46"/><circle cx="586.0" cy="14.2" r="3" fill="#0A6E46"/><polyline points="38.0,164.0 147.6,164.0 257.2,164.0 366.8,164.0 476.4,164.0 586.0,31.5" fill="none" stroke="#E0892B" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="38.0" cy="164.0" r="3" fill="#E0892B"/><circle cx="147.6" cy="164.0" r="3" fill="#E0892B"/><circle cx="257.2" cy="164.0" r="3" fill="#E0892B"/><circle cx="366.8" cy="164.0" r="3" fill="#E0892B"/><circle cx="476.4" cy="164.0" r="3" fill="#E0892B"/><circle cx="586.0" cy="31.5" r="3" fill="#E0892B"/><text x="38.0" y="182" text-anchor="middle" font-size="10" fill="currentColor" opacity=".62">4月</text><text x="147.6" y="182" text-anchor="middle" font-size="10" fill="currentColor" opacity=".62">5月</text><text x="257.2" y="182" text-anchor="middle" font-size="10" fill="currentColor" opacity=".62">6月</text><text x="366.8" y="182" text-anchor="middle" font-size="10" fill="currentColor" opacity=".62">7月</text><text x="476.4" y="182" text-anchor="middle" font-size="10" fill="currentColor" opacity=".62">8月</text><text x="586.0" y="182" text-anchor="middle" font-size="10" fill="currentColor" opacity=".62">9月</text></svg>
+        <div class="hint" style="margin-top:6px">口径：按会员打卡明细（checkinAt）逐日聚合，同月内多人多次叠加计人次。</div>
+      </div>
+    
+      <div class="card tight" style="margin-bottom:10px">
+        <div class="between" style="margin-bottom:6px">
+          <div style="font-weight:650">新增会员</div>
+          <div class="small muted" style="display:flex;gap:10px">
+            <span><i style="display:inline-block;width:9px;height:9px;border-radius:2px;background:#0A6E46;margin-right:3px"></i>门店</span>
+            <span><i style="display:inline-block;width:9px;height:9px;border-radius:2px;background:#E0892B;margin-right:3px"></i>个人</span>
+          </div>
+        </div>
+        <svg viewBox="0 0 600 190" class="lc-svg" style="width:100%;height:auto;display:block"><line x1="38" y1="164.0" x2="586" y2="164.0" stroke="rgba(128,128,128,.22)" stroke-width="1"/><text x="32" y="168.0" text-anchor="end" font-size="10" fill="currentColor" opacity=".62">0</text><line x1="38" y1="126.0" x2="586" y2="126.0" stroke="rgba(128,128,128,.22)" stroke-width="1"/><text x="32" y="130.0" text-anchor="end" font-size="10" fill="currentColor" opacity=".62">1</text><line x1="38" y1="88.0" x2="586" y2="88.0" stroke="rgba(128,128,128,.22)" stroke-width="1"/><text x="32" y="92.0" text-anchor="end" font-size="10" fill="currentColor" opacity=".62">2</text><line x1="38" y1="50.0" x2="586" y2="50.0" stroke="rgba(128,128,128,.22)" stroke-width="1"/><text x="32" y="54.0" text-anchor="end" font-size="10" fill="currentColor" opacity=".62">3</text><line x1="38" y1="12.0" x2="586" y2="12.0" stroke="rgba(128,128,128,.22)" stroke-width="1"/><text x="32" y="16.0" text-anchor="end" font-size="10" fill="currentColor" opacity=".62">4</text><polyline points="38.0,88.0 147.6,88.0 257.2,126.0 366.8,126.0 476.4,12.0 586.0,12.0" fill="none" stroke="#0A6E46" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="38.0" cy="88.0" r="3" fill="#0A6E46"/><circle cx="147.6" cy="88.0" r="3" fill="#0A6E46"/><circle cx="257.2" cy="126.0" r="3" fill="#0A6E46"/><circle cx="366.8" cy="126.0" r="3" fill="#0A6E46"/><circle cx="476.4" cy="12.0" r="3" fill="#0A6E46"/><circle cx="586.0" cy="12.0" r="3" fill="#0A6E46"/><polyline points="38.0,88.0 147.6,126.0 257.2,126.0 366.8,126.0 476.4,50.0 586.0,50.0" fill="none" stroke="#E0892B" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="38.0" cy="88.0" r="3" fill="#E0892B"/><circle cx="147.6" cy="126.0" r="3" fill="#E0892B"/><circle cx="257.2" cy="126.0" r="3" fill="#E0892B"/><circle cx="366.8" cy="126.0" r="3" fill="#E0892B"/><circle cx="476.4" cy="50.0" r="3" fill="#E0892B"/><circle cx="586.0" cy="50.0" r="3" fill="#E0892B"/><text x="38.0" y="182" text-anchor="middle" font-size="10" fill="currentColor" opacity=".62">4月</text><text x="147.6" y="182" text-anchor="middle" font-size="10" fill="currentColor" opacity=".62">5月</text><text x="257.2" y="182" text-anchor="middle" font-size="10" fill="currentColor" opacity=".62">6月</text><text x="366.8" y="182" text-anchor="middle" font-size="10" fill="currentColor" opacity=".62">7月</text><text x="476.4" y="182" text-anchor="middle" font-size="10" fill="currentColor" opacity=".62">8月</text><text x="586.0" y="182" text-anchor="middle" font-size="10" fill="currentColor" opacity=".62">9月</text></svg>
+        <div class="hint" style="margin-top:6px">口径：按会员建档日期（createdAt）归属月份，每人只计一次。</div>
+      </div>
+    
+      <div class="card tight" style="margin-bottom:10px">
+        <div class="between" style="margin-bottom:6px">
+          <div style="font-weight:650">新成交单</div>
+          <div class="small muted" style="display:flex;gap:10px">
+            <span><i style="display:inline-block;width:9px;height:9px;border-radius:2px;background:#0A6E46;margin-right:3px"></i>门店</span>
+            <span><i style="display:inline-block;width:9px;height:9px;border-radius:2px;background:#E0892B;margin-right:3px"></i>个人</span>
+          </div>
+        </div>
+        <svg viewBox="0 0 600 190" class="lc-svg" style="width:100%;height:auto;display:block"><line x1="38" y1="164.0" x2="586" y2="164.0" stroke="rgba(128,128,128,.22)" stroke-width="1"/><text x="32" y="168.0" text-anchor="end" font-size="10" fill="currentColor" opacity=".62">0</text><line x1="38" y1="126.0" x2="586" y2="126.0" stroke="rgba(128,128,128,.22)" stroke-width="1"/><text x="32" y="130.0" text-anchor="end" font-size="10" fill="currentColor" opacity=".62">0.5</text><line x1="38" y1="88.0" x2="586" y2="88.0" stroke="rgba(128,128,128,.22)" stroke-width="1"/><text x="32" y="92.0" text-anchor="end" font-size="10" fill="currentColor" opacity=".62">1</text><line x1="38" y1="50.0" x2="586" y2="50.0" stroke="rgba(128,128,128,.22)" stroke-width="1"/><text x="32" y="54.0" text-anchor="end" font-size="10" fill="currentColor" opacity=".62">1.5</text><line x1="38" y1="12.0" x2="586" y2="12.0" stroke="rgba(128,128,128,.22)" stroke-width="1"/><text x="32" y="16.0" text-anchor="end" font-size="10" fill="currentColor" opacity=".62">2</text><polyline points="38.0,88.0 147.6,12.0 257.2,88.0 366.8,88.0 476.4,12.0 586.0,12.0" fill="none" stroke="#0A6E46" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="38.0" cy="88.0" r="3" fill="#0A6E46"/><circle cx="147.6" cy="12.0" r="3" fill="#0A6E46"/><circle cx="257.2" cy="88.0" r="3" fill="#0A6E46"/><circle cx="366.8" cy="88.0" r="3" fill="#0A6E46"/><circle cx="476.4" cy="12.0" r="3" fill="#0A6E46"/><circle cx="586.0" cy="12.0" r="3" fill="#0A6E46"/><polyline points="38.0,88.0 147.6,88.0 257.2,88.0 366.8,88.0 476.4,88.0 586.0,12.0" fill="none" stroke="#E0892B" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="38.0" cy="88.0" r="3" fill="#E0892B"/><circle cx="147.6" cy="88.0" r="3" fill="#E0892B"/><circle cx="257.2" cy="88.0" r="3" fill="#E0892B"/><circle cx="366.8" cy="88.0" r="3" fill="#E0892B"/><circle cx="476.4" cy="88.0" r="3" fill="#E0892B"/><circle cx="586.0" cy="12.0" r="3" fill="#E0892B"/><text x="38.0" y="182" text-anchor="middle" font-size="10" fill="currentColor" opacity=".62">4月</text><text x="147.6" y="182" text-anchor="middle" font-size="10" fill="currentColor" opacity=".62">5月</text><text x="257.2" y="182" text-anchor="middle" font-size="10" fill="currentColor" opacity=".62">6月</text><text x="366.8" y="182" text-anchor="middle" font-size="10" fill="currentColor" opacity=".62">7月</text><text x="476.4" y="182" text-anchor="middle" font-size="10" fill="currentColor" opacity=".62">8月</text><text x="586.0" y="182" text-anchor="middle" font-size="10" fill="currentColor" opacity=".62">9月</text></svg>
+        <div class="hint" style="margin-top:6px">口径：建档于该月且已付费（totalPaid 大于 0）的客户数。</div>
+      </div>
+
+    <div class="section-title">本月 vs 上月（环比）</div>
+    <div class="card tight">
+      
+      <div class="row-line" style="display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid var(--line)">
+        <div class="small">到店人次</div>
+        <div style="display:flex;align-items:baseline;gap:10px">
+          <div class="big-num" style="font-size:18px">69<span class="small muted" style="margin-left:2px">人次</span></div>
+          <div class="small" style="color:var(--muted)">↑ 上月无记录，本月 69</div>
+        </div>
+      </div>
+      
+      <div class="row-line" style="display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid var(--line)">
+        <div class="small">新增会员</div>
+        <div style="display:flex;align-items:baseline;gap:10px">
+          <div class="big-num" style="font-size:18px">4<span class="small muted" style="margin-left:2px">人</span></div>
+          <div class="small" style="color:var(--muted)"> 环比持平（上月 4）</div>
+        </div>
+      </div>
+      
+      <div class="row-line" style="display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid var(--line)">
+        <div class="small">新成交单</div>
+        <div style="display:flex;align-items:baseline;gap:10px">
+          <div class="big-num" style="font-size:18px">2<span class="small muted" style="margin-left:2px">单</span></div>
+          <div class="small" style="color:var(--muted)"> 环比持平（上月 2）</div>
+        </div>
+      </div>
+      
+      <div class="row-line" style="display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid var(--line)">
+        <div class="small">跟进记录</div>
+        <div style="display:flex;align-items:baseline;gap:10px">
+          <div class="big-num" style="font-size:18px">11<span class="small muted" style="margin-left:2px">条</span></div>
+          <div class="small" style="color:#0A6E46">↑ 环比 +1000%（上月 1）</div>
+        </div>
+      </div>
+      
+      <div class="row-line" style="display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid var(--line)">
+        <div class="small">到店预约</div>
+        <div style="display:flex;align-items:baseline;gap:10px">
+          <div class="big-num" style="font-size:18px">6<span class="small muted" style="margin-left:2px">次</span></div>
+          <div class="small" style="color:var(--muted)">↑ 上月无记录，本月 6</div>
+        </div>
+      </div>
+      <div class="hint" style="margin-top:8px">上月为 0 时不出百分比：以 0 作分母得出的涨跌幅没有意义，这里如实显示「上月无记录」。指标口径与上面趋势图一致。</div>
+    </div>
+
+    <div class="section-title">个人 vs 门店</div>
+    <div class="card tight">
+      <div class="between"><div class="small muted">门店成交率</div><div class="big-num">64%</div></div>
+      <div class="bar thin" style="margin:6px 0"><i style="width:64%"></i></div>
+      <div class="between" style="margin-top:10px"><div class="small muted">个人成交率（陈默）</div><div class="big-num" style="color:var(--brand-2)">64%</div></div>
+      <div class="bar thin brand" style="margin:6px 0"><i style="width:64%"></i></div>
+      
+      <div style="padding:9px 0;border-bottom:1px solid var(--line)">
+        <div class="between"><div class="small muted">本月到店（门店）</div><div class="big-num" style="font-size:16px">69 人次</div></div>
+        <div class="bar thin" style="margin:5px 0"><i style="width:100%"></i></div>
+        <div class="between"><div class="small muted">本月到店（个人 · 陈默）</div><div class="big-num" style="font-size:16px;color:var(--brand-2)">61 人次</div></div>
+        <div class="bar thin brand" style="margin:5px 0"><i style="width:88.40579710144928%"></i></div>
+      </div>
+      
+      <div style="padding:9px 0;border-bottom:1px solid var(--line)">
+        <div class="between"><div class="small muted">本月新增（门店）</div><div class="big-num" style="font-size:16px">4 人</div></div>
+        <div class="bar thin" style="margin:5px 0"><i style="width:100%"></i></div>
+        <div class="between"><div class="small muted">本月新增（个人 · 陈默）</div><div class="big-num" style="font-size:16px;color:var(--brand-2)">3 人</div></div>
+        <div class="bar thin brand" style="margin:5px 0"><i style="width:75%"></i></div>
+      </div>
+      
+      <div style="padding:9px 0;border-bottom:1px solid var(--line)">
+        <div class="between"><div class="small muted">本月跟进（门店）</div><div class="big-num" style="font-size:16px">11 条</div></div>
+        <div class="bar thin" style="margin:5px 0"><i style="width:100%"></i></div>
+        <div class="between"><div class="small muted">本月跟进（个人 · 陈默）</div><div class="big-num" style="font-size:16px;color:var(--brand-2)">9 条</div></div>
+        <div class="bar thin brand" style="margin:5px 0"><i style="width:81.81818181818183%"></i></div>
+      </div>
+      <div class="hint" style="margin-top:8px">我在门店大盘里的份额：名下 11 人，占注册客户量 14 人的 79%。门店数按全店计，个人数按归属顾问（陈默）计，两者不是同一批人，故门店值恒大于或等于个人值。</div>
+    </div>
+
+    <div class="section-title">结构分布（当前在册）</div>
+    <div class="card tight">
+      <div class="small muted" style="margin-bottom:4px">客户阶段</div>
+      
+      <div style="padding:6px 0;border-bottom:1px solid var(--line)">
+        <div class="between"><div class="small">在练</div><div class="small muted">4 人 · 29%</div></div>
+        <div class="bar thin" style="margin-top:4px"><i style="width:100%"></i></div>
+      </div>
+      <div style="padding:6px 0;border-bottom:1px solid var(--line)">
+        <div class="between"><div class="small">体验中</div><div class="small muted">3 人 · 21%</div></div>
+        <div class="bar thin" style="margin-top:4px"><i style="width:75%"></i></div>
+      </div>
+      <div style="padding:6px 0;border-bottom:1px solid var(--line)">
+        <div class="between"><div class="small">续费洽谈</div><div class="small muted">2 人 · 14%</div></div>
+        <div class="bar thin" style="margin-top:4px"><i style="width:50%"></i></div>
+      </div>
+      <div style="padding:6px 0;border-bottom:1px solid var(--line)">
+        <div class="between"><div class="small">沉默</div><div class="small muted">2 人 · 14%</div></div>
+        <div class="bar thin" style="margin-top:4px"><i style="width:50%"></i></div>
+      </div>
+      <div style="padding:6px 0;border-bottom:1px solid var(--line)">
+        <div class="between"><div class="small">线索</div><div class="small muted">2 人 · 14%</div></div>
+        <div class="bar thin" style="margin-top:4px"><i style="width:50%"></i></div>
+      </div>
+      <div style="padding:6px 0;border-bottom:1px solid var(--line)">
+        <div class="between"><div class="small">已过期</div><div class="small muted">1 人 · 7%</div></div>
+        <div class="bar thin" style="margin-top:4px"><i style="width:25%"></i></div>
+      </div>
+      <div class="small muted" style="margin:10px 0 4px">客户来源</div>
+      
+      <div style="padding:6px 0;border-bottom:1px solid var(--line)">
+        <div class="between"><div class="small">三体同步</div><div class="small muted">7 人 · 50%</div></div>
+        <div class="bar thin" style="margin-top:4px"><i style="width:100%"></i></div>
+      </div>
+      <div style="padding:6px 0;border-bottom:1px solid var(--line)">
+        <div class="between"><div class="small">自然到店</div><div class="small muted">2 人 · 14%</div></div>
+        <div class="bar thin" style="margin-top:4px"><i style="width:28.57142857142857%"></i></div>
+      </div>
+      <div style="padding:6px 0;border-bottom:1px solid var(--line)">
+        <div class="between"><div class="small">抖音</div><div class="small muted">2 人 · 14%</div></div>
+        <div class="bar thin" style="margin-top:4px"><i style="width:28.57142857142857%"></i></div>
+      </div>
+      <div style="padding:6px 0;border-bottom:1px solid var(--line)">
+        <div class="between"><div class="small">小红书</div><div class="small muted">1 人 · 7%</div></div>
+        <div class="bar thin" style="margin-top:4px"><i style="width:14.285714285714285%"></i></div>
+      </div>
+      <div style="padding:6px 0;border-bottom:1px solid var(--line)">
+        <div class="between"><div class="small">转介绍</div><div class="small muted">1 人 · 7%</div></div>
+        <div class="bar thin" style="margin-top:4px"><i style="width:14.285714285714285%"></i></div>
+      </div>
+      <div style="padding:6px 0;border-bottom:1px solid var(--line)">
+        <div class="between"><div class="small">朋友圈</div><div class="small muted">1 人 · 7%</div></div>
+        <div class="bar thin" style="margin-top:4px"><i style="width:14.285714285714285%"></i></div>
+      </div>
+      <div class="hint" style="margin-top:8px">已永久流失 0 人，不计入在册池，只在单独统计里出数。</div>
+    </div>
+
+    <div class="notice info"><svg viewBox="0 0 24 24"><use href="#i-alert"/></svg><div>口径说明：会员 = 已付费成交；注册客户 = 全部在册（含线索 / 体验）。到店人次来自会员打卡明细，明细窗口与「近 30 天 N 次」自洽绑定，因此更早月份在明细里确实没有记录（图上为真实 0，不是缺数）；接入三体 / 勤鸟的历史到店数据后，趋势线会自动补齐。所有数值均由本地数据包直接统计得出，无推算、无平滑。</div></div>
+  
+  <button class="fab" data-act="new-member" aria-label="新增会员"><svg viewBox="0 0 24 24"><use href="#i-plus"/></svg></button></div>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" data-page-node-id="h9o1FF5gzKicCTSKeIGxod">
+  <defs data-page-node-id="sCMtztfBzm8cJ3pmgiVsc3">
+    <symbol id="i-today" viewBox="0 0 24 24" data-page-node-id="Vqx8ufNv7ibGFAGOVuuhdd"><path d="M12 3v2M4.9 4.9l1.4 1.4M3 12h2M19 12h2M17.7 6.3l1.4-1.4M12 8a4 4 0 100 8 4 4 0 000-8zM5 20h14" data-page-node-id="4Aac3bjJYLyJIlR2GgWdMr"/></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24" data-page-node-id="Ng4uJY3NvsKm04rz4sanG0"><path d="M16 20v-1.5a4 4 0 00-4-4H7a4 4 0 00-4 4V20M9.5 10.5a3.5 3.5 0 100-7 3.5 3.5 0 000 7zM21 20v-1.5a4 4 0 00-3-3.87M16.5 4a3.5 3.5 0 010 6.9" data-page-node-id="2UV6vo1xmD4PecoceyV292"/></symbol>
+    <symbol id="i-ops" viewBox="0 0 24 24" data-page-node-id="KWOLn6FAW8VgEqCzGdLe27"><path d="M3 11l14-6v14L3 13v-2zM17 8a4 4 0 010 8M7 13v5a2 2 0 002 2h1" data-page-node-id="tKTOvpRyy3XEg7RSDdJvmb"/></symbol>
+    <symbol id="i-learn" viewBox="0 0 24 24" data-page-node-id="hYgr5h3L6CIcCyHnjDAGfK"><path d="M4 5.5A2.5 2.5 0 016.5 3H20v15H6.5A2.5 2.5 0 004 20.5v-15zM20 18v3H6.5A2.5 2.5 0 014 18.5" data-page-node-id="sjNTKCq7eBKgidQgdrGvRn"/></symbol>
+    <symbol id="i-data" viewBox="0 0 24 24" data-page-node-id="PP1mLUENa9Wx0Iz4PZ4woj"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2" data-page-node-id="A2GaQohXnebDquA2acO3ex"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24" data-page-node-id="UoL6d48cwmjH7b1sLoK6Zp"><path d="M12 5v14M5 12h14" data-page-node-id="8ujBlCjVJrwTgr5wBXoAXF"/></symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24" data-page-node-id="x9yJDmKtLxs0iuJ70oOpBH"><path d="M4 6.5A2.5 2.5 0 016.5 4h11A2.5 2.5 0 0120 6.5v11A2.5 2.5 0 0117.5 20h-11A2.5 2.5 0 014 17.5v-11zM8 3v3M16 3v3M4 9.5h16" data-page-node-id="AGUnBHwMdRhBlALrOuKE1x"/></symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24" data-page-node-id="cBbZJGIweUh43vcvVlfva6"><path d="M18 15V10a6 6 0 10-12 0v5l-1.5 3h15L18 15zM10 21h4" data-page-node-id="tfeIXiB5osnqeqDmr8sH2i"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24" data-page-node-id="ZZ8oDwpH8yELEc7T3Bw9Se"><path d="M11 19a8 8 0 100-16 8 8 0 000 16zM21 21l-4.3-4.3" data-page-node-id="XWubpHtZaqoJClywI7p5q2"/></symbol>
+    <symbol id="i-sync" viewBox="0 0 24 24" data-page-node-id="yixaijFNHjJbR3nGvRlTsJ"><path d="M20 11a8 8 0 00-14-4.5L4 9M4 13a8 8 0 0014 4.5L20 15M4 4v5h5M20 20v-5h-5" data-page-node-id="IAYEZELLUwRRuQysTSzUcs"/></symbol>
+    <symbol id="i-link" viewBox="0 0 24 24" data-page-node-id="mBrKbbJWLIquZ3PS09pUgR"><path d="M10 13.5a4 4 0 005.7 0l3-3a4 4 0 10-5.7-5.7l-1 1M14 10.5a4 4 0 00-5.7 0l-3 3a4 4 0 105.7 5.7l1-1" data-page-node-id="eAp3wkfDc2XH5GEedjBXw3"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24" data-page-node-id="OrBEdxfFLJXzjgEFAl9hmC"><path d="M12 4v11M7.5 10.5L12 15l4.5-4.5M4 19h16" data-page-node-id="jtCcufk1jkUTkBHBcyzN4c"/></symbol>
+    <symbol id="i-upload" viewBox="0 0 24 24" data-page-node-id="RIJ6JlXVDxBAGpmZ2jXWvD"><path d="M12 16V5M7.5 9.5L12 5l4.5 4.5M4 19h16" data-page-node-id="32B8mblXBxCtn5X6HVaQx6"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24" data-page-node-id="BfE7rv9Z7bi9oGlQIapuqa"><path d="M9 9V6.5A2.5 2.5 0 0111.5 4h6A2.5 2.5 0 0120 6.5v6a2.5 2.5 0 01-2.5 2.5H15M6.5 9h6A2.5 2.5 0 0115 11.5v6A2.5 2.5 0 0112.5 20h-6A2.5 2.5 0 014 17.5v-6A2.5 2.5 0 016.5 9z" data-page-node-id="LWgCGu2SvfV8EWZgTriaGs"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24" data-page-node-id="HgxLB40sFuxC7pPrhNsHGS"><path d="M4 12.5l5 5L20 6.5" data-page-node-id="KEBusuYvBldb6ETrcex0hF"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24" data-page-node-id="KftrgYTHEZvX7QdMGWpbyX"><path d="M6 6l12 12M18 6L6 18" data-page-node-id="vDxPrXhst01zHBM2ks3sox"/></symbol>
+    <symbol id="i-chev" viewBox="0 0 24 24" data-page-node-id="agNfRzT1bg7BHFsfgsFpGQ"><path d="M9 5l7 7-7 7" data-page-node-id="TGvCgw09JRWQ3y6QOQU8dN"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24" data-page-node-id="yYKl2EM3WBETswvbFAbalD"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3zM19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8L19 16z" data-page-node-id="V7sgB85M5Ev4iC2QsbDQJX"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24" data-page-node-id="xyAiOPzqMv3CeCakyyO0TK"><path d="M12 4l9 16H3l9-16zM12 10v4M12 17.5h.01" data-page-node-id="LnZ8Ptu1zMNqkWZcBFkh37"/></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24" data-page-node-id="teNnbIlcVRnJGjsj2DqLNt"><path d="M6 3h3l1.5 4-2 1.5a11 11 0 006 6l1.5-2 4 1.5v3a2 2 0 01-2 2A16 16 0 014 5a2 2 0 012-2z" data-page-node-id="eOuQRBo99MWc4URx9CnCDq"/></symbol>
+    <symbol id="i-chat" viewBox="0 0 24 24" data-page-node-id="iu6tpstGwSZIcIG0BTF7iA"><path d="M21 12a8 8 0 01-11.6 7.1L4 21l1.9-5.4A8 8 0 1121 12z" data-page-node-id="FPFMifJQmQGF0E3Cxudaef"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l7 3v6c0 4.2-2.9 7.6-7 9-4.1-1.4-7-4.8-7-9V6l7-3zM9.2 12.2l2 2 3.6-3.6"/></symbol>
+    <symbol id="i-doc" viewBox="0 0 24 24" data-page-node-id="jxeXq2JBPHWtRgmKzQMc0J"><path d="M7 3h7l5 5v13H7V3zM14 3v5h5M10 13h7M10 17h5" data-page-node-id="vEUE5cT3m46xLet4kiTOHa"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24" data-page-node-id="2nRLAbukUEmIaZvTCNsJ0L"><path d="M12 15a3 3 0 100-6 3 3 0 000 6zM19.4 15a1.6 1.6 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.6 1.6 0 00-2.7 1.1V21a2 2 0 11-4 0v-.2A1.6 1.6 0 007.5 19l-.1.1a2 2 0 11-2.8-2.8l.1-.1A1.6 1.6 0 003 13.6H3a2 2 0 110-4h.2A1.6 1.6 0 004.9 7.5l-.1-.1a2 2 0 112.8-2.8l.1.1A1.6 1.6 0 0010.4 3V3a2 2 0 114 0v.2a1.6 1.6 0 002.7 1.1l.1-.1a2 2 0 112.8 2.8l-.1.1a1.6 1.6 0 001.1 2.7H21a2 2 0 110 4h-.2a1.6 1.6 0 00-1.4 1.2z" data-page-node-id="pmWrodah489PkmDT2CpJkl"/></symbol>
+    <symbol id="i-target" viewBox="0 0 24 24" data-page-node-id="Mxvk70fFDJNytEBYMOASMX"><path d="M12 21a9 9 0 100-18 9 9 0 000 18zM12 17a5 5 0 100-10 5 5 0 000 10zM12 13.5a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" data-page-node-id="QFmS9hXdsrOHM0U5KPEQ7W"/></symbol>
+    <symbol id="i-flame" viewBox="0 0 24 24" data-page-node-id="361DgbEHmrsA303dcd0syB"><path d="M12 22c4 0 6.5-2.6 6.5-6 0-4.5-4.5-6-4.5-10 0 0-3 1.5-3 5-1 0-2-1.5-2-3-1.5 1.5-3 4-3 7.5C6 19.2 8 22 12 22z" data-page-node-id="1GPY24580mJL8g662N0HCF"/></symbol>
+    <symbol id="i-key" viewBox="0 0 24 24" data-page-node-id="uEAcAtH23Dcsgm6GnM2dRl"><path d="M8.5 15.5a4 4 0 100-8 4 4 0 000 8zM11.4 12.6L20 4M17 7l2.2 2.2M14.6 9.4l1.8 1.8" data-page-node-id="YuaF6X9bEOH4EjULwtjzmn"/></symbol>
+    <symbol id="i-plug" viewBox="0 0 24 24" data-page-node-id="NhsTw8Fz4ZcsEKDaZ4bub8"><path d="M9 3v6M15 3v6M6 9h12v3a6 6 0 01-6 6 6 6 0 01-6-6V9zM12 18v3" data-page-node-id="3weiWR3zc0wpeepEzKmds8"/></symbol>
+    <symbol id="i-link-off" viewBox="0 0 24 24" data-page-node-id="v23hvUJBHSLglidkOi5coS"><path d="M10 13.5a4 4 0 005.7 0l3-3a4 4 0 10-5.7-5.7l-1 1M14 10.5a4 4 0 00-5.7 0l-3 3a4 4 0 105.7 5.7l1-1M3 3l18 18" data-page-node-id="Zy8ue854UHPHMmVuVX4qrM"/></symbol>
+    <symbol id="i-douyin" viewBox="0 0 24 24"><path d="M10 17a2 2 0 11-2-2V7l9-1.8v9a2 2 0 11-2-2V6.6L10 7.8V17z"/></symbol>
+    <symbol id="i-xhs" viewBox="0 0 24 24"><path d="M12 6c-2-1.2-4-1.2-6-1v12c2 .2 4 .2 6 1 2-1.2 4-1.2 6-1V5c-2 .2-4 .2-6 1zM12 6v13"/></symbol>
+    <symbol id="i-xianyu" viewBox="0 0 24 24"><path d="M5 12c3-4 9-4 12-1.5 1.5 1.3 2 3 .8 4.2-2 2.3-8 2.3-11-.2L3 17l1-2.5C2.5 13 2.5 13.5 5 12zM14 11h.01"/></symbol>
+    <symbol id="i-other" viewBox="0 0 24 24"><path d="M5.5 12a1.6 1.6 0 11-3.2 0 1.6 1.6 0 013.2 0zM13.6 12a1.6 1.6 0 11-3.2 0 1.6 1.6 0 013.2 0zM21.7 12a1.6 1.6 0 11-3.2 0 1.6 1.6 0 013.2 0z"/></symbol>
+  </defs>
+</svg>
+</body></html>

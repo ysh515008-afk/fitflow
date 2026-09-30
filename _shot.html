@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>截图 harness</title>
+<link rel="stylesheet" href="./styles.css" />
+<!-- 抽屉和遮罩的入场动画在无头环境里跑不赢虚拟时钟，
+     截图偶尔会抓到半透明的中间帧。截的是静态成品，直接把动画关掉。 -->
+<style>.sheet-mask,.sheet{animation:none !important}</style>
+</head>
+<body>
+
+<div class="app-shell" id="shell" hidden>
+  <header id="appHeader" class="app-header"></header>
+  <main id="view" class="app-main"></main>
+  <nav id="tabbar" class="tabbar"></nav>
+</div>
+<div id="modalRoot"></div>
+<div id="toastRoot" class="toast-root"></div>
+
+<script type="module">
+/* ============================================================
+   截图 harness（开发用，不参与上线）
+   ------------------------------------------------------------
+   无头 Chrome 的 --screenshot 不能点击，所以抽屉、向导这类
+   交互内容截不到。这个页面用 URL 参数直接把任意一屏渲染出来。
+
+     ?page=agent|members|ops|learning|analytics
+     ?oseg=content|leads|community   运营的一级分段
+     ?csub=douyin|biz|store|ledger   运营线上营销的二级分段
+     ?sheet=<抽屉名>                 打开抽屉，背后自动铺一层背景页
+     ?src=laike|meituan|santi|qinniao
+     ?on=ops.biz,ops.community       先打开这些可选配模块
+     ?step=preview|done              报表导入向导推进到第几步
+     ?stall=1                        把某个学习课题改成停滞，用来演示队列里的课题分支
+     ?mid=m07                        触达台用哪位会员（默认 m01）
+     ?stage=silent7|silent21         客户列表的未到店预警子集
+     ?from=agent|members             会员档案左上角返回按钮指向哪一屏
+     ?theme=mono                     切到黑白基础版截图
+
+   渲染完把结果写进页脚 #scan，配合 --dump-dom 抓回来做校验。
+   ============================================================ */
+const q = new URLSearchParams(location.search);
+
+/* 图标 defs 直接从 index.html 里抠，避免维护两份 */
+const idxHtml = await (await fetch('./index.html')).text();
+const defs = idxHtml.match(/<svg width="0"[\s\S]*?<\/svg>/);
+if (defs) document.body.insertAdjacentHTML('afterbegin', defs[0]);
+
+const { init, get, setFeature, logReach, pendingReachOf } = await import('./js/store.js');
+const { computeMetrics } = await import('./js/metrics.js');
+const views = {
+  agent: await import('./js/views/agent.js'),
+  members: await import('./js/views/members.js'),
+  ops: await import('./js/views/ops.js'),
+  learning: await import('./js/views/learning.js'),
+  analytics: await import('./js/views/analytics.js'),
+};
+const sheets = await import('./js/sheets.js');
+const console_ = await import('./js/connectorConsole.js');
+const outreach = await import('./js/outreach.js');
+
+init();
+for (const id of (q.get('on') || '').split(',').filter(Boolean)) setFeature(id, true);
+/* 黑白主题截图用：?theme=mono */
+document.documentElement.dataset.theme = q.get('theme') === 'mono' ? 'mono' : 'brand';
+
+/* 默认数据里没有停滞的课题（最早的也只停了 2 天），
+   想把队列里的"课题类"分支截出来，就得先造一个。 */
+if (q.get('stall')) {
+  const p = get().learning?.progress?.t02;
+  if (p) {
+    const dd = new Date();
+    dd.setDate(dd.getDate() - 12);
+    p.updatedAt = dd.toISOString().slice(0, 10);
+  }
+}
+
+const NAV = [
+  { id: 'agent', label: '智能体', long: '智能体运行台', icon: 'i-spark' },
+  { id: 'members', label: '客户', long: '客户与会籍', icon: 'i-users' },
+  { id: 'ops', label: '运营', long: '运营中心', icon: 'i-ops' },
+  { id: 'learning', label: '成长', long: '技能成长', icon: 'i-learn' },
+  { id: 'analytics', label: '数据', long: '经营数据', icon: 'i-data' },
+];
+
+const tab = q.get('sheet') ? (q.get('bg') || 'ops') : (q.get('page') || 'agent');
+const nav = NAV.find((n) => n.id === tab) || NAV[0];
+
+const ctx = {
+  state: get(),
+  metrics: computeMetrics(get()),
+  _tab: nav.id,
+  _opsSeg: q.get('oseg') || 'content',
+  _contentSub: q.get('csub') || 'douyin',
+  _memberSeg: q.get('mseg') || 'list',
+  _memberTab: q.get('mtab') || 'profile',
+  _calMonth: q.get('cal') || '',
+  _cardFilter: q.get('cfilter') || 'attention',
+  _stageTab: q.get('stagetab') || 's1',
+  _q: '', _stage: q.get('stage') || 'all', _openTopic: null, _aiTopic: null,
+  _memberFrom: q.get('from') || '',
+  greeting: () => '早上好，先看清今天该动谁',
+  weekday: () => '周六',
+  funnel: () => [],
+  refresh() { ctx.state = get(); ctx.metrics = computeMetrics(get()); },
+  go() {}, goTopic() {}, syncHash() {}, _applyMeta() {},
+  toast: (m) => console.log('[toast]', m),
+  exportData() {}, openImport() {}, openSettings() {}, clearDemo() {},
+  openMember() {}, openMemberForm() {}, openFollowupForm() {}, openApptForm() {},
+  openRenewalForm() {}, openCardForm() {}, openCardActions() {}, openBlockForm() {},
+  openContact() {}, setMemberNote() {}, setRule() {}, setRuleParam() {},
+  openAi() {}, openAiHub() {}, openGroupPlanForm() {}, openCampaignForm() {},
+  openLeadForm() {}, openTopicEvidence() {}, openDouyinBind() {}, openStoreHeat() {},
+  openTopBoard() {}, openFeatures() {}, openBrief() {}, readAllBrief() {},
+  openBizReport() {}, openBizDetail() {}, deleteBizRecord() {}, openConnector() {},
+  syncDouyin() {}, syncDouyinBoard() {}, openPsychForm() {},
+};
+
+/* ---- 外壳：顶栏 + 底栏，和 app.js 的成品保持一致 ---- */
+const briefMod = await import('./js/opsBrief.js');
+const unread = briefMod.unreadOf(briefMod.buildBrief(get()), briefMod.readIdsOf(get())).length;
+const s = ctx.state;
+/* ?hdr=open 展开顶栏面板，?hdr=scroll 模拟下滑后的置顶态 */
+const hdrEl = document.getElementById('appHeader');
+const panelOn = q.get('hdr') === 'open';
+if (q.get('hdr') === 'scroll') hdrEl.classList.add('solid');
+hdrEl.innerHTML = `
+  <div class="hd-mark-flat" aria-hidden="true">F</div>
+  <button class="bubble${panelOn ? ' on' : ''}" aria-label="展开顶栏"><svg viewBox="0 0 24 24"><use href="#i-spark"/></svg></button>
+  <div class="hd-panel${panelOn ? ' on' : ''}">
+    <div class="logo-mark">F</div>
+    <div class="hd-main">
+      <div class="hd-title"><span class="wordmark" style="font-size:19px">FitFlow</span></div>
+      <div class="hd-sub">
+        <span style="color:var(--brand-2);font-weight:650">${nav.long}</span>
+        <span>·</span><span>${s.settings.store}</span>
+        <span>·</span><span>${s.settings.advisor}（${s.settings.role}）</span>
+      </div>
+    </div>
+    <div class="hd-actions">
+      <button class="icon-btn" aria-label="AI 任务包"><svg viewBox="0 0 24 24"><use href="#i-spark"/></svg></button>
+      <button class="icon-btn accent" aria-label="立即运行"><svg viewBox="0 0 24 24"><use href="#i-sync"/></svg></button>
+      <button class="icon-btn" aria-label="个人设置"><svg viewBox="0 0 24 24"><use href="#i-settings"/></svg></button>
+    </div>
+  </div>`;
+document.getElementById('tabbar').innerHTML = NAV.map((n) => `
+  <button class="tab ${n.id === nav.id ? 'on' : ''}">
+    <svg viewBox="0 0 24 24"><use href="#${n.icon}"/></svg>
+    <span>${n.label}</span>
+    ${n.id === 'ops' && unread ? `<span class="badge dot">${unread}</span>` : ''}
+  </button>`).join('');
+
+/* ---- 背景页：抽屉背后铺真实的页面，截图才有上下文 ---- */
+document.getElementById('shell').hidden = false;
+const view = document.getElementById('view');
+const bgView = views[nav.id];
+view.innerHTML = bgView.render(ctx);
+bgView.mount && bgView.mount(view, ctx);
+
+/* ---- 打开指定抽屉 ---- */
+const M = q.get('mid') || 'm01', CARD = q.get('card') || 'card_m01_m', GROUP = 'g01', CAMP = 'c01',
+      BLOCK = 'tb_7wj282s56q2', FOLLOWUP = 'f_bo54xdd56q1', TOPIC = 't01';
+
+const sheet = q.get('sheet');
+const src = q.get('src') || 'laike';
+const step = q.get('step') || '';
+let err = '';
+
+/* ?dial=1 —— 先造一条"拨出·结果待补"的记录，好把待补提示条截出来 */
+if (q.get('dial')) {
+  const m = get().members.find((x) => x.id === M);
+  logReach(M, { channel: 'phone', phone: m?.phone || '' });
+}
+
+if (sheet) {
+  try {
+    if (q.get('mtab')) ctx._memberTab = q.get('mtab');
+    if (sheet === 'member')            sheets.openMemberSheet(M, ctx, { from: q.get('from') || undefined });
+    else if (sheet === 'member-form')  sheets.openMemberForm(M, ctx);
+    else if (sheet === 'appt')         sheets.openApptForm(M, ctx, {});
+    else if (sheet === 'renewal')      sheets.openRenewalForm(M, ctx);
+    else if (sheet === 'followup')     sheets.openFollowupForm(M, ctx);
+    else if (sheet === 'psych')        sheets.openPsychForm(FOLLOWUP, ctx);
+    else if (sheet === 'card-form')    sheets.openCardForm(null, { memberId: M }, ctx);
+    else if (sheet === 'card-actions') sheets.openCardActions(CARD, ctx);
+    else if (sheet === 'card-err')     sheets.openCardErrorSheet(ctx, M, CARD);
+    else if (sheet === 'block')        sheets.openBlockForm(ctx, BLOCK, q.get('rm') ? { method: q.get('rm') } : undefined);
+    else if (sheet === 'ai')           sheets.openAiSheet(q.get('pack') || 'followup', M, ctx, null, q.get('aimodel') || null);
+    else if (sheet === 'ai-models')    sheets.openModelMarket(ctx);
+    else if (sheet === 'ai-hub')       sheets.openAiHub(ctx);
+    else if (sheet === 'group-plan')   sheets.openGroupPlanForm(GROUP, ctx, 0);
+    else if (sheet === 'campaign')     sheets.openCampaignForm(CAMP, ctx);
+    else if (sheet === 'lead')         sheets.openLeadForm(q.get('lead') || undefined, ctx);
+    else if (sheet === 'topic')        sheets.openTopicEvidence(TOPIC, ctx);
+    else if (sheet === 'douyin-bind')  sheets.openDouyinBindSheet(ctx);
+    else if (sheet === 'top-board')    sheets.openTopBoardSheet(ctx);
+    else if (sheet === 'store-heat')   sheets.openStoreHeatForm(ctx, q.get('kind') || 'poiComments');
+    else if (sheet === 'features')     sheets.openFeaturesSheet(ctx);
+    else if (sheet === 'brief')        sheets.openBriefSheet(ctx);
+    else if (sheet === 'log')          views.agent.openLogSheet(ctx);
+    else if (sheet === 'cmds')         views.agent.openCommandSheet(ctx);
+    else if (sheet === 'rules')        views.agent.openRulesSheet(ctx);
+    else if (sheet === 'contact')      outreach.openContactSheet(ctx, q.get('mid') || M);
+    else if (sheet === 'reach-result') {
+      logReach(M, { channel: 'phone', phone: get().members.find((x) => x.id === M)?.phone || '' });
+      outreach.openReachResultSheet(ctx, pendingReachOf(M)[0].id);
+    }
+    else if (sheet === 'connector')    console_.openConnectorSheet(src, ctx);
+    else if (sheet === 'import')       console_.openImportSheet(ctx, null, () => {});
+    else if (sheet === 'settings')     console_.openSettingsSheet(ctx);
+    else if (sheet === 'biz-detail')   sheets.openBizDetailSheet(ctx, src);
+    else if (sheet === 'biz-report') {
+      sheets.openBizReportSheet(ctx, src);
+      const ta = document.querySelector('#bzText');
+      if (ta) {
+        ta.value = [
+          '统计日期\t曝光人数\t商详页访问人数\t预约人数\t下单人数\t到店核销人数\t推广消耗\t曝光转化率',
+          '2026-09-25\t24800\t2610\t318\t38\t27\t600\t1.28%',
+          '2026-09-25\t9200\t980\t102\t11\t8\t200\t1.11%',
+          '2026-09-26\t26350\t2780\t341\t42\t30\t640\t1.29%',
+          '合计\t60350\t6370\t761\t91\t65\t1440\t',
+        ].join('\n');
+        const next = () => document.querySelector('[data-bz-next]');
+        if (step === 'preview' || step === 'done' || step === 'back') next().click();
+        if (step === 'done' || step === 'back') next().click();
+        if (step === 'back') document.querySelector('[data-bz-again]')?.click();
+      }
+    }
+    else err = '未知抽屉：' + sheet;
+  } catch (e) { err = '抛异常：' + e.message; }
+}
+
+/* ---- 清 toast：首屏那条会盖住底栏 ---- */
+setInterval(() => { const t = document.getElementById('toastRoot'); if (t) t.innerHTML = ''; }, 120);
+
+/* ---- 扫描渲染产物 ---- */
+const root = document.querySelector('.sheet') || view;
+const html = root ? root.innerHTML : '';
+const text = html.replace(/<style[\s\S]*?<\/style>/g, ' ')
+  .replace(/<svg[\s\S]*?<\/svg>/g, ' ')
+  .replace(/<[^>]+>/g, ' ');
+const hits = [];
+for (const [n, re] of [['undefined', /undefined/], ['NaN', /NaN/], ['[object', /\[object/]]) {
+  if (re.test(text)) hits.push(n);
+}
+const dash = text.match(/[\u2014\u2013]|(?<![-])--(?![-])/);
+if (dash) hits.push('横线:' + JSON.stringify(text.slice(Math.max(0, dash.index - 26), dash.index + 26)));
+
+const rep = document.createElement('div');
+rep.id = 'scan';
+rep.style.cssText =
+  'position:fixed;left:0;bottom:0;z-index:999;font:11px monospace;background:#fff;color:#000;padding:2px 5px';
+rep.textContent = `SCAN ${sheet ? 'sheet=' + sheet + (step ? '/' + step : '') : 'page=' + nav.id}`
+  + (q.get('oseg') ? '/' + q.get('oseg') : '') + (q.get('csub') ? '/' + q.get('csub') : '')
+  + ` size=${html.length} ${err ? 'ERR ' + err : 'hits=' + (hits.length ? hits.join(' ; ') : 'none')}`;
+document.body.appendChild(rep);
+console.log(rep.textContent);
+</script>
+</body>
+</html>
