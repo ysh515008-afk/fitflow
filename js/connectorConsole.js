@@ -420,7 +420,7 @@ function openAuthSheet(id, ctx) {
     subtitle: '授权让 FitFlow 能读取这家系统的数据',
     size: 'tall',
     body: `
-      ${notice('授权是「系统级」的：让 FitFlow 拿到调用 ' + esc(p.name) + ' 接口的资格（网关 Key 或 OAuth）。它和「账号登陆」是两件事——授权只决定能不能读，个人账号决定读谁的数据。', 'info', 'i-key')}
+      ${notice('授权是「系统级」的：让 FitFlow 拿到调用 ' + esc(p.name) + ' 接口的资格（网关 Key 或 OAuth）。它和「账号登陆」是两件事：授权只决定能不能读，个人账号决定读谁的数据。', 'info', 'i-key')}
       <div class="section-title">当前授权状态</div>
       <div class="card tight">
         ${kvRow('接口授权', STATUS_TEXT[c.status] ? `<span class="badge ${STATUS_TEXT[c.status].cls}">${STATUS_TEXT[c.status].label}</span>` : esc(c.status))}
@@ -473,7 +473,7 @@ function openAccountSheet(id, ctx) {
     size: 'tall',
     body: `
       ${canLogin
-        ? notice('系统接口已授权。下面是在这家系统里登陆的个人操作员账号——决定「读谁的数据」。可随时切换，不影响接口授权本身。', 'green', 'i-users')
+        ? notice('系统接口已授权。下面是在这家系统里登陆的个人操作员账号，决定「读谁的数据」。可随时切换，不影响接口授权本身。', 'green', 'i-users')
         : notice(`系统接口尚未授权（当前：${STATUS_TEXT[c.status]?.label || c.status}）。请先在「系统接口授权」入口完成授权，才能登陆或切换个人账号。`, 'warn', 'i-key')}
 
       <div class="section-title">已登陆账号</div>

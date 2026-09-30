@@ -738,7 +738,7 @@ function openGradeSheet() {
     subtitle: `${esc(a.advisor)} · ${esc(a.grade.label)} ${esc(a.grade.name)} · 综合分 ${a.score}`,
     size: 'tall',
     body: `
-      ${notice('等级依据全部来自<strong>本机使用日志</strong>的确定性计算：累计消费、续费次数、到店频次、跟进密度、卡种。没有接入任何外部数据源，也没有用行业平均值替代 —— 取不到真值的指标直接显示「未获取」。', 'info', 'i-shield')}
+      ${notice('等级依据全部来自<strong>本机使用日志</strong>的确定性计算：累计消费、续费次数、到店频次、跟进密度、卡种。没有接入任何外部数据源，也没有用行业平均值替代。取不到真值的指标直接显示「未获取」。', 'info', 'i-shield')}
 
       <div class="stat-grid g4" style="margin:12px 0">
         ${statCard({ k: '综合分', v: a.score, unit: '分' })}

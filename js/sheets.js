@@ -944,7 +944,7 @@ export function openMemberForm(id, ctx, onSaved) {
     title: id ? '编辑会员资料' : '新增会员 / 线索',
     size: 'tall',
     body: `
-      ${src ? `${notice(`这份档案由<strong>${esc(src)}</strong>同步而来。<strong>灰字字段由来源系统维护，改不了</strong> —— 要改请回${esc(src)}，同步后这里自动更新。白底可编辑的字段分两类：一是 FitFlow 本机登记的（阶段、训练目标、需求、顾虑、标签、备注），二是${esc(src)}没返回、允许本机补填的空字段。`, 'info', 'i-alert')}` : ''}
+      ${src ? `${notice(`这份档案由<strong>${esc(src)}</strong>同步而来。<strong>灰字字段由来源系统维护，改不了</strong>。要改请回${esc(src)}，同步后这里自动更新。白底可编辑的字段分两类：一是 FitFlow 本机登记的（阶段、训练目标、需求、顾虑、标签、备注），二是${esc(src)}没返回、允许本机补填的空字段。`, 'info', 'i-alert')}` : ''}
 
       ${readOnly.length ? `
         <div class="section-title">${esc(src)}同步字段 · 只读</div>
@@ -2889,7 +2889,7 @@ export function openXhsNoteForm(ctx, id) {
     size: 'tall',
     body: `
       ${notice('填你能在小红书后台看到的数字。<b>看不到的就留空</b>，留空显示「未获取」，'
-        + '比随便填一个数字有用得多 —— 后面的平均阅读、爆款率都是拿这些数算的。', 'info', 'i-doc')}
+        + '比随便填一个数字有用得多：后面的平均阅读、爆款率都是拿这些数算的。', 'info', 'i-doc')}
       ${field({ label: '笔记标题', name: 'title', value: cur?.title || '', required: true })}
       <div class="form-grid">
         ${field({ label: '发布日期', name: 'publishedAt', value: cur?.publishedAt || '', type: 'date', required: true })}
