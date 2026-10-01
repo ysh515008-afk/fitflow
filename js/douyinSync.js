@@ -19,9 +19,11 @@ import { pickBenchmarks } from './douyin.js';
 
 const DEFAULT_PROXY = 'http://localhost:8787';
 
-function buildClient(proxyUrl, endpointsVerified, uniqueName) {
+function buildClient(proxyUrl, endpointsVerified, uniqueName, proxyToken) {
   return makeContentClient('redfox', {
     proxyUrl: proxyUrl || DEFAULT_PROXY,
+    /* 线上代理的访问口令（PROXY_ACCESS_TOKEN），本地代理留空 */
+    proxyToken: proxyToken || '',
     endpointsVerified: endpointsVerified || {},
     accounts: uniqueName ? [uniqueName] : [],
   });
@@ -32,13 +34,13 @@ function buildClient(proxyUrl, endpointsVerified, uniqueName) {
  * 返回 { ok, step, error, account, works, calls }。
  * 每条失败路径都会写一条同步日志，界面上要能看出"试过了但没成功"。
  */
-export async function syncDouyinAccount({ uniqueName, proxyUrl, endpointsVerified, monitor }) {
+export async function syncDouyinAccount({ uniqueName, proxyUrl, proxyToken, endpointsVerified, monitor }) {
   const m = monitor || {};
-  const client = buildClient(proxyUrl, endpointsVerified, uniqueName);
+  const client = buildClient(proxyUrl, endpointsVerified, uniqueName, proxyToken);
 
   const h = await client.health();
   if (!h.ok) {
-    logDouyinError(`连不上本地代理 ${proxyUrl || DEFAULT_PROXY}，先运行 node server/proxy.mjs`);
+    logDouyinError(`连不上代理 ${proxyUrl || DEFAULT_PROXY}。本地先运行 node server/proxy.mjs；线上确认 https://域名/api 已部署`);
     return { ok: false, step: 'proxy', error: h.error };
   }
   if (!h.provider?.configured) {
@@ -95,9 +97,9 @@ export async function syncDouyinAccount({ uniqueName, proxyUrl, endpointsVerifie
  * 它和账号同步分开调，因为对标要多花一次搜索调用的钱，
  * 由 monitor.benchmark 单独控制，不该绑定在每次同步上。
  */
-export async function syncDouyinBenchmarks({ keyword, proxyUrl, endpointsVerified, mine }) {
+export async function syncDouyinBenchmarks({ keyword, proxyUrl, proxyToken, endpointsVerified, mine }) {
   if (!keyword) return { ok: false, error: new Error('关键词必填') };
-  const client = buildClient(proxyUrl, endpointsVerified);
+  const client = buildClient(proxyUrl, endpointsVerified, null, proxyToken);
 
   try {
     const list = await client.fetchSearchAccounts(keyword);
@@ -113,11 +115,11 @@ export async function syncDouyinBenchmarks({ keyword, proxyUrl, endpointsVerifie
  * 取官方赛道榜。
  * 榜位由接口给，我们只负责原样存和显示 —— 不重排、不按自己口径再算一遍。
  */
-export async function syncDouyinBoard({ dateType, rankDate, category, proxyUrl, endpointsVerified }) {
+export async function syncDouyinBoard({ dateType, rankDate, category, proxyUrl, proxyToken, endpointsVerified }) {
   if (!rankDate) return { ok: false, error: new Error('榜单日期必填') };
   if (!category) return { ok: false, error: new Error('赛道必填') };
 
-  const client = buildClient(proxyUrl, endpointsVerified);
+  const client = buildClient(proxyUrl, endpointsVerified, null, proxyToken);
   try {
     const items = await client.fetchTopAccounts({ dateType, rankDate, category });
     if (!items.length) {
@@ -137,9 +139,9 @@ export async function syncDouyinBoard({ dateType, rankDate, category, proxyUrl, 
  * 刻意不叫 syncPoi：它拿回来的不是 POI 数据，名字里不能出现门店定位这种词，
  * 否则半年后没人记得这个区别。
  */
-export async function searchWorksByKeyword({ keyword, proxyUrl, endpointsVerified }) {
+export async function searchWorksByKeyword({ keyword, proxyUrl, proxyToken, endpointsVerified }) {
   if (!keyword) return { ok: false, error: new Error('关键词必填') };
-  const client = buildClient(proxyUrl, endpointsVerified);
+  const client = buildClient(proxyUrl, endpointsVerified, null, proxyToken);
   try {
     const list = await client.fetchSearchWorks(keyword);
     return { ok: true, list };

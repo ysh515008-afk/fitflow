@@ -54,6 +54,8 @@ export function defaultBizSource(id) {
     poiId: '',
     accountRole: '',
     proxyUrl: 'http://localhost:8787',
+    /** 线上代理的访问口令（对应服务端环境变量 PROXY_ACCESS_TOKEN），本地代理留空 */
+    proxyToken: '',
     endpointsVerified: {},
     lastImportAt: null,
     lastSyncAt: null,
@@ -96,6 +98,8 @@ export function defaultConnector(id) {
     accountRole: '',
     systemVersion: '',
     scope: 'own',                // own | all
+    /** 线上代理的访问口令（对应服务端环境变量 PROXY_ACCESS_TOKEN），本地代理留空 */
+    proxyToken: '',
     writeBack: false,
     autoSync: false,
     lastSyncAt: null,
@@ -127,6 +131,8 @@ export function defaultContentSource(id) {
     status: 'unauthorized',      // 密钥没配就是 unauthorized，不假装已连接
     baseUrl: s.baseUrl,
     proxyUrl: 'http://localhost:8787',
+    /** 线上代理的访问口令（对应服务端环境变量 PROXY_ACCESS_TOKEN），本地代理留空 */
+    proxyToken: '',
     /* 关注的账号清单：抖音号，不含昵称（昵称不唯一，官方脚本直接拒绝） */
     accounts: [],
     lastSyncAt: null,
@@ -150,10 +156,14 @@ export function makeClient(id, cfg, { allowUnverified = false } = {}) {
   if (!p) throw new ConnectorError('unknown_provider', '未知对接方：' + id);
 
   const base = (cfg.proxyUrl || 'http://localhost:8787').replace(/\/$/, '');
+  /* 线上代理设了 PROXY_ACCESS_TOKEN 之后，不带这个头就是 401。
+     它挡的是"别人拿到代理地址也用不了"，不是防本机使用者
+     ——本机 localStorage 里本来就存着全部会员数据。 */
+  const withToken = (extra = {}) => (cfg.proxyToken ? { 'X-Proxy-Token': cfg.proxyToken, ...extra } : extra);
 
   async function health() {
     try {
-      const res = await fetch(`${base}/health`, { method: 'GET' });
+      const res = await fetch(`${base}/health`, { method: 'GET', headers: withToken() });
       if (!res.ok) throw new Error('HTTP ' + res.status);
       const json = await res.json();
       return { ok: true, ...json, provider: json.providers?.[id] || null };
@@ -161,7 +171,7 @@ export function makeClient(id, cfg, { allowUnverified = false } = {}) {
       return {
         ok: false,
         error: new ConnectorError('network',
-          `连不上本地代理 ${base}。请先运行：node server/proxy.mjs`, e.message),
+          `连不上代理 ${base}。本地：先运行 node server/proxy.mjs；线上：确认已部署 api/ 下的 Serverless 函数且地址以 /api 结尾。`, e.message),
       };
     }
   }
@@ -179,7 +189,7 @@ export function makeClient(id, cfg, { allowUnverified = false } = {}) {
     try {
       res = await fetch(`${base}/proxy/${id}`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: withToken({ 'Content-Type': 'application/json' }),
         body: JSON.stringify({
           resource,
           method: req.method,
@@ -256,11 +266,12 @@ export function makeContentClient(id, cfg = {}, { transport } = {}) {
   if (!s) throw new ConnectorError('unknown_source', '未知内容源：' + id);
 
   const base = (cfg.proxyUrl || 'http://localhost:8787').replace(/\/$/, '');
+  const withToken = (extra = {}) => (cfg.proxyToken ? { 'X-Proxy-Token': cfg.proxyToken, ...extra } : extra);
 
   /** 同 makeClient 的健康检查：判断"代理起了没 / 密钥配了没" */
   async function health() {
     try {
-      const res = await fetch(`${base}/health`, { method: 'GET' });
+      const res = await fetch(`${base}/health`, { method: 'GET', headers: withToken() });
       if (!res.ok) throw new Error('HTTP ' + res.status);
       const json = await res.json();
       return { ok: true, ...json, provider: json.providers?.[id] || null };
@@ -268,7 +279,7 @@ export function makeContentClient(id, cfg = {}, { transport } = {}) {
       return {
         ok: false,
         error: new ConnectorError('network',
-          `连不上本地代理 ${base}。请先运行：node server/proxy.mjs`, e.message),
+          `连不上代理 ${base}。本地：先运行 node server/proxy.mjs；线上：确认已部署 api/ 下的 Serverless 函数且地址以 /api 结尾。`, e.message),
       };
     }
   }
@@ -308,7 +319,7 @@ export function makeContentClient(id, cfg = {}, { transport } = {}) {
     try {
       res = await fetch(`${base}/proxy/${id}`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: withToken({ 'Content-Type': 'application/json' }),
         body: JSON.stringify({
           resource, method: req.method, path: req.path,
           query: req.query, body: req.body,
@@ -316,7 +327,7 @@ export function makeContentClient(id, cfg = {}, { transport } = {}) {
       });
     } catch (e) {
       throw new ConnectorError('network',
-        `连不上本地代理 ${base}。请先运行：node server/proxy.mjs`, e.message);
+        `连不上代理 ${base}。本地：先运行 node server/proxy.mjs；线上：确认已部署 api/ 下的 Serverless 函数且地址以 /api 结尾。`, e.message);
     }
 
     if (res.status === 401 || res.status === 403) {

@@ -247,6 +247,7 @@ const ctx = {
     const res = await syncDouyinAccount({
       uniqueName: b.uniqueName,
       proxyUrl: d.proxyUrl,
+      proxyToken: d.proxyToken,
       endpointsVerified: d.endpointsVerified,
       monitor: d.monitor,
     });
@@ -287,6 +288,7 @@ const ctx = {
     const res = await syncDouyinBoard({
       dateType, rankDate, category,
       proxyUrl: d.proxyUrl,
+      proxyToken: d.proxyToken,
       endpointsVerified: d.endpointsVerified,
     });
 

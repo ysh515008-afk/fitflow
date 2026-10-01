@@ -144,7 +144,8 @@ function panel(id, tab, ctx) {
       <div class="section-title">接入配置</div>
       <div class="card tight">
         ${kvRow('服务地址', c.baseUrl ? esc(c.baseUrl) : '未填写', !c.baseUrl)}
-        ${kvRow('本地代理', `<span class="mono">${esc(c.proxyUrl || 'http://localhost:8787')}</span>`)}
+        ${kvRow('代理地址', `<span class="mono">${esc(c.proxyUrl || 'http://localhost:8787')}</span>`)}
+        ${kvRow('访问口令', c.proxyToken ? '已设置' : '未设置', !c.proxyToken)}
         ${kvRow('系统版本', c.systemVersion ? esc(c.systemVersion) : '未填写', !c.systemVersion)}
         ${kvRow('账号角色', c.accountRole ? esc(c.accountRole) : '未填写', !c.accountRole)}
         ${kvRow('同步范围', c.scope === 'all' ? '全店会员' : '仅本人负责的会员')}
@@ -237,7 +238,8 @@ function panel(id, tab, ctx) {
     const envs = p.authSpec.envVars.map((k) => `${k}=你的值`).join(' \\\n  ');
     const curl = `curl -X POST http://localhost:8787/proxy/${id} \\
   -H 'Content-Type: application/json' \\
-  -d '{"resource":"members","method":"POST","path":"${Object.values(p.endpointSpec)[0].path}","body":{"pageNo":1,"pageSize":50}}'`;
+  -d '{"resource":"members","method":"POST","path":"${Object.values(p.endpointSpec)[0].path}","body":{"pageNo":1,"pageSize":50}}'
+# 线上：地址换成 https://你的域名/api/proxy/${id}，并加一行 -H 'X-Proxy-Token: 你的口令'`;
     const snippet = providerSnippet(id);
     body = `
       ${notice('对接分成三层：浏览器里的适配器负责字段映射，本地代理进程负责签名与转发，密钥只存在代理进程的环境变量里。<strong>前端代码里不会出现任何密钥。</strong>', 'info', 'i-spark')}
@@ -248,19 +250,35 @@ function panel(id, tab, ctx) {
         <div class="pb-actions"><button data-copy="#code-env"><svg viewBox="0 0 24 24"><use href="#i-copy"/></svg>复制</button></div>
       </div>
 
-      <div class="section-title">2. 代理转发测试</div>
+      <div class="section-title">2. 线上部署（Serverless）</div>
+      <div class="prompt-box">
+        <pre id="code-deploy">${esc(`# 仓库里已有：api/health.js、api/proxy/[provider].js
+# git push 后 Vercel 自动部署，无需改前端
+
+# Vercel 后台 → Settings → Environment Variables
+${p.authSpec.envVars.map((k) => `${k}=你的值`).join('\n')}
+PROXY_ACCESS_TOKEN=自定义口令
+ALLOWED_ORIGINS=https://你的域名
+
+# 前端「代理地址」填：https://你的域名/api
+# 自检：
+curl -H 'X-Proxy-Token: 你的口令' https://你的域名/api/health`)}</pre>
+        <div class="pb-actions"><button data-copy="#code-deploy"><svg viewBox="0 0 24 24"><use href="#i-copy"/></svg>复制</button></div>
+      </div>
+
+      <div class="section-title">3. 代理转发测试</div>
       <div class="prompt-box">
         <pre id="code-curl">${esc(curl)}</pre>
         <div class="pb-actions"><button data-copy="#code-curl"><svg viewBox="0 0 24 24"><use href="#i-copy"/></svg>复制</button></div>
       </div>
 
-      <div class="section-title">3. 适配器文件</div>
+      <div class="section-title">4. 适配器文件</div>
       <div class="prompt-box">
         <pre id="code-file">${esc(snippet)}</pre>
         <div class="pb-actions"><button data-copy="#code-file"><svg viewBox="0 0 24 24"><use href="#i-copy"/></svg>复制</button></div>
       </div>
 
-      <div class="section-title">4. 核对清单</div>
+      <div class="section-title">5. 核对清单</div>
       <div class="card tight">
         ${['确认开放平台如何申请、账号需要什么角色',
           '确认请求路径与请求方式（GET / POST）',
@@ -352,12 +370,20 @@ function openConnectorForm(id, ctx, onSaved) {
   const c = ctx.state.connectors[id];
   openSheet({
     title: `${p.name} 接入信息`,
-    subtitle: '密钥请填在本地代理进程的环境变量里，不要填在这里',
+    subtitle: '密钥填在代理进程的环境变量里（线上在 Vercel 后台），不要填在这里',
     size: 'tall',
     body: `
-      ${notice(`本表单只保存接入信息，不接收密钥。密钥通过环境变量注入代理进程：<span class="mono">${esc(p.authSpec.envVars.join('、'))}</span>`, 'warn', 'i-alert')}
+      ${notice(`本表单只保存接入信息，不接收密钥。密钥通过环境变量注入代理进程（本地：启动命令；线上：Vercel 后台 Environment Variables）：<span class="mono">${esc(p.authSpec.envVars.join('、'))}</span>`, 'warn', 'i-alert')}
       ${field({ label: '服务地址 baseUrl', name: 'baseUrl', value: c.baseUrl, placeholder: '如 https://open.example.com', hint: `${esc(p.name)} 开放网关的根地址，由对方提供` })}
-      ${field({ label: '本地代理地址', name: 'proxyUrl', value: c.proxyUrl || 'http://localhost:8787', hint: '保持默认即可，除非你改了代理端口' })}
+      ${field({ label: '代理地址', name: 'proxyUrl', value: c.proxyUrl || 'http://localhost:8787', hint: '本地：http://localhost:8787；线上：https://你的域名/api（线上部署见 DEPLOY.md）' })}
+      ${field({
+        label: '代理访问口令',
+        name: 'proxyToken',
+        type: 'password',
+        value: c.proxyToken || '',
+        placeholder: '线上代理必填，本地代理留空',
+        hint: '对应服务端环境变量 PROXY_ACCESS_TOKEN。线上不设口令等于把三体会员数据公开，任何人拿到地址都能调。',
+      })}
       ${field({ label: '系统版本', name: 'systemVersion', value: c.systemVersion, placeholder: id === 'santi' ? '如 三体云动 Pro' : '如 勤鸟 SaaS 门店版' })}
       ${field({ label: '账号角色', name: 'accountRole', value: c.accountRole, placeholder: '如 销售员工（本人）/ 门店管理员' })}
       ${selectField({ label: '读取范围', name: 'scope', value: c.scope, options: [
@@ -392,7 +418,7 @@ function openConnectorForm(id, ctx, onSaved) {
       el.querySelector('[data-save]').onclick = () => {
         const f = serialize(el);
         setConnector(id, {
-          baseUrl: f.baseUrl, proxyUrl: f.proxyUrl, systemVersion: f.systemVersion,
+          baseUrl: f.baseUrl, proxyUrl: f.proxyUrl, proxyToken: f.proxyToken, systemVersion: f.systemVersion,
           accountRole: f.accountRole, scope: f.scope, status: f.status,
           autoSync: flags.autoSync, writeBack: flags.writeBack,
         });
@@ -550,7 +576,7 @@ async function runTest(id, ctx, body, paint) {
     <div class="card tight">
       <div class="skeleton w60" style="margin-bottom:8px"></div>
       <div class="skeleton w40"></div>
-      <div class="hint" style="margin-top:8px">正在向本地代理 ${esc(c.proxyUrl || 'http://localhost:8787')} 发起健康检查</div>
+      <div class="hint" style="margin-top:8px">正在向代理 ${esc(c.proxyUrl || 'http://localhost:8787')} 发起健康检查</div>
     </div>`;
 
   const client = makeClient(id, c);

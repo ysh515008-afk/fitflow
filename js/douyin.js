@@ -483,8 +483,10 @@ export function defaultDouyinState() {
       benchmark: false,   // 对标账号（要多花一次搜索调用的钱）
       storeHeat: false,   // 门店热度近似召回
     },
-    /** 本地代理地址。密钥在这个进程的环境变量里，这里只存地址。 */
+    /** 代理地址。密钥在代理进程的环境变量里，这里只存地址与口令。 */
     proxyUrl: 'http://localhost:8787',
+    /** 线上代理访问口令（对应 PROXY_ACCESS_TOKEN），本地代理留空 */
+    proxyToken: '',
     /**
      * 用户核对过端点之后可以在这里把它标成 true 来解除拦截。
      * 放在状态里而不是写死在代码里，是因为"我核对过了"是使用者的判断，
