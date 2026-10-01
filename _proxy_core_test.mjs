@@ -2,7 +2,7 @@
    跑法：node _proxy_core_test.mjs                                   */
 import assert from 'node:assert/strict';
 import {
-  buildProviders, healthPayload, proxyCall, corsHeaders, checkAccess, readPayload,
+  buildProviders, healthPayload, proxyCall, corsHeaders, checkAccess, readPayload, runtimeGuard,
 } from './server/_core.mjs';
 
 let pass = 0;
@@ -68,6 +68,34 @@ console.log('\n[2] 访问控制');
   });
   ok('白名单内的来源 → 放行', () => {
     assert.equal(checkAccess({}, { ...clean, ALLOWED_ORIGINS: 'https://a.com' }, { origin: 'https://a.com' }).ok, true);
+  });
+}
+
+console.log('\n[2b] 线上强制配置（缺了就关闭转发，不静默放行）');
+{
+  ok('本地进程（无 VERCEL）不做强制', () => {
+    assert.equal(runtimeGuard(clean), null);
+  });
+  ok('线上缺 PROXY_ACCESS_TOKEN → 503 且点名缺哪个变量', () => {
+    const g = runtimeGuard({ VERCEL: '1' });
+    assert.equal(g.status, 503);
+    assert.match(g.body.error, /PROXY_ACCESS_TOKEN/);
+    assert.match(g.body.error, /ALLOWED_ORIGINS/);
+  });
+  ok('线上只缺口令 → 503 只点名口令', () => {
+    const g = runtimeGuard({ VERCEL: '1', ALLOWED_ORIGINS: 'https://a.com' });
+    assert.equal(g.status, 503);
+    assert.match(g.body.error, /PROXY_ACCESS_TOKEN/);
+    assert.ok(!g.body.error.includes('ALLOWED_ORIGINS'));
+  });
+  ok('线上配齐 → 放行', () => {
+    assert.equal(runtimeGuard({ VERCEL: '1', PROXY_ACCESS_TOKEN: 't', ALLOWED_ORIGINS: 'https://a.com' }), null);
+  });
+  ok('健康检查照常返回，但标出 forwardingBlocked 与缺失项', () => {
+    const h = healthPayload({ VERCEL: '1' });
+    assert.equal(h.ok, true);
+    assert.equal(h.access.forwardingBlocked, true);
+    assert.deepEqual(h.access.missingRequired, ['PROXY_ACCESS_TOKEN', 'ALLOWED_ORIGINS']);
   });
 }
 

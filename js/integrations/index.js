@@ -246,7 +246,9 @@ export function makeClient(id, cfg, { allowUnverified = false } = {}) {
           `代理已启动，但 ${p.name} 的密钥尚未配置。请在代理进程环境变量里设置：${p.authSpec.envVars.join('、')}`),
       };
     }
-    return { ok: true, info };
+    /* access 带出去：线上代理缺必配变量时界面要显示"转发已关闭"，
+       而不是只报"已连通"，让人到同步时才撞上 503 */
+    return { ok: true, info, access: h.access || null };
   }
 
   return { provider: p, health, call, fetchMembers, fetchAppointments, testConnection };

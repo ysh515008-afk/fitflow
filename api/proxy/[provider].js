@@ -11,7 +11,7 @@
 
    三体的网关 Key 只存在 Vercel 环境变量里，不进代码、不进日志、不进任何响应。
    ============================================================ */
-import { proxyCall, corsHeaders, checkAccess, readPayload } from '../../server/_core.mjs';
+import { proxyCall, corsHeaders, checkAccess, readPayload, runtimeGuard } from '../../server/_core.mjs';
 
 export default async function handler(req, res) {
   const origin = req.headers?.origin;
@@ -28,6 +28,10 @@ export default async function handler(req, res) {
 
   const gate = checkAccess(req.headers || {}, process.env, { origin });
   if (!gate.ok) { res.status(gate.status).json(gate.body); return; }
+
+  /* 线上缺 PROXY_ACCESS_TOKEN / ALLOWED_ORIGINS 时关闭转发，不静默放行 */
+  const guard = runtimeGuard(process.env);
+  if (guard) { res.status(guard.status).json(guard.body); return; }
 
   const id = String(req.query?.provider || '').toLowerCase();
   if (!id) {

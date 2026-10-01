@@ -285,6 +285,27 @@ export function corsHeaders(origin, env = process.env) {
 }
 
 /**
+ * 线上运行时的强制配置检查（只对 Vercel 生效，本地进程不拦）。
+ * 线上缺 PROXY_ACCESS_TOKEN 或缺 ALLOWED_ORIGINS 时，转发通道直接关掉并给出 503：
+ * 静默放行等于把三体会员姓名与手机号公开，比报错严重得多。
+ * 健康检查不拦，这样部署完能立刻确认"函数起来了没"。
+ */
+export function runtimeGuard(env = process.env) {
+  if (!env.VERCEL) return null;
+  const missing = [];
+  if (!env.PROXY_ACCESS_TOKEN) missing.push('PROXY_ACCESS_TOKEN');
+  if (!originList(env).length) missing.push('ALLOWED_ORIGINS');
+  if (!missing.length) return null;
+  return {
+    status: 503,
+    body: {
+      error: `server_misconfigured: 线上代理缺少必配环境变量：${missing.join('、')}`,
+      detail: 'Vercel 后台 → Settings → Environment Variables 补齐后 Redeploy。补齐前所有转发请求一律拒绝，密钥不会因此泄露。',
+    },
+  };
+}
+
+/**
  * 访问口令。线上不设 PROXY_ACCESS_TOKEN 等于把代理裸奔出去：
  * 任何拿到地址的人都能用你的三体网关 Key 拉会员手机号。
  * 口令用 X-Proxy-Token 传，不用 Authorization——Authorization 是代理与上游三体之间用的。
@@ -329,6 +350,7 @@ export function healthPayload(env = process.env) {
     };
   });
   const list = originList(env);
+  const guard = runtimeGuard(env);
   return {
     ok: true,
     service: 'fitflow-proxy',
@@ -336,6 +358,9 @@ export function healthPayload(env = process.env) {
     access: {
       tokenRequired: Boolean(env.PROXY_ACCESS_TOKEN),
       originGuard: list.length ? (list.includes('*') ? 'any' : 'allowlist') : 'reflect',
+      /* 线上缺了必配变量时，健康检查照常返回，转发通道关闭 */
+      missingRequired: guard ? (guard.body.error.match(/：(.+)$/)?.[1] || '').split('、') : [],
+      forwardingBlocked: Boolean(guard),
     },
     providers,
     hint: '未配置的对接方请在进程环境变量里注入密钥（Vercel：Project Settings → Environment Variables）。',

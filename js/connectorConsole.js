@@ -584,10 +584,16 @@ async function runTest(id, ctx, body, paint) {
 
   if (res.ok) {
     const info = res.info;
+    /* 线上代理缺必配变量时，健康检查还能通，但转发被关掉了——必须显示出来，
+       否则用户会看到"已连通"却在同步时报 503。 */
+    const blocked = res.access?.forwardingBlocked
+      ? `<br/><strong>转发已关闭</strong>：线上代理缺少 ${esc((res.access.missingRequired || []).join('、'))}，补齐后要在 Vercel 后台 Redeploy。`
+      : '';
     out.innerHTML = notice(
       `代理已连通。${esc(p.name)} 密钥状态：<strong>已配置</strong>（${esc(info.authMode || '')}${info.keyPreview ? '，' + esc(info.keyPreview) : ''}）。` +
-      (info.baseUrlSet ? '' : '<br/>但服务地址还没填写，请在「填写接入信息」里补上。'),
-      'green', 'i-check');
+      (info.baseUrlSet ? '' : '<br/>但服务地址还没填写，请在「填写接入信息」里补上。') +
+      blocked,
+      blocked ? 'warn' : 'green', blocked ? 'i-alert' : 'i-check');
     setConnector(id, { status: info.baseUrlSet ? 'pending' : c.status, lastError: null });
     addConnectorLog(id, { type: 'sync', scope: '健康检查', records: 0, ok: true, message: '代理连通性检查通过，密钥已就绪' });
   } else {

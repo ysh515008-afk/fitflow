@@ -56,11 +56,13 @@ git push origin main
 | 变量 | 值 | 不设的后果 |
 | --- | --- | --- |
 | `SANTI_GATEWAY_KEY` | 三体网关 Key（32 位，PC 端「员工账号管理」生成） | `/api/proxy/santi` 一律返回 401「密钥尚未配置」 |
-| `PROXY_ACCESS_TOKEN` | 自定义一段随机字符串 | 代理裸奔：任何拿到 URL 的人都能用你的 Key 拉会员手机号 |
-| `ALLOWED_ORIGINS` | `https://你的.vercel.app域名`（多个用逗号分隔） | 来源不限，任意站点页面都能带着用户浏览器调你的代理 |
+| `PROXY_ACCESS_TOKEN` | 自定义一段随机字符串 | **转发通道关闭**：`/api/proxy/*` 一律 503（不是裸奔放行） |
+| `ALLOWED_ORIGINS` | `https://你的.vercel.app域名`（多个用逗号分隔） | **转发通道关闭**：`/api/proxy/*` 一律 503 |
 | `SANTI_APP_ID` | 通常不用填，默认 `10000` | — |
 
 改完环境变量必须 **Redeploy** 一次才会生效（Vercel 不会自动重跑已完成的部署）。
+
+这两项在**线上是强制的**：只要跑在 Vercel 上（`VERCEL=1`），缺任何一项，转发接口直接返回 503 `server_misconfigured` 并点名缺哪个变量，不会静默放行。健康检查 `/api/health` 仍返回 200，但会带 `"forwardingBlocked": true`，方便你先确认"函数起来了没"。本地 `node server/proxy.mjs` 不受此限制。
 
 ### 3.2 把函数区域改到香港
 `Settings → Functions → Function Region` 选 `hkg1`（香港）。
@@ -75,15 +77,21 @@ git push origin main
 ### 3.4 验收（三条命令，逐条看结果）
 
 ```bash
-# ① 不带给口令 → 必须是 401
+# ① 先确认函数起来了
+#   还没配 PROXY_ACCESS_TOKEN 时：下面这条直接通（健康检查只报配置状态，不含数据）
+#   已配了口令之后：不带口令会是 401，用第 ③ 条那条带口令的即可
+curl -s https://你的域名/api/health
+# 期望：{"ok":true,...}；若看到 "forwardingBlocked":true，说明环境变量还没配齐
+
+# ② 带口令再看一次：不带应该是 401
 curl -s -o /dev/null -w '%{http_code}\n' https://你的域名/api/health
 # 期望：401
 
-# ② 带口令 → 200，且 santi.configured 为 true
+# ③ 带口令 → 200，且 santi.configured 为 true、forwardingBlocked 为 false
 curl -s -H 'X-Proxy-Token: 你的口令' https://你的域名/api/health
-# 期望：{"ok":true,...,"providers":{"santi":{"configured":true,...}}}
+# 期望：{"ok":true,...,"providers":{"santi":{"configured":true,...}},"access":{"forwardingBlocked":false}}
 
-# ③ 真实转发（把 keyword 换成一个真实会员手机号）
+# ④ 真实转发（把 keyword 换成一个真实会员手机号）
 curl -s -X POST https://你的域名/api/proxy/santi \
   -H 'Content-Type: application/json' \
   -H 'X-Proxy-Token: 你的口令' \
@@ -92,8 +100,9 @@ curl -s -X POST https://你的域名/api/proxy/santi \
 # 期望：上游原始响应；判定成功的标准是 code=0 且响应里有 request_id
 ```
 
-第 ③ 条失败时，代理会原样把上游的 `code` / `msg` 返回，不做转述。常见两个：
+第 ④ 条失败时，代理会原样把上游的 `code` / `msg` 返回，不做转述。常见三个：
 
+- HTTP 503 `server_misconfigured`：`PROXY_ACCESS_TOKEN` 或 `ALLOWED_ORIGINS` 没配，补齐后 Redeploy
 - `code=60105`：网关 Key 无效或过期（默认有效期 90 天，到期要在三体 PC 端重新生成）
 - HTTP 504：函数到 `ai-gateway.styd.cn` 的往返超过 15 秒，检查 Function Region 是否是 hkg1
 
@@ -108,6 +117,7 @@ curl -s -X POST https://你的域名/api/proxy/santi \
 5. **`vercel.app` 域名在国内的可访问性由网络环境决定**，本说明不对其做保证；若不可用，需要绑定自有域名（绑定后 `ALLOWED_ORIGINS` 要同步改）。
 6. **小程序分支暂不能直接复用这个地址。** 小程序 `wx.request` 要求域名已 ICP 备案并加入 request 合法域名白名单，`vercel.app` 不满足。要共用就先绑一个已备案的自有域名。
 7. **日志里没有密钥。** `DEBUG=1` 时打印转发路径与耗时，密钥只以 `前4****后2` 的形式出现。
+8. **线上缺 `PROXY_ACCESS_TOKEN` 或 `ALLOWED_ORIGINS` 时转发关闭**，返回 503 并点名缺哪个变量；健康检查仍返回 200。这个判断只在线上（`VERCEL=1`）生效，本地进程不拦。
 
 ---
 

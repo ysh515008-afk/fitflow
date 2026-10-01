@@ -35,7 +35,7 @@
    ============================================================ */
 import { createServer } from 'node:http';
 import {
-  buildProviders, healthPayload, proxyCall, corsHeaders, checkAccess, readPayload,
+  buildProviders, healthPayload, proxyCall, corsHeaders, checkAccess, readPayload, runtimeGuard,
 } from './_core.mjs';
 
 const PORT = Number(process.env.PORT || 8787);
@@ -100,6 +100,10 @@ const server = createServer(async (req, res) => {
   const m = url.pathname.match(/^\/proxy\/([a-z0-9_-]+)$/i);
   if (!m) return send(res, 404, { error: '未定义的路径，可用：GET /health 或 POST /proxy/:provider' }, cors);
   if (req.method !== 'POST') return send(res, 405, { error: '请用 POST' }, cors);
+
+  /* 只在 Vercel 环境生效：线上缺必配变量时关闭转发。本地进程不拦。 */
+  const guard = runtimeGuard(process.env);
+  if (guard) return send(res, guard.status, guard.body, cors);
 
   let payload;
   try { payload = await readBody(req); } catch (e) { return send(res, 400, { error: e.message }, cors); }
